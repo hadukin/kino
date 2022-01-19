@@ -1,9 +1,11 @@
 package com.example.kino
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
+import android.view.ViewGroup
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.kino.models.Content
 import java.util.UUID
@@ -11,9 +13,10 @@ import java.util.UUID
 class MainActivity : AppCompatActivity() {
 
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        // setContentView(R.layout.activity_main)
 
         val data = listOf(
             Content(
@@ -36,20 +39,48 @@ class MainActivity : AppCompatActivity() {
             ),
         )
 
-        val btn1 = findViewById<Button>(R.id.button1)
-        val btn2 = findViewById<Button>(R.id.button2)
-        val btn3 = findViewById<Button>(R.id.button3)
 
-        val buttons = listOf<Button>(btn1, btn2, btn3)
+        val linearLayout = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
 
-        buttons.forEachIndexed { index, button ->
+        val layoutParam =
+            ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+
+        setContentView(linearLayout, layoutParam)
+
+        for (item in data) {
+
+
+            val img = ImageView(this).apply {
+                setImageResource(item.poster)
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    300
+                )
+            }
+
+            val button = Button(this).apply {
+                text = "Детали"
+                id = item.poster
+            }
             button.setOnClickListener {
                 val intent = Intent(this, ContentDetailActivity::class.java)
+                findViewById<Button>(it.id).setBackgroundColor(R.color.teal_200)
                 intent.apply {
-                    putExtra(CONTENT, data[index])
+                    putExtra(CONTENT, item)
                 }
                 showDetails.launch(intent)
             }
+
+            val title = TextView(this).apply {
+                text = item.name
+            }
+
+            linearLayout.addView(img)
+            linearLayout.addView(title)
+            linearLayout.addView(button)
         }
     }
 
