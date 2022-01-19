@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">kino</string>
+    <string name="button_detail">Детали</string>
 </resources>
