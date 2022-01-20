@@ -17,17 +17,16 @@
             android:id="@+id/content_detail_poster_id"
             android:layout_width="wrap_content"
             android:layout_height="300dp"
-            android:contentDescription="TODO"
-            android:scaleType="fitStart"
             android:layout_marginBottom="20dp"
+            android:scaleType="fitStart"
             android:src="@drawable/poster_1" />
 
         <TextView
-            android:textSize="12dp"
-            android:layout_marginBottom="20dp"
             android:id="@+id/content_detail_title_id"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/content_detail_description_id"
