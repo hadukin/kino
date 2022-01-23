@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity() {
                     "message: ${detailResult?.message}\nisFavorite: ${detailResult?.isFavorite}",
                     Toast.LENGTH_SHORT
                 ).show()
+
                 Log.d(ContentDetailActivity.DETAIL_RESULT, it.toString())
             }
         }
