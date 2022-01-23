@@ -12,15 +12,12 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import com.example.kino.databinding.ActivityMainBinding
 import com.example.kino.models.Content
 import com.example.kino.models.DetailResult
-import java.util.UUID
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var data: ArrayList<Content>
     private var selectedContent = arrayListOf<Content>()
     private lateinit var binding: ActivityMainBinding
 
-    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -103,6 +100,11 @@ class MainActivity : AppCompatActivity() {
             val detailResult =
                 result.data?.getParcelableExtra<DetailResult>(ContentDetailActivity.DETAIL_RESULT)
             detailResult.let {
+                Toast.makeText(
+                    this,
+                    "message: ${detailResult?.message}\nisFavorite: ${detailResult?.isFavorite}",
+                    Toast.LENGTH_SHORT
+                ).show()
                 Log.d(ContentDetailActivity.DETAIL_RESULT, it.toString())
             }
         }

@@ -9,33 +9,37 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
+import com.example.kino.databinding.ActivityContentDetailBinding
 import com.example.kino.models.Content
 import com.example.kino.models.DetailResult
 
 class ContentDetailActivity : AppCompatActivity() {
     private lateinit var detailResult: DetailResult
+    private lateinit var binding: ActivityContentDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_content_detail)
+        binding = ActivityContentDetailBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         detailResult = DetailResult(false, "")
 
         val content = intent.getParcelableExtra<Content>(CONTENT) ?: error("Content is not passed")
 
-        findViewById<ImageView>(R.id.content_detail_poster_id).apply {
+        binding.contentDetailPosterId.apply {
             setImageResource(content.poster)
             contentDescription = content.name
         }
 
-        findViewById<TextView>(R.id.content_detail_title_id).apply {
+        binding.contentDetailTitleId.apply {
             text = content.name
         }
 
-        findViewById<TextView>(R.id.content_detail_description_id).apply {
+        binding.contentDetailDescriptionId.apply {
             text = content.description
         }
 
-        findViewById<CheckBox>(R.id.content_detail_is_favorite_checkbox_id).setOnCheckedChangeListener { _, isChecked ->
+        binding.contentDetailIsFavoriteCheckboxId.setOnCheckedChangeListener { _, isChecked ->
             detailResult = detailResult.copy(isFavorite = isChecked)
             val intent = Intent().apply {
                 putExtra(DETAIL_RESULT, detailResult)
@@ -43,7 +47,7 @@ class ContentDetailActivity : AppCompatActivity() {
             setResult(RESULT_OK, intent)
         }
 
-        findViewById<EditText>(R.id.content_detail_text_field_id).addTextChangedListener { value ->
+        binding.contentDetailTextFieldId.addTextChangedListener { value ->
             detailResult = detailResult.copy(message = value.toString())
             val intent = Intent().apply {
                 putExtra(DETAIL_RESULT, detailResult)
