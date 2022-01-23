@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private var selectedContent = arrayListOf<Content>()
     private lateinit var binding: ActivityMainBinding
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)

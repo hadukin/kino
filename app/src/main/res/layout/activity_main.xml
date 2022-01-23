@@ -4,17 +4,13 @@
     android:layout_height="wrap_content"
     android:fillViewport="true">
 
-    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/main_activity_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="20dp"
-        tools:context=".ContentDetailActivity">
-
-
+        android:padding="20dp">
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </ScrollView>
