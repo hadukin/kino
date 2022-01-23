@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.LinearLayoutCompat
+import com.example.kino.databinding.ActivityMainBinding
 import com.example.kino.models.Content
 import com.example.kino.models.DetailResult
 import java.util.UUID
@@ -17,11 +18,13 @@ import java.util.UUID
 class MainActivity : AppCompatActivity() {
     private lateinit var data: ArrayList<Content>
     private var selectedContent = arrayListOf<Content>()
+    private lateinit var binding: ActivityMainBinding
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         data = fetchContent()
 
@@ -32,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val linearLayout = findViewById<LinearLayoutCompat>(R.id.main_activity_linear_layout)
+        val linearLayout: LinearLayoutCompat = binding.mainActivityLinearLayout
 
         for (item in data) {
             val img = ImageView(this).apply {
@@ -79,8 +82,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(SELECTED_CONTENT, selectedContent)
         super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(SELECTED_CONTENT, selectedContent)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        intent.putParcelableArrayListExtra(SELECTED_CONTENT, selectedContent)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        intent.getParcelableArrayExtra(SELECTED_CONTENT)
     }
 
     private val showDetails = registerForActivityResult(
