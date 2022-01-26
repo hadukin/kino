@@ -1,6 +1,7 @@
 package com.example.kino
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.core.content.ContextCompat
 import com.example.kino.databinding.ActivityMainBinding
 import com.example.kino.models.Content
 import com.example.kino.models.DetailResult
@@ -17,10 +19,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var data: ArrayList<Content>
     private var selectedContent = arrayListOf<Content>()
     private lateinit var binding: ActivityMainBinding
+    private lateinit var context: Context
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        context = this
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -50,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
             button.setOnClickListener {
                 val intent = Intent(this, ContentDetailActivity::class.java)
-                findViewById<TextView>(item.id).setTextColor(R.color.pure_red)
+                findViewById<TextView>(item.id).setTextColor(ContextCompat.getColor(this, R.color.pure_red))
                 selectedContent.add(item)
                 intent.apply {
                     putExtra(CONTENT, item)
@@ -63,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                 text = item.name
                 textSize = 16F
                 setPadding(0, 0, 0, 12)
-                if (selectedContent.contains(item)) setTextColor(R.color.pure_red)
+                if (selectedContent.contains(item)) setTextColor(ContextCompat.getColor(context, R.color.pure_red))
             }
 
             val description = TextView(this).apply {
