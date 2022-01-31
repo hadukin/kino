@@ -10,4 +10,5 @@ data class Content(
     val name: String,
     val description: String,
     val poster: Int,
+    val isFavorite: Boolean = false
 ) : Parcelable
