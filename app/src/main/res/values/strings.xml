@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">kino</string>
+    <string name="app_name">Кино</string>
     <string name="button_detail">Детали</string>
     <string name="checkbox_favorite">Нравится</string>
     <string name="text_field_comment">Комментарий</string>
+    <string name="favorite">Избранное</string>
 </resources>
