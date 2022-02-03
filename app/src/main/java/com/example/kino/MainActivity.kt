@@ -3,9 +3,11 @@ package com.example.kino
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.databinding.ActivityMainBinding
@@ -66,7 +68,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initRecycler() {
-        val layoutManager = LinearLayoutManager(this)
+        val orientation = resources.configuration.orientation
+        val layoutManager = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            GridLayoutManager(this, 3)
+        } else {
+            LinearLayoutManager(this)
+        }
         recycler.layoutManager = layoutManager
         recycler.adapter = ContentItemAdapter(FakeBackend.content, clickListener)
     }
