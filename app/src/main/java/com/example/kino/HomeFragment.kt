@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
 
         binding.buttonShowDetail.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_home_id, FavoriteFragment())
+                .replace(R.id.fragment_home_id, ContentDetailFragment())
                 .addToBackStack(null)
                 .commit()
         }
