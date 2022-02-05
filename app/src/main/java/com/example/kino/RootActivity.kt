@@ -2,6 +2,7 @@ package com.example.kino
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -20,7 +21,8 @@ class RootActivity : AppCompatActivity() {
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navView: BottomNavigationView = binding.navView
+        val navigate: BottomNavigationView = binding.navigate
+
         val navController = findNavController(R.id.nav_host_fragment_activity_root)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -28,6 +30,6 @@ class RootActivity : AppCompatActivity() {
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        navigate.setupWithNavController(navController)
     }
 }
