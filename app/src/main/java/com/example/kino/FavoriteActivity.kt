@@ -21,8 +21,8 @@ class FavoriteActivity : AppCompatActivity() {
 
         recycler = binding.recycler
 
-        favoriteList = intent.getParcelableArrayListExtra(MainActivity.CONTENT)
-            ?: error("Content is not passed")
+        // favoriteList = intent.getParcelableArrayListExtra(MainActivity.CONTENT)
+        //     ?: error("Content is not passed")
 
         initRecycler(favoriteList)
     }
