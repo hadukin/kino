@@ -34,11 +34,10 @@ class RootActivity : AppCompatActivity(),
         return true
     }
 
-    private fun loadFragment(fragment: Fragment): Boolean {
+    private fun loadFragment(fragment: Fragment) {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
-        return true
     }
 }

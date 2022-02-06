@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,9 +48,13 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         recycler.adapter = ContentItemAdapter(FakeBackend.content, this)
     }
 
-
-    override fun onClickImage(contentItem: Content, position: Int) {
-        TODO("Not yet implemented")
+    override fun onClickDetails(contentItem: Content, position: Int) {
+        parentFragmentManager
+            .beginTransaction()
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .replace(R.id.fragment_container, ContentDetailFragment())
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onClickFavorite(contentItem: Content, position: Int) {

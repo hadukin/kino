@@ -11,6 +11,7 @@ import com.example.kino.models.Content
 class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val name = itemView.findViewById<TextView>(R.id.title)
+    private val details = itemView.findViewById<TextView>(R.id.button)
     private val description = itemView.findViewById<TextView>(R.id.description)
     private val image = itemView.findViewById<ImageView>(R.id.image)
     private val favorite = itemView.findViewById<ImageView>(R.id.favorite)
@@ -37,8 +38,8 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             setImageResource(item.poster)
         }
 
-        image.setOnClickListener {
-            listener.onClickImage(item, adapterPosition)
+        details.setOnClickListener {
+            listener.onClickDetails(item, adapterPosition)
         }
 
         favorite.setOnClickListener {

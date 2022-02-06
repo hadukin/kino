@@ -27,7 +27,7 @@ class ContentItemAdapter(
     }
 
     interface ContentClickListener {
-        fun onClickImage(contentItem: Content, position: Int)
+        fun onClickDetails(contentItem: Content, position: Int)
         fun onClickFavorite(contentItem: Content, position: Int)
     }
 }
