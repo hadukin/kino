@@ -18,6 +18,7 @@ class RootActivity : AppCompatActivity(),
 
         binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         loadFragment(HomeFragment())
 
         val navigate: BottomNavigationView = binding.navigate

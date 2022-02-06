@@ -2,6 +2,7 @@ package com.example.kino
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,10 +32,27 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         return binding.root
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(FAVORITE_LIST, favoriteList)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
         initRecycler()
+
+        favoriteList = savedInstanceState?.getParcelableArrayList(FAVORITE_LIST) ?: arrayListOf()
+
+
+        binding.fab.setOnClickListener {
+            // val r = Bundle().apply {
+            //     putParcelableArrayList(COUNTER, favoriteList)
+            // }
+            // parentFragmentManager.setFragmentResult(COUNTER_RESULT, r)
+            // count++
+            // Log.d("count", "${favoriteList.size}")
+        }
     }
 
     private fun initRecycler() {
@@ -64,6 +82,10 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             FakeBackend.content[position] = updated
             recycler.adapter?.notifyItemChanged(position)
 
+            parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
+                putParcelableArrayList(FAVORITE_LIST, favoriteList)
+            })
+
             showSnackBar("Контент успешно добавлен в избранное") {
                 favoriteList.remove(contentItem)
                 FakeBackend.content[position] = contentItem
@@ -83,7 +105,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG)
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
             .setAction("Отмена") {
                 onCancel()
             }
@@ -92,7 +114,9 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     companion object {
-        const val COUNTER = "counter"
-        const val COUNTER_RESULT = "counter_result"
+        // const val COUNTER = "counter"
+        // const val COUNTER_RESULT = "counter_result"
+        const val FAVORITE_LIST = "favorite_list"
+        const val FAVORITE_LIST_RESULT = "favorite_list_result"
     }
 }

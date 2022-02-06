@@ -1,11 +1,13 @@
 package com.example.kino
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.kino.models.Content
 
 class FavoriteFragment : Fragment() {
 
@@ -23,10 +25,15 @@ class FavoriteFragment : Fragment() {
         val txt = view.findViewById<TextView>(R.id.counter_text)
 
         parentFragmentManager.setFragmentResultListener(
-            HomeFragment.COUNTER_RESULT,
+            HomeFragment.FAVORITE_LIST_RESULT,
             this
         ) { _, result ->
-            txt.text = "${result.getInt(HomeFragment.COUNTER)}"
+            val favoriteList = result.getParcelableArrayList<Content>(HomeFragment.FAVORITE_LIST)
+
+            Log.d("FAVVVV", "${favoriteList}")
+
+            txt.text = "${favoriteList?.size}"
         }
     }
+
 }
