@@ -11,9 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.models.Content
+import com.google.android.material.snackbar.Snackbar
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var recycler: RecyclerView
@@ -31,26 +32,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         recycler = binding.recycler
         initRecycler()
-    }
-
-    private val clickListener = object : ContentItemAdapter.ContentClickListener {
-        override fun onClickImage(contentItem: Content, position: Int) {}
-
-        override fun onClickFavorite(contentItem: Content, position: Int) {
-            val updateItem = contentItem.copy(isFavorite = !contentItem.isFavorite)
-
-            if (!favoriteList.contains(contentItem)) {
-                favoriteList.add(updateItem)
-            } else {
-                favoriteList.remove(contentItem)
-            }
-
-            FakeBackend.content[position] = updateItem
-            recycler.adapter?.notifyItemChanged(position)
-        }
     }
 
     private fun initRecycler() {
@@ -61,7 +44,46 @@ class HomeFragment : Fragment() {
             LinearLayoutManager(requireContext())
         }
         recycler.layoutManager = layoutManager
-        recycler.adapter = ContentItemAdapter(FakeBackend.content, clickListener)
+        recycler.adapter = ContentItemAdapter(FakeBackend.content, this)
+    }
+
+
+    override fun onClickImage(contentItem: Content, position: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onClickFavorite(contentItem: Content, position: Int) {
+        if (!favoriteList.contains(contentItem)) {
+            val updated = contentItem.copy(isFavorite = true)
+            favoriteList.add(updated)
+            FakeBackend.content[position] = updated
+            recycler.adapter?.notifyItemChanged(position)
+
+            showSnackBar("Контент успешно добавлен в избранное") {
+                favoriteList.remove(contentItem)
+                FakeBackend.content[position] = contentItem
+                recycler.adapter?.notifyItemChanged(position)
+            }
+        } else {
+            favoriteList.remove(contentItem)
+            FakeBackend.content[position] = contentItem.copy(isFavorite = false)
+            recycler.adapter?.notifyItemChanged(position)
+
+            showSnackBar("Контент успешно удален из избранного") {
+                favoriteList.add(contentItem)
+                FakeBackend.content[position] = contentItem
+                recycler.adapter?.notifyItemChanged(position)
+            }
+        }
+    }
+
+    private fun showSnackBar(text: String, onCancel: () -> Unit) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG)
+            .setAction("Отмена") {
+                onCancel()
+            }
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+            .show()
     }
 
     companion object {
