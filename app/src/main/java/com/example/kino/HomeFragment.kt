@@ -30,10 +30,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.buttonShowDetail.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_home_id, ContentDetailFragment())
+                .replace(R.id.fragment_container, ContentDetailFragment())
                 .addToBackStack(null)
                 .commit()
         }
