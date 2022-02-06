@@ -42,10 +42,6 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
 
-        binding.fab.setOnClickListener {
-            println("${vm.favoriteItems.value?.size}")
-        }
-
         parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
             putParcelableArrayList(FAVORITE_LIST, vm.favoriteItems.value)
         })
