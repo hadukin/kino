@@ -2,7 +2,6 @@ package com.example.kino
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,10 +18,9 @@ import com.google.android.material.snackbar.Snackbar
 class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var recycler: RecyclerView
     private var favoriteList = arrayListOf<Content>()
-
     private var count = 0
+    private lateinit var recycler: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +33,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelableArrayList(FAVORITE_LIST, favoriteList)
+        outState.putInt(COUNTER, count)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,15 +42,19 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         initRecycler()
 
         favoriteList = savedInstanceState?.getParcelableArrayList(FAVORITE_LIST) ?: arrayListOf()
+        count = savedInstanceState?.getInt(COUNTER) ?: 0
+        binding.counterText.apply {
+            text = count.toString()
+        }
 
 
         binding.fab.setOnClickListener {
-            // val r = Bundle().apply {
-            //     putParcelableArrayList(COUNTER, favoriteList)
-            // }
-            // parentFragmentManager.setFragmentResult(COUNTER_RESULT, r)
-            // count++
-            // Log.d("count", "${favoriteList.size}")
+            count++
+            val result = Bundle().apply {
+                putInt(COUNTER, count)
+            }
+            parentFragmentManager.setFragmentResult(COUNTER_RESULT, result)
+            binding.counterText.text = count.toString()
         }
     }
 
@@ -86,7 +89,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                 putParcelableArrayList(FAVORITE_LIST, favoriteList)
             })
 
-            showSnackBar("Контент успешно добавлен в избранное") {
+            showSnackBar("Контент добавлен в избранное") {
                 favoriteList.remove(contentItem)
                 FakeBackend.content[position] = contentItem
                 recycler.adapter?.notifyItemChanged(position)
@@ -96,7 +99,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             FakeBackend.content[position] = contentItem.copy(isFavorite = false)
             recycler.adapter?.notifyItemChanged(position)
 
-            showSnackBar("Контент успешно удален из избранного") {
+            showSnackBar("Контент удален из избранного") {
                 favoriteList.add(contentItem)
                 FakeBackend.content[position] = contentItem
                 recycler.adapter?.notifyItemChanged(position)
@@ -114,8 +117,8 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     companion object {
-        // const val COUNTER = "counter"
-        // const val COUNTER_RESULT = "counter_result"
+        const val COUNTER = "counter"
+        const val COUNTER_RESULT = "counter_result"
         const val FAVORITE_LIST = "favorite_list"
         const val FAVORITE_LIST_RESULT = "favorite_list_result"
     }

@@ -10,8 +10,6 @@ import android.widget.TextView
 import com.example.kino.models.Content
 
 class FavoriteFragment : Fragment() {
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -22,17 +20,24 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val txt = view.findViewById<TextView>(R.id.counter_text)
+        val textView = view.findViewById<TextView>(R.id.counter_text)
+
+        parentFragmentManager.setFragmentResultListener(
+            HomeFragment.COUNTER_RESULT,
+            this
+        ) { _, result ->
+            val counter = result.getInt(HomeFragment.COUNTER)
+
+            textView.text = "$counter"
+        }
 
         parentFragmentManager.setFragmentResultListener(
             HomeFragment.FAVORITE_LIST_RESULT,
             this
         ) { _, result ->
             val favoriteList = result.getParcelableArrayList<Content>(HomeFragment.FAVORITE_LIST)
-
-            Log.d("FAVVVV", "${favoriteList}")
-
-            txt.text = "${favoriteList?.size}"
+            Log.d("FAVORITE_LIST_RESULT", "${favoriteList?.size}")
+            // textView.text = "${favoriteList?.size}"
         }
     }
 
