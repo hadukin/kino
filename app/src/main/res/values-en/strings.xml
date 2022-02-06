@@ -5,4 +5,6 @@
     <string name="checkbox_favorite">Like</string>
     <string name="text_field_comment">Comment</string>
     <string name="favorite">Favorite</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_favorite">Favorite</string>
 </resources>
