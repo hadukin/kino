@@ -52,7 +52,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         parentFragmentManager
             .beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .replace(R.id.fragment_container, ContentDetailFragment())
+            .replace(R.id.fragment_container, ContentDetailFragment(contentItem))
             .addToBackStack(null)
             .commit()
     }

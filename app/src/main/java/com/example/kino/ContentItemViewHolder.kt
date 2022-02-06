@@ -1,7 +1,6 @@
 package com.example.kino
 
 import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,8 +16,6 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     private val favorite = itemView.findViewById<ImageView>(R.id.favorite)
 
     fun bind(item: Content, listener: ContentItemAdapter.ContentClickListener) {
-        Log.d("IS_FAVORITE_IN_HOLDER", "${item.isFavorite}")
-
         if (item.isFavorite) {
             favorite.setColorFilter(Color.RED)
         } else {

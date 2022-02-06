@@ -28,7 +28,7 @@ class FavoriteActivity : AppCompatActivity() {
     }
 
     private val clickListener = object : ContentItemAdapter.ContentClickListener {
-        override fun onClickImage(contentItem: Content, position: Int) {}
+        override fun onClickDetails(contentItem: Content, position: Int) {}
 
         override fun onClickFavorite(contentItem: Content, position: Int) {
             favoriteList.remove(contentItem)
