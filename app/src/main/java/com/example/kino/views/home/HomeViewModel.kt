@@ -12,6 +12,8 @@ class HomeViewModel : ViewModel() {
 
     val favoriteItems: LiveData<ArrayList<Content>> = _favoriteItems
 
+    fun update() {}
+
     fun addFavorite(item: Content) {
         _favoriteItems.value?.add(item)
     }

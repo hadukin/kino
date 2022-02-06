@@ -2,6 +2,7 @@ package com.example.kino.views.home
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.models.Content
 import com.google.android.material.snackbar.Snackbar
+import kotlin.math.log
 
 
 class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
@@ -40,10 +42,12 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
 
-        vm.favoriteItems.observe(viewLifecycleOwner, Observer {
-            parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
-                putParcelableArrayList(FAVORITE_LIST, it)
-            })
+        binding.fab.setOnClickListener {
+            println("${vm.favoriteItems.value?.size}")
+        }
+
+        parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
+            putParcelableArrayList(FAVORITE_LIST, vm.favoriteItems.value)
         })
 
         initRecycler()
@@ -76,9 +80,8 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             vm.addFavorite(updated)
             FakeBackend.content[position] = updated
             recycler.adapter?.notifyItemChanged(position)
-
             showSnackBar("Контент добавлен в избранное") {
-                vm.removeFavorite(contentItem)
+                vm.removeFavorite(updated)
                 FakeBackend.content[position] = contentItem
                 recycler.adapter?.notifyItemChanged(position)
             }
