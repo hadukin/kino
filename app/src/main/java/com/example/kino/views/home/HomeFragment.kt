@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,11 +23,9 @@ import com.google.android.material.snackbar.Snackbar
 class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private var favoriteList = arrayListOf<Content>()
-    private var count = 0
     private lateinit var recycler: RecyclerView
 
-    private val homeViewModel by lazy { ViewModelProvider(this)[HomeViewModel::class.java] }
+    private val vm by lazy { ViewModelProvider(this)[HomeViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,20 +39,6 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
         initRecycler()
-
-        favoriteList = savedInstanceState?.getParcelableArrayList(FAVORITE_LIST) ?: arrayListOf()
-        count = savedInstanceState?.getInt(COUNTER) ?: 0
-
-        homeViewModel.counter.observe(viewLifecycleOwner, Observer {
-            count = it
-            binding.counterText.text = it.toString()
-        })
-
-        binding.fab.setOnClickListener {
-            println("===============================")
-            println(homeViewModel.favoriteItems.value?.size)
-            println("===============================")
-        }
     }
 
     private fun initRecycler() {
@@ -78,34 +61,33 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             .commit()
     }
 
+
     override fun onClickFavorite(contentItem: Content, position: Int) {
-        if (!favoriteList.contains(contentItem)) {
+        if (!vm.favoriteItems.value?.contains(contentItem)!!) {
             val updated = contentItem.copy(isFavorite = true)
-            favoriteList.add(updated)
+            vm.addFavorite(updated)
             FakeBackend.content[position] = updated
             recycler.adapter?.notifyItemChanged(position)
-            homeViewModel.addToFavorite(updated)
 
-            parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
-                putParcelableArrayList(FAVORITE_LIST, favoriteList)
-            })
-
-            showSnackBar("Контент добавлен в избранное") {
-                favoriteList.remove(contentItem)
-                FakeBackend.content[position] = contentItem
-                recycler.adapter?.notifyItemChanged(position)
-            }
+            // showSnackBar("Контент добавлен в избранное") {
+            //     vm.removeFavorite(contentItem)
+            //     FakeBackend.content[position] = contentItem
+            //     recycler.adapter?.notifyItemChanged(position)
+            // }
         } else {
-            favoriteList.remove(contentItem)
+            vm.removeFavorite(contentItem)
             FakeBackend.content[position] = contentItem.copy(isFavorite = false)
             recycler.adapter?.notifyItemChanged(position)
 
-            showSnackBar("Контент удален из избранного") {
-                favoriteList.add(contentItem)
-                FakeBackend.content[position] = contentItem
-                recycler.adapter?.notifyItemChanged(position)
-            }
+            // showSnackBar("Контент удален из избранного") {
+            //     vm.addFavorite(contentItem)
+            //     FakeBackend.content[position] = contentItem
+            //     recycler.adapter?.notifyItemChanged(position)
+            // }
         }
+        parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
+            putParcelableArrayList(FAVORITE_LIST, vm.favoriteItems.value)
+        })
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
@@ -118,8 +100,6 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     companion object {
-        const val COUNTER = "counter"
-        const val COUNTER_RESULT = "counter_result"
         const val FAVORITE_LIST = "favorite_list"
         const val FAVORITE_LIST_RESULT = "favorite_list_result"
     }
