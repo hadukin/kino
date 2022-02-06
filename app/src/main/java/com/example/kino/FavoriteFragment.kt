@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.kino.models.Content
+import com.example.kino.views.home.HomeFragment
 
 class FavoriteFragment : Fragment() {
     override fun onCreateView(

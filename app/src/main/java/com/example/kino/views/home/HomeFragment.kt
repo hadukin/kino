@@ -1,15 +1,22 @@
-package com.example.kino
+package com.example.kino.views.home
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kino.ContentDetailFragment
+import com.example.kino.ContentItemAdapter
+import com.example.kino.FakeBackend
+import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.models.Content
 import com.google.android.material.snackbar.Snackbar
@@ -22,6 +29,8 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private var count = 0
     private lateinit var recycler: RecyclerView
 
+    private val homeViewModel by lazy { ViewModelProvider(this)[HomeViewModel::class.java] }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -30,11 +39,11 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         return binding.root
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(FAVORITE_LIST, favoriteList)
-        outState.putInt(COUNTER, count)
-    }
+    // override fun onSaveInstanceState(outState: Bundle) {
+    //     super.onSaveInstanceState(outState)
+    //     outState.putParcelableArrayList(FAVORITE_LIST, favoriteList)
+    //     outState.putInt(COUNTER, count)
+    // }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,19 +51,26 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         initRecycler()
 
         favoriteList = savedInstanceState?.getParcelableArrayList(FAVORITE_LIST) ?: arrayListOf()
-        count = savedInstanceState?.getInt(COUNTER) ?: 0
-        binding.counterText.apply {
-            text = count.toString()
-        }
+        // count = savedInstanceState?.getInt(COUNTER) ?: 0
+        // binding.counterText.apply {
+        //     text = count.toString()
+        // }
+
+        Log.d("ONVIEWCREATE", "${count.toString()}")
+
+        homeViewModel.counter.observe(viewLifecycleOwner, Observer {
+            count = it
+            binding.counterText.text = it.toString()
+        })
 
 
         binding.fab.setOnClickListener {
-            count++
-            val result = Bundle().apply {
-                putInt(COUNTER, count)
-            }
-            parentFragmentManager.setFragmentResult(COUNTER_RESULT, result)
-            binding.counterText.text = count.toString()
+            homeViewModel.increment()
+            // val result = Bundle().apply {
+            //     putInt(COUNTER, count)
+            // }
+            // parentFragmentManager.setFragmentResult(COUNTER_RESULT, result)
+            // binding.counterText.text = count.toString()
         }
     }
 
