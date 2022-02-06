@@ -10,8 +10,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.ActivityMainBinding
 import com.example.kino.models.Content
+import com.example.kino.utils.FakeBackend
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

@@ -10,7 +10,7 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:context=".ContentDetailActivity">
+        tools:context=".content_recycler.ContentDetailActivity">
 
 
         <ImageView

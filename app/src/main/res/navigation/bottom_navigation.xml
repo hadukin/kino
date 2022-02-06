@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/navigation_favorite"
-        android:name="com.example.kino.FavoriteFragment"
+        android:name="com.example.kino.views.favorite.FavoriteFragment"
         android:label="Favorite"
         tools:layout="@layout/fragment_favorite" />
 

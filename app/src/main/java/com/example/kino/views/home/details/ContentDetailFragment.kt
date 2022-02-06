@@ -1,12 +1,12 @@
-package com.example.kino
+package com.example.kino.views.home.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.models.Content

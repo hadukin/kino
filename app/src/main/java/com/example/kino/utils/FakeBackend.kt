@@ -1,5 +1,6 @@
-package com.example.kino
+package com.example.kino.utils
 
+import com.example.kino.R
 import com.example.kino.models.Content
 
 class FakeBackend {

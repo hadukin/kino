@@ -1,4 +1,4 @@
-package com.example.kino
+package com.example.kino.content_recycler
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

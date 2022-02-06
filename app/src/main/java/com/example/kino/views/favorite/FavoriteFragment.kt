@@ -1,4 +1,4 @@
-package com.example.kino
+package com.example.kino.views.favorite
 
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.example.kino.R
 import com.example.kino.models.Content
 import com.example.kino.views.home.HomeFragment
 

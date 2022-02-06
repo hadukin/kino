@@ -13,12 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kino">
         <activity
-            android:name=".FavoriteActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ContentDetailActivity"
-            android:exported="false" />
-        <activity
             android:name=".RootActivity"
             android:exported="true">
             <intent-filter>

@@ -1,10 +1,11 @@
-package com.example.kino
+package com.example.kino.content_recycler
 
 import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kino.R
 import com.example.kino.models.Content
 
 class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
