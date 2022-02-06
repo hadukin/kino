@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,13 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
+
+        vm.favoriteItems.observe(viewLifecycleOwner, Observer {
+            parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
+                putParcelableArrayList(FAVORITE_LIST, it)
+            })
+        })
+
         initRecycler()
     }
 
@@ -69,25 +77,22 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             FakeBackend.content[position] = updated
             recycler.adapter?.notifyItemChanged(position)
 
-            // showSnackBar("Контент добавлен в избранное") {
-            //     vm.removeFavorite(contentItem)
-            //     FakeBackend.content[position] = contentItem
-            //     recycler.adapter?.notifyItemChanged(position)
-            // }
+            showSnackBar("Контент добавлен в избранное") {
+                vm.removeFavorite(contentItem)
+                FakeBackend.content[position] = contentItem
+                recycler.adapter?.notifyItemChanged(position)
+            }
         } else {
             vm.removeFavorite(contentItem)
             FakeBackend.content[position] = contentItem.copy(isFavorite = false)
             recycler.adapter?.notifyItemChanged(position)
 
-            // showSnackBar("Контент удален из избранного") {
-            //     vm.addFavorite(contentItem)
-            //     FakeBackend.content[position] = contentItem
-            //     recycler.adapter?.notifyItemChanged(position)
-            // }
+            showSnackBar("Контент удален из избранного") {
+                vm.addFavorite(contentItem)
+                FakeBackend.content[position] = contentItem
+                recycler.adapter?.notifyItemChanged(position)
+            }
         }
-        parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
-            putParcelableArrayList(FAVORITE_LIST, vm.favoriteItems.value)
-        })
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {

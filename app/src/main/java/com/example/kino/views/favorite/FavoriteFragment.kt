@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.FavoriteActivity
@@ -19,6 +20,7 @@ import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.models.Content
 import com.example.kino.views.home.HomeFragment
+import com.example.kino.views.home.HomeViewModel
 
 class FavoriteFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
@@ -59,9 +61,9 @@ class FavoriteFragment : Fragment() {
             removedItems.add(contentItem)
             recycler.adapter?.notifyItemRemoved(position)
 
-            val intent = Intent().apply {
-                putExtra(FavoriteActivity.FAVORITE_VIEW_RESULT, removedItems)
-            }
+            // val intent = Intent().apply {
+            //     putExtra(FavoriteActivity.FAVORITE_VIEW_RESULT, removedItems)
+            // }
             // setResult(AppCompatActivity.RESULT_OK, intent)
         }
     }
