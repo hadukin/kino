@@ -94,12 +94,12 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        // Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-        //     .setAction("Отмена") {
-        //         onCancel()
-        //     }
-        //     .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-        //     .show()
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .setAction("Отмена") {
+                onCancel()
+            }
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+            .show()
     }
 
     companion object {
