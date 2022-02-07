@@ -52,7 +52,6 @@ class FavoriteFragment : Fragment() {
         // favoriteList =
         //     savedInstanceState?.getParcelableArrayList(FAVORITE_LIST) ?: arrayListOf()
 
-        val textView = view.findViewById<TextView>(R.id.counter_text)
         parentFragmentManager.setFragmentResultListener(
             HomeFragment.FAVORITE_LIST_RESULT,
             this

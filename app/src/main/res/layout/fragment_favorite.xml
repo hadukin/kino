@@ -10,15 +10,21 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:theme="?android:attr/toolbarStyle">
+        app:contentScrim="?attr/colorPrimary"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        app:toolbarId="@id/toolbar">
 
-
-        <com.google.android.material.appbar.MaterialToolbar
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            app:subtitleTextColor="@color/white"
-            app:title="@string/favorite"
-            app:titleTextColor="@color/white" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="@null"
+            android:fitsSystemWindows="true"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:title="@string/nav_favorite" />
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
