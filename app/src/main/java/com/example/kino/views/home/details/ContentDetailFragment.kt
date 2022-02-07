@@ -36,6 +36,16 @@ class ContentDetailFragment() : Fragment() {
 
         val content = arguments?.getParcelable<Content>(CONTENT)
 
+        binding.poster.apply {
+            content?.poster.let {
+                if (it != null) {
+                    setImageResource(it)
+                }
+            }
+        }
+
+        binding.description.text = content?.description
+
         binding.toolbar.apply {
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
             setNavigationOnClickListener {

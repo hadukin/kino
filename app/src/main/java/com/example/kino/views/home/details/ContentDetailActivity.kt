@@ -1,4 +1,4 @@
-package com.example.kino.content_recycler
+package com.example.kino.views.home.details
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +24,10 @@ class ContentDetailActivity : AppCompatActivity() {
         binding.contentDetailPosterId.apply {
             setImageResource(content.poster)
             contentDescription = content.name
+        }
+
+        binding.contentDetailPosterId.apply {
+            setImageResource(content.poster)
         }
 
         binding.contentDetailTitleId.apply {

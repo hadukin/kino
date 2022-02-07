@@ -41,12 +41,11 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
+        initRecycler()
 
         parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
             putParcelableArrayList(FAVORITE_LIST, vm.favoriteItems.value)
         })
-
-        initRecycler()
     }
 
     private fun initRecycler() {
@@ -95,12 +94,12 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-            .setAction("Отмена") {
-                onCancel()
-            }
-            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-            .show()
+        // Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+        //     .setAction("Отмена") {
+        //         onCancel()
+        //     }
+        //     .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+        //     .show()
     }
 
     companion object {
