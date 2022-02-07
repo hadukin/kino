@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +33,8 @@ class FavoriteFragment : Fragment() {
     private var favoriteList: ArrayList<Content>? = null
     private var removedItems = arrayListOf<Content>()
 
+    // private val vm by lazy { ViewModelProvider(this)[FavoriteViewModel::class.java] }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,17 +52,21 @@ class FavoriteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // favoriteList =
-        //     savedInstanceState?.getParcelableArrayList(FAVORITE_LIST) ?: arrayListOf()
+        // favoriteList = savedInstanceState?.getParcelableArrayList(FAVORITE_LIST)
+        // Log.d("FLIST/SAVE1", "${favoriteList?.size}")
 
         parentFragmentManager.setFragmentResultListener(
             HomeFragment.FAVORITE_LIST_RESULT,
             this
         ) { _, result ->
-            favoriteList = result.getParcelableArrayList(HomeFragment.FAVORITE_LIST)
-                ?: savedInstanceState?.getParcelableArrayList(FAVORITE_LIST) ?: arrayListOf()
-            if (favoriteList != null) {
-                initRecycler(favoriteList!!)
+            favoriteList = savedInstanceState?.getParcelableArrayList(FAVORITE_LIST)
+                ?: result.getParcelableArrayList(HomeFragment.FAVORITE_LIST)
+                        ?: arrayListOf()
+
+            Log.d("FLIST/SAVE2", "${favoriteList?.size}")
+            favoriteList?.let {
+                Log.d("FLIST/SAVE3", "${it.size}")
+                initRecycler(it)
             }
         }
     }
