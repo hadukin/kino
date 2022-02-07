@@ -33,8 +33,6 @@ class FavoriteFragment : Fragment() {
     private var favoriteList: ArrayList<Content>? = null
     private var removedItems = arrayListOf<Content>()
 
-    // private val vm by lazy { ViewModelProvider(this)[FavoriteViewModel::class.java] }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,9 +49,12 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // favoriteList = savedInstanceState?.getParcelableArrayList(FAVORITE_LIST)
-        // Log.d("FLIST/SAVE1", "${favoriteList?.size}")
+        favoriteList = savedInstanceState?.getParcelableArrayList(FAVORITE_LIST)
+        favoriteList.let {
+            if (it != null) {
+                initRecycler(it)
+            }
+        }
 
         parentFragmentManager.setFragmentResultListener(
             HomeFragment.FAVORITE_LIST_RESULT,
@@ -63,9 +64,7 @@ class FavoriteFragment : Fragment() {
                 ?: result.getParcelableArrayList(HomeFragment.FAVORITE_LIST)
                         ?: arrayListOf()
 
-            Log.d("FLIST/SAVE2", "${favoriteList?.size}")
             favoriteList?.let {
-                Log.d("FLIST/SAVE3", "${it.size}")
                 initRecycler(it)
             }
         }
