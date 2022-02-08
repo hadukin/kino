@@ -21,6 +21,7 @@ import com.example.kino.FavoriteActivity
 import com.example.kino.R
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.FragmentContentDetailBinding
+import com.example.kino.databinding.FragmentFavoriteBinding
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.models.Content
 import com.example.kino.views.home.HomeFragment
@@ -28,7 +29,7 @@ import com.example.kino.views.home.HomeViewModel
 import com.example.kino.views.home.details.ContentDetailFragment
 
 class FavoriteFragment : Fragment() {
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentFavoriteBinding
     private lateinit var recycler: RecyclerView
     private var favoriteList: ArrayList<Content>? = null
     private var removedItems = arrayListOf<Content>()
@@ -37,7 +38,7 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater)
+        binding = FragmentFavoriteBinding.inflate(layoutInflater)
         recycler = binding.recycler
         return binding.root
     }
