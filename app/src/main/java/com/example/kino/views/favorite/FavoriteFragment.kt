@@ -17,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kino.FavoriteActivity
 import com.example.kino.R
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.FragmentContentDetailBinding
@@ -76,7 +75,7 @@ class FavoriteFragment : Fragment() {
             childFragmentManager
                 .beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .add(R.id.fragment_home_id, ContentDetailFragment(contentItem))
+                .replace(R.id.fragment_favorite_id, ContentDetailFragment(contentItem))
                 .addToBackStack(null)
                 .commit()
         }

@@ -54,7 +54,7 @@ class ContentDetailFragment() : Fragment() {
             title = "${content?.name}"
         }
 
-        binding.description?.apply {
+        binding.description.apply {
             text = "${content?.description}"
         }
     }
