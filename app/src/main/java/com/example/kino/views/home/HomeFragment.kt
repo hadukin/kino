@@ -38,6 +38,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
@@ -70,36 +71,39 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
 
     override fun onClickFavorite(contentItem: Content, position: Int) {
+
         if (!vm.favoriteItems.value?.contains(contentItem)!!) {
             val updated = contentItem.copy(isFavorite = true)
             vm.addFavorite(updated)
-            FakeBackend.content[position] = updated
+            FakeBackend.addToFavorite(contentItem)
+            // FakeBackend.content[position] = updated
             recycler.adapter?.notifyItemChanged(position)
             showSnackBar("Контент добавлен в избранное") {
                 vm.removeFavorite(updated)
-                FakeBackend.content[position] = contentItem
+                // FakeBackend.content[position] = contentItem
                 recycler.adapter?.notifyItemChanged(position)
             }
         } else {
+            FakeBackend.removeFromFavorite(contentItem)
             vm.removeFavorite(contentItem)
-            FakeBackend.content[position] = contentItem.copy(isFavorite = false)
+            // FakeBackend.content[position] = contentItem.copy(isFavorite = false)
             recycler.adapter?.notifyItemChanged(position)
 
             showSnackBar("Контент удален из избранного") {
                 vm.addFavorite(contentItem)
-                FakeBackend.content[position] = contentItem
+                // FakeBackend.content[position] = contentItem
                 recycler.adapter?.notifyItemChanged(position)
             }
         }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-            .setAction("Отмена") {
-                onCancel()
-            }
-            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-            .show()
+        // Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+        //     .setAction("Отмена") {
+        //         onCancel()
+        //     }
+        //     .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+        //     .show()
     }
 
     companion object {
