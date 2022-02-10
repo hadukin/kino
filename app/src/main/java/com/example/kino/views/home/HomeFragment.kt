@@ -2,14 +2,11 @@ package com.example.kino.views.home
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,15 +17,12 @@ import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.models.Content
 import com.google.android.material.snackbar.Snackbar
-import kotlin.math.log
 
 
 class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var recycler: RecyclerView
-
-    private val vm by lazy { ViewModelProvider(this)[HomeViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,15 +32,10 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
         initRecycler()
-
-        parentFragmentManager.setFragmentResult(FAVORITE_LIST_RESULT, Bundle().apply {
-            putParcelableArrayList(FAVORITE_LIST, vm.favoriteItems.value)
-        })
     }
 
     private fun initRecycler() {
@@ -71,43 +60,31 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
 
     override fun onClickFavorite(contentItem: Content, position: Int) {
-
-        if (!vm.favoriteItems.value?.contains(contentItem)!!) {
-            val updated = contentItem.copy(isFavorite = true)
-            vm.addFavorite(updated)
+        if (!FakeBackend.favorites.contains(contentItem)) {
             FakeBackend.addToFavorite(contentItem)
-            // FakeBackend.content[position] = updated
             recycler.adapter?.notifyItemChanged(position)
             showSnackBar("Контент добавлен в избранное") {
-                vm.removeFavorite(updated)
-                // FakeBackend.content[position] = contentItem
+                FakeBackend.removeFromFavorite(contentItem)
                 recycler.adapter?.notifyItemChanged(position)
             }
+
         } else {
             FakeBackend.removeFromFavorite(contentItem)
-            vm.removeFavorite(contentItem)
-            // FakeBackend.content[position] = contentItem.copy(isFavorite = false)
             recycler.adapter?.notifyItemChanged(position)
 
             showSnackBar("Контент удален из избранного") {
-                vm.addFavorite(contentItem)
-                // FakeBackend.content[position] = contentItem
+                FakeBackend.addToFavorite(contentItem)
                 recycler.adapter?.notifyItemChanged(position)
             }
         }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        // Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-        //     .setAction("Отмена") {
-        //         onCancel()
-        //     }
-        //     .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-        //     .show()
-    }
-
-    companion object {
-        const val FAVORITE_LIST = "favorite_list"
-        const val FAVORITE_LIST_RESULT = "favorite_list_result"
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .setAction("Отмена") {
+                onCancel()
+            }
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+            .show()
     }
 }
