@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,33 +29,38 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var recycler: RecyclerView
+    private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        App.instance.contentApi.getContent(1, 10).enqueue(object : Callback<List<Content>?> {
-            override fun onResponse(
-                call: Call<List<Content>?>,
-                response: Response<List<Content>?>
-            ) {
-                Log.d("RESULT", "${response.body()}")
-            }
-
-            override fun onFailure(call: Call<List<Content>?>, t: Throwable) {
-                Log.d("RESULT", "ERROR: ${t}")
-            }
-        })
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
+
         initRecycler()
+
+
+        App.instance.contentApi.getContent(1, 10).enqueue(object : Callback<List<Content>?> {
+            override fun onResponse(
+                call: Call<List<Content>?>,
+                response: Response<List<Content>?>
+            ) {
+                response.body().let {
+                    vm.contentList.value?.addAll(response.body()!!)
+                    recycler.adapter?.notifyDataSetChanged()
+                }
+            }
+
+            override fun onFailure(call: Call<List<Content>?>, t: Throwable) {
+                Log.d("RESULT", "ERROR: ${t}")
+            }
+        })
     }
 
     private fun initRecycler() {
@@ -64,8 +70,9 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         } else {
             LinearLayoutManager(requireContext())
         }
+
         recycler.layoutManager = layoutManager
-        recycler.adapter = ContentItemAdapter(FakeBackend.content, this)
+        recycler.adapter = ContentItemAdapter(vm.contentList.value!!, this)
     }
 
     override fun onClickDetails(contentItem: Content, position: Int) {

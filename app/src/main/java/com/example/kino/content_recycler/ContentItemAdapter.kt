@@ -7,7 +7,7 @@ import com.example.kino.R
 import com.example.kino.models.Content
 
 class ContentItemAdapter(
-    private val items: List<Content>,
+    private val items: ArrayList<Content>,
     private val listener: ContentClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

@@ -1,30 +1,20 @@
 package com.example.kino.views.favorite
 
-import android.content.Intent
 import android.content.res.Configuration
-import android.hardware.lights.Light
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.R
 import com.example.kino.content_recycler.ContentItemAdapter
-import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.databinding.FragmentFavoriteBinding
-import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.models.Content
 import com.example.kino.utils.FakeBackend
-import com.example.kino.views.home.HomeFragment
 import com.example.kino.views.home.HomeViewModel
 import com.example.kino.views.home.details.ContentDetailFragment
 
@@ -53,9 +43,9 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         } else {
             LinearLayoutManager(requireContext())
         }
-        val adapter = ContentItemAdapter(FakeBackend.favorites, this)
-        recycler.layoutManager = layoutManager
-        recycler.adapter = adapter
+        // val adapter = ContentItemAdapter(FakeBackend.favorites, this)
+        // recycler.layoutManager = layoutManager
+        // recycler.adapter = adapter
     }
 
     override fun onClickDetails(contentItem: Content, position: Int) {

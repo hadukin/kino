@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.kino.R
 import com.example.kino.models.Content
 
@@ -31,6 +32,14 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
             text = item.description
             maxLines = 2
         }
+
+        Glide.with(image.context)
+            .load(item.poster)
+            // .placeholder(R.drawable.ic_image)
+            // .error(R.drawable.ic_error)
+            // .override(image2.resources.getDimensionPixelSize(R.dimen.image_size))
+            .centerCrop()
+            .into(image)
 
         image.apply {
             // setImageResource("item.poster")
