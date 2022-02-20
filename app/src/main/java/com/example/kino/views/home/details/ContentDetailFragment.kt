@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
@@ -30,17 +31,16 @@ class ContentDetailFragment() : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val content = arguments?.getParcelable<Content>(CONTENT)
 
-        binding.poster.apply {
-            content?.poster.let {
-                // if (it != null) {
-                //     setImageResource(it)
-                // }
+        content?.poster.let {
+            if (it != null) {
+                Glide.with(binding.poster.context)
+                    .load(it)
+                    .centerCrop()
+                    .into(binding.poster)
             }
         }
 
