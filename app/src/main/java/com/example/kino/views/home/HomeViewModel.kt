@@ -31,46 +31,11 @@ class HomeViewModel : ViewModel() {
 
     val contentList: LiveData<ArrayList<Content>> = _contentList
 
-    fun addContent(item: Content) {
-        _contentList.value?.add(item)
+    private val _page = MutableLiveData<Int>().apply { value = 1 }
+
+    val page: LiveData<Int> = _page
+
+    fun nextPage() {
+        _page.value = _page.value?.plus(1)
     }
-
-    //
-    // val contentList: LiveData<ArrayList<Content>> = _favoriteItems
-
-    // private val _users: MutableLiveData<List<Content>> by lazy {
-    //     MutableLiveData<List<Content>>().also {
-    //         loadUsers()
-    //     }
-    // }
-    //
-    // fun fetchUsers(): LiveData<List<Content>> {
-    //     return _users
-    // }
-    //
-    // private fun loadUsers(): MutableList<Content> {
-    //     val data = mutableListOf<Content>()
-    //
-    //     App.instance.contentApi.getContent(1, 10).enqueue(object : Callback<List<Content>?> {
-    //         override fun onResponse(
-    //             call: Call<List<Content>?>,
-    //             response: Response<List<Content>?>
-    //         ) {
-    //             response.body().let {
-    //                 if (it != null) {
-    //                     data.addAll(it)
-    //                 }
-    //             }
-    //         }
-    //
-    //         override fun onFailure(call: Call<List<Content>?>, t: Throwable) {
-    //             Log.d("RESULT", "ERROR: ${t}")
-    //         }
-    //     })
-    //     return data
-    // }
-
-    // fun fetchContent(): MutableList<Content> {
-    //     val data = mutableListOf<Content>()
-    // }
 }

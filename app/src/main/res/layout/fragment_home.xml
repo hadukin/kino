@@ -25,6 +25,23 @@
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:title="@string/nav_home" />
 
+            <!--<Button
+                android:id="@+id/increment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="increment" />
+
+            <TextView
+                android:id="@+id/page"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/decrement"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="decrement" />-->
+
 
         </com.google.android.material.appbar.AppBarLayout>
 
