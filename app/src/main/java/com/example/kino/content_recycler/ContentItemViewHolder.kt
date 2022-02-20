@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.bumptech.glide.Glide
 import com.example.kino.R
 import com.example.kino.models.Content
@@ -35,9 +36,6 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
         Glide.with(image.context)
             .load(item.poster)
-            // .placeholder(R.drawable.ic_image)
-            // .error(R.drawable.ic_error)
-            // .override(image2.resources.getDimensionPixelSize(R.dimen.image_size))
             .centerCrop()
             .into(image)
 

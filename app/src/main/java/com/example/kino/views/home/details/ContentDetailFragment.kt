@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import coil.load
 import com.bumptech.glide.Glide
 import com.example.kino.R
 
@@ -37,10 +38,7 @@ class ContentDetailFragment() : Fragment() {
 
         content?.poster.let {
             if (it != null) {
-                Glide.with(binding.poster.context)
-                    .load(it)
-                    .centerCrop()
-                    .into(binding.poster)
+                binding.poster.load(it)
             }
         }
 
