@@ -28,6 +28,7 @@ class App : Application() {
             val response = chain.proceed(
                 chain.request()
                     .newBuilder()
+                    .addHeader("apikey", API_KEY)
                     .url(url)
                     .build()
             )
@@ -50,7 +51,8 @@ class App : Application() {
 
     companion object {
 
-        const val BASE_URL = "https://6212347701ccdac07434b998.mockapi.io/"
+        const val BASE_URL = "https://api.napster.com/v2.2/"
+        const val API_KEY = "Njc0NWI0MzEtZWQyOS00ZGY2LTgzYjQtM2FmOTYxNWUyMzNk"
 
         lateinit var instance: App
             private set

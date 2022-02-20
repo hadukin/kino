@@ -1,6 +1,7 @@
 package com.example.kino.views.home
 
 import android.content.res.Configuration
+import android.hardware.lights.Light
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -18,8 +19,8 @@ import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.utils.FakeBackend
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
+import com.example.kino.models.*
 import retrofit2.Callback
-import com.example.kino.models.Content
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Response
@@ -43,7 +44,8 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
         initRecycler()
-        fetchContent(vm.page.value ?: 1)
+        fetchPlaylist()
+        // fetchContent(vm.page.value ?: 1)
     }
 
     private fun initRecycler() {
@@ -61,15 +63,13 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
                     vm.nextPage()
-                    fetchContent(vm.page.value ?: 1)
+                    // fetchContent(vm.page.value ?: 1)
                 }
-
-                Log.d("RRRR", "${recyclerView.canScrollVertically(1)}")
             }
         })
     }
 
-    override fun onClickDetails(contentItem: Content, position: Int) {
+    override fun onClickDetails(contentItem: Station, position: Int) {
         childFragmentManager
             .beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -79,24 +79,24 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
 
-    override fun onClickFavorite(contentItem: Content, position: Int) {
-        if (!FakeBackend.favorites.contains(contentItem)) {
-            FakeBackend.addToFavorite(contentItem)
-            recycler.adapter?.notifyItemChanged(position)
-            showSnackBar("Контент добавлен в избранное") {
-                FakeBackend.removeFromFavorite(contentItem)
-                recycler.adapter?.notifyItemChanged(position)
-            }
-
-        } else {
-            FakeBackend.removeFromFavorite(contentItem)
-            recycler.adapter?.notifyItemChanged(position)
-
-            showSnackBar("Контент удален из избранного") {
-                FakeBackend.addToFavorite(contentItem)
-                recycler.adapter?.notifyItemChanged(position)
-            }
-        }
+    override fun onClickFavorite(contentItem: Station, position: Int) {
+        // if (!FakeBackend.favorites.contains(contentItem)) {
+        //     FakeBackend.addToFavorite(contentItem)
+        //     recycler.adapter?.notifyItemChanged(position)
+        //     showSnackBar("Контент добавлен в избранное") {
+        //         FakeBackend.removeFromFavorite(contentItem)
+        //         recycler.adapter?.notifyItemChanged(position)
+        //     }
+        //
+        // } else {
+        //     FakeBackend.removeFromFavorite(contentItem)
+        //     recycler.adapter?.notifyItemChanged(position)
+        //
+        //     showSnackBar("Контент удален из избранного") {
+        //         FakeBackend.addToFavorite(contentItem)
+        //         recycler.adapter?.notifyItemChanged(position)
+        //     }
+        // }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
@@ -108,6 +108,28 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             .show()
     }
 
+    private fun fetchPlaylist() {
+        App.instance.contentApi.getStations(5, 0).enqueue(object : Callback<StationsResponse> {
+            override fun onResponse(
+                call: Call<StationsResponse>,
+                response: Response<StationsResponse>
+            ) {
+                response.body().let {
+                    if (it != null) {
+                        vm.contentList.value?.addAll(it.stations)
+                        recycler.adapter?.notifyDataSetChanged()
+                    }
+                    // vm.contentList.value?.addAll(response.body()!!)
+                    // recycler.adapter?.notifyDataSetChanged()
+                }
+            }
+
+            override fun onFailure(call: Call<StationsResponse>?, t: Throwable) {
+                Log.d("RESULT", "ERROR: ${t}")
+            }
+        })
+    }
+
     private fun fetchContent(page: Int) {
         App.instance.contentApi.getContent(page, 10).enqueue(object : Callback<List<Content>?> {
             override fun onResponse(
@@ -115,7 +137,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                 response: Response<List<Content>?>
             ) {
                 response.body().let {
-                    vm.contentList.value?.addAll(response.body()!!)
+                    // vm.contentList.value?.addAll(response.body()!!)
                     recycler.adapter?.notifyDataSetChanged()
                 }
             }

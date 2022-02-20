@@ -13,12 +13,13 @@ import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.models.Content
+import com.example.kino.models.Station
 import com.example.kino.views.home.HomeViewModel
 
 class ContentDetailFragment() : Fragment() {
     private lateinit var binding: FragmentContentDetailBinding
 
-    constructor(content: Content) : this() {
+    constructor(content: Station) : this() {
         arguments = Bundle().apply {
             putParcelable(CONTENT, content)
         }
@@ -34,9 +35,9 @@ class ContentDetailFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val content = arguments?.getParcelable<Content>(CONTENT)
+        val content = arguments?.getParcelable<Station>(CONTENT)
 
-        content?.poster.let {
+        content?.links?.largeImage?.href.let {
             if (it != null) {
                 binding.poster.load(it)
             }
