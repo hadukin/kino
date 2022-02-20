@@ -2,6 +2,7 @@ package com.example.kino.views.home
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +11,17 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kino.App
 import com.example.kino.views.home.details.ContentDetailFragment
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.utils.FakeBackend
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
+import retrofit2.Callback
 import com.example.kino.models.Content
 import com.google.android.material.snackbar.Snackbar
+import retrofit2.Call
+import retrofit2.Response
 
 
 class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
@@ -29,6 +34,20 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        App.instance.contentApi.getContent(1, 10).enqueue(object : Callback<List<Content>?> {
+            override fun onResponse(
+                call: Call<List<Content>?>,
+                response: Response<List<Content>?>
+            ) {
+                Log.d("RESULT", "${response.body()}")
+            }
+
+            override fun onFailure(call: Call<List<Content>?>, t: Throwable) {
+                Log.d("RESULT", "ERROR: ${t}")
+            }
+        })
+
         return binding.root
     }
 

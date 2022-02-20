@@ -1,14 +1,15 @@
 package com.example.kino.models
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 import java.util.UUID
 
 @Parcelize
 data class Content(
-    val id: Int,
-    val name: String,
-    val description: String,
-    val poster: Int,
-    var isFavorite: Boolean = false
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("description") val description: String,
+    @SerializedName("poster") val poster: String,
+    @SerializedName("is_favorite") var isFavorite: Boolean = false
 ) : Parcelable

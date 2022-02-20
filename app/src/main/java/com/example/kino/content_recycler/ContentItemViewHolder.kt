@@ -33,7 +33,7 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         }
 
         image.apply {
-            setImageResource(item.poster)
+            // setImageResource("item.poster")
         }
 
         details.setOnClickListener {

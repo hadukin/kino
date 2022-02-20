@@ -38,9 +38,9 @@ class ContentDetailFragment() : Fragment() {
 
         binding.poster.apply {
             content?.poster.let {
-                if (it != null) {
-                    setImageResource(it)
-                }
+                // if (it != null) {
+                //     setImageResource(it)
+                // }
             }
         }
 
