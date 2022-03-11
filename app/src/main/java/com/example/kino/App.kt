@@ -36,9 +36,9 @@ class App : Application() {
         }
             .addInterceptor(HttpLoggingInterceptor()
                 .apply {
-                    if (BuildConfig.DEBUG) {
-                        level = HttpLoggingInterceptor.Level.BODY
-                    }
+                    // if (BuildConfig.DEBUG) {
+                    //     level = HttpLoggingInterceptor.Level.BODY
+                    // }
                 }).build()
 
         val retrofit = Retrofit.Builder()
@@ -51,8 +51,8 @@ class App : Application() {
 
     companion object {
 
-        const val BASE_URL = "https://api.napster.com/v2.2/"
-        const val API_KEY = "Njc0NWI0MzEtZWQyOS00ZGY2LTgzYjQtM2FmOTYxNWUyMzNk"
+        const val BASE_URL = "https://api.themoviedb.org/3/"
+        const val API_KEY = "6cd5ff50f548e8ae4e99db6d336a460b"
 
         lateinit var instance: App
             private set

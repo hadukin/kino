@@ -13,8 +13,10 @@ import com.bumptech.glide.load.model.Headers
 import com.bumptech.glide.load.model.LazyHeaders
 import com.example.kino.R
 import com.example.kino.models.Content
+import com.example.kino.models.Movie
 // import com.example.kino.models.Playlist
-import com.example.kino.models.Station
+// import com.example.kino.models.Station
+import com.example.kino.models.posterUrl
 
 class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -24,7 +26,7 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     private val image = itemView.findViewById<ImageView>(R.id.image)
     private val favorite = itemView.findViewById<ImageView>(R.id.favorite)
 
-    fun bind(item: Station, listener: ContentItemAdapter.ContentClickListener) {
+    fun bind(item: Movie, listener: ContentItemAdapter.ContentClickListener) {
         // if (item.isFavorite) {
         //     favorite.setColorFilter(Color.RED)
         // } else {
@@ -32,11 +34,11 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         // }
 
         name.apply {
-            text = item.name
+            text = item.title
         }
 
         description.apply {
-            text = item.description
+            text = item.overview
             maxLines = 2
         }
 
@@ -56,7 +58,7 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         //         .addHeader("apikey", "Njc0NWI0MzEtZWQyOS00ZGY2LTgzYjQtM2FmOTYxNWUyMzNk").build()
         // )
         Glide.with(image.context)
-            .load(item.links?.largeImage?.href)
+            .load(item.posterUrl())
             .centerCrop()
             .into(image)
         // Glide.with(image.context)

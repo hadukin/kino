@@ -2,6 +2,7 @@ package com.example.kino.views.home.details
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,13 +14,14 @@ import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.models.Content
-import com.example.kino.models.Station
+import com.example.kino.models.Movie
+// import com.example.kino.models.Station
 import com.example.kino.views.home.HomeViewModel
 
 class ContentDetailFragment() : Fragment() {
     private lateinit var binding: FragmentContentDetailBinding
 
-    constructor(content: Station) : this() {
+    constructor(content: Movie) : this() {
         arguments = Bundle().apply {
             putParcelable(CONTENT, content)
         }
@@ -35,26 +37,26 @@ class ContentDetailFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val content = arguments?.getParcelable<Station>(CONTENT)
+        val content = arguments?.getParcelable<Movie>(CONTENT)
 
-        content?.links?.largeImage?.href.let {
-            if (it != null) {
-                binding.poster.load(it)
-            }
+        content?.posterPath.let {
+            binding.poster.load("https://image.tmdb.org/t/p/original/$it")
         }
 
-        binding.description.text = content?.description
+        Log.d("posterPath", "${content?.posterPath}")
+
+        binding.description.text = content?.overview
 
         binding.toolbar.apply {
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
             setNavigationOnClickListener {
                 activity?.onBackPressed()
             }
-            title = "${content?.name}"
+            title = "${content?.title}"
         }
 
         binding.description.apply {
-            text = "${content?.description}"
+            text = "${content?.overview}"
         }
     }
 

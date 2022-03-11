@@ -69,7 +69,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         })
     }
 
-    override fun onClickDetails(contentItem: Station, position: Int) {
+    override fun onClickDetails(contentItem: Movie, position: Int) {
         childFragmentManager
             .beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -79,7 +79,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
 
-    override fun onClickFavorite(contentItem: Station, position: Int) {
+    override fun onClickFavorite(contentItem: Movie, position: Int) {
         // if (!FakeBackend.favorites.contains(contentItem)) {
         //     FakeBackend.addToFavorite(contentItem)
         //     recycler.adapter?.notifyItemChanged(position)
@@ -109,14 +109,14 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     private fun fetchPlaylist() {
-        App.instance.contentApi.getStations(5, 0).enqueue(object : Callback<StationsResponse> {
+        App.instance.contentApi.getMoviePopular(1, "6cd5ff50f548e8ae4e99db6d336a460b").enqueue(object : Callback<MoviesResponse> {
             override fun onResponse(
-                call: Call<StationsResponse>,
-                response: Response<StationsResponse>
+                call: Call<MoviesResponse>,
+                response: Response<MoviesResponse>
             ) {
                 response.body().let {
                     if (it != null) {
-                        vm.contentList.value?.addAll(it.stations)
+                        vm.contentList.value?.addAll(it.results)
                         recycler.adapter?.notifyDataSetChanged()
                     }
                     // vm.contentList.value?.addAll(response.body()!!)
@@ -124,8 +124,8 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                 }
             }
 
-            override fun onFailure(call: Call<StationsResponse>?, t: Throwable) {
-                Log.d("RESULT", "ERROR: ${t}")
+            override fun onFailure(call: Call<MoviesResponse>?, t: Throwable) {
+                // Log.d("RESULT", "ERROR: ${t}")
             }
         })
     }
@@ -143,7 +143,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             }
 
             override fun onFailure(call: Call<List<Content>?>, t: Throwable) {
-                Log.d("RESULT", "ERROR: ${t}")
+                // Log.d("RESULT", "ERROR: ${t}")
             }
         })
     }

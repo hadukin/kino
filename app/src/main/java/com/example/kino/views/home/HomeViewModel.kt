@@ -6,8 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kino.App
 import com.example.kino.models.Content
+import com.example.kino.models.Movie
 // import com.example.kino.models.Playlist
-import com.example.kino.models.Station
+// import com.example.kino.models.Station
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -27,11 +28,11 @@ class HomeViewModel : ViewModel() {
         _favoriteItems.value?.remove(item)
     }
 
-    private val _contentList = MutableLiveData<ArrayList<Station>>().apply {
+    private val _contentList = MutableLiveData<ArrayList<Movie>>().apply {
         value = arrayListOf()
     }
 
-    val contentList: LiveData<ArrayList<Station>> = _contentList
+    val contentList: LiveData<ArrayList<Movie>> = _contentList
 
     private val _page = MutableLiveData<Int>().apply { value = 1 }
 

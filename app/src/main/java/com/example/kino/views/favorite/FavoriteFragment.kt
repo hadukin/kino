@@ -14,8 +14,9 @@ import com.example.kino.R
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.FragmentFavoriteBinding
 import com.example.kino.models.Content
+import com.example.kino.models.Movie
 // import com.example.kino.models.Playlist
-import com.example.kino.models.Station
+// import com.example.kino.models.Station
 import com.example.kino.utils.FakeBackend
 import com.example.kino.views.home.HomeViewModel
 import com.example.kino.views.home.details.ContentDetailFragment
@@ -50,7 +51,7 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         // recycler.adapter = adapter
     }
 
-    override fun onClickDetails(contentItem: Station, position: Int) {
+    override fun onClickDetails(contentItem: Movie, position: Int) {
         // childFragmentManager
         //     .beginTransaction()
         //     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -59,7 +60,7 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         //     .commit()
     }
 
-    override fun onClickFavorite(contentItem: Station, position: Int) {
+    override fun onClickFavorite(contentItem: Movie, position: Int) {
         // FakeBackend.removeFromFavorite(contentItem)
         // recycler.adapter?.notifyItemRemoved(position)
     }
