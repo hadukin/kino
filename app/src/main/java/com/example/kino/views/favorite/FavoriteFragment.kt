@@ -6,20 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kino.R
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.FragmentFavoriteBinding
-import com.example.kino.models.Content
 import com.example.kino.models.Movie
-// import com.example.kino.models.Playlist
-// import com.example.kino.models.Station
-import com.example.kino.utils.FakeBackend
-import com.example.kino.views.home.HomeViewModel
-import com.example.kino.views.home.details.ContentDetailFragment
 
 class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private lateinit var binding: FragmentFavoriteBinding

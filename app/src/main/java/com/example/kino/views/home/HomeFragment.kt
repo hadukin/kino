@@ -1,9 +1,7 @@
 package com.example.kino.views.home
 
 import android.content.res.Configuration
-import android.hardware.lights.Light
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.App
 import com.example.kino.views.home.details.ContentDetailFragment
 import com.example.kino.content_recycler.ContentItemAdapter
-import com.example.kino.utils.FakeBackend
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.models.*

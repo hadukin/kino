@@ -1,17 +1,10 @@
 package com.example.kino.views.home
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kino.App
 import com.example.kino.models.Content
 import com.example.kino.models.Movie
-// import com.example.kino.models.Playlist
-// import com.example.kino.models.Station
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
     private val _favoriteItems = MutableLiveData<ArrayList<Content>>().apply {

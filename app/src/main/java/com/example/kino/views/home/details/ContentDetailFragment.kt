@@ -1,22 +1,15 @@
 package com.example.kino.views.home.details
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import coil.load
-import com.bumptech.glide.Glide
 import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
-import com.example.kino.models.Content
 import com.example.kino.models.Movie
-// import com.example.kino.models.Station
-import com.example.kino.views.home.HomeViewModel
 
 class ContentDetailFragment() : Fragment() {
     private lateinit var binding: FragmentContentDetailBinding
@@ -42,10 +35,6 @@ class ContentDetailFragment() : Fragment() {
         content?.posterPath.let {
             binding.poster.load("https://image.tmdb.org/t/p/original/$it")
         }
-
-        Log.d("posterPath", "${content?.posterPath}")
-
-        binding.description.text = content?.overview
 
         binding.toolbar.apply {
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
