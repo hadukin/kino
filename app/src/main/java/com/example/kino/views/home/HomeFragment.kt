@@ -2,6 +2,7 @@ package com.example.kino.views.home
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -41,7 +42,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
         initRecycler()
-        fetchPlaylist()
+        fetchPlaylist(vm.page.value ?: 1)
         // fetchContent(vm.page.value ?: 1)
     }
 
@@ -60,7 +61,8 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
                     vm.nextPage()
-                    // fetchContent(vm.page.value ?: 1)
+                    Log.d("FETCH_NEXT_PAGE", "${vm.page.value}")
+                    fetchPlaylist(vm.page.value ?: 1)
                 }
             }
         })
@@ -105,43 +107,42 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             .show()
     }
 
-    private fun fetchPlaylist() {
-        App.instance.contentApi.getMoviePopular(1, "6cd5ff50f548e8ae4e99db6d336a460b").enqueue(object : Callback<MoviesResponse> {
-            override fun onResponse(
-                call: Call<MoviesResponse>,
-                response: Response<MoviesResponse>
-            ) {
-                response.body().let {
-                    if (it != null) {
-                        vm.contentList.value?.addAll(it.results)
-                        recycler.adapter?.notifyDataSetChanged()
+    private fun fetchPlaylist(page: Int) {
+        App.instance.contentApi.getMoviePopular(page, App.API_KEY)
+            .enqueue(object : Callback<MoviesResponse> {
+                override fun onResponse(
+                    call: Call<MoviesResponse>,
+                    response: Response<MoviesResponse>
+                ) {
+                    response.body().let {
+                        if (it != null) {
+                            vm.contentList.value?.addAll(it.results)
+                            recycler.adapter?.notifyDataSetChanged()
+                        }
                     }
-                    // vm.contentList.value?.addAll(response.body()!!)
-                    // recycler.adapter?.notifyDataSetChanged()
                 }
-            }
 
-            override fun onFailure(call: Call<MoviesResponse>?, t: Throwable) {
-                // Log.d("RESULT", "ERROR: ${t}")
-            }
-        })
+                override fun onFailure(call: Call<MoviesResponse>?, t: Throwable) {
+                    // Log.d("RESULT", "ERROR: ${t}")
+                }
+            })
     }
 
     private fun fetchContent(page: Int) {
-        App.instance.contentApi.getContent(page, 10).enqueue(object : Callback<List<Content>?> {
-            override fun onResponse(
-                call: Call<List<Content>?>,
-                response: Response<List<Content>?>
-            ) {
-                response.body().let {
-                    // vm.contentList.value?.addAll(response.body()!!)
-                    recycler.adapter?.notifyDataSetChanged()
-                }
-            }
-
-            override fun onFailure(call: Call<List<Content>?>, t: Throwable) {
-                // Log.d("RESULT", "ERROR: ${t}")
-            }
-        })
+        // App.instance.contentApi.getContent(page, 10).enqueue(object : Callback<List<Content>?> {
+        //     override fun onResponse(
+        //         call: Call<List<Content>?>,
+        //         response: Response<List<Content>?>
+        //     ) {
+        //         response.body().let {
+        //             // vm.contentList.value?.addAll(response.body()!!)
+        //             recycler.adapter?.notifyDataSetChanged()
+        //         }
+        //     }
+        //
+        //     override fun onFailure(call: Call<List<Content>?>, t: Throwable) {
+        //         // Log.d("RESULT", "ERROR: ${t}")
+        //     }
+        // })
     }
 }
