@@ -15,6 +15,8 @@ data class Movie(
     @SerializedName("vote_average") val voteAverage: Double,
     @SerializedName("vote_count") val voteCount: Int,
     @SerializedName("overview") val overview: String,
+
+    var isFavorite: Boolean = false,
 ) : Parcelable
 
 // fun Movie.posterUrl(): String {

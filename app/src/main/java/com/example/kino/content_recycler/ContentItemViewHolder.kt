@@ -1,5 +1,7 @@
 package com.example.kino.content_recycler
 
+import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -23,6 +25,14 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         // voteCountText.apply {
         //     text = "${item.voteCount}"
         // }
+
+        Log.d("ISFAV","${item.isFavorite}")
+
+        if (item.isFavorite) {
+            buttonFavorite.setColorFilter(Color.RED)
+        } else {
+            buttonFavorite.setColorFilter(Color.GRAY)
+        }
 
         title.apply {
             text = item.title

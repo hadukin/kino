@@ -1,5 +1,6 @@
 package com.example.kino.views.home
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -41,8 +42,11 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
+
+        if (vm.contentList.value?.isEmpty() == true){
+            fetchPlaylist(vm.page.value ?: 1)
+        }
         initRecycler()
-        fetchPlaylist(vm.page.value ?: 1)
     }
 
     private fun initRecycler() {
@@ -60,7 +64,6 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
                     vm.nextPage()
-                    Log.d("FETCH_NEXT_PAGE", "${vm.page.value}")
                     fetchPlaylist(vm.page.value ?: 1)
                 }
             }
@@ -78,6 +81,14 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
+
+        vm.toggleFavorite(contentItem)
+        recycler.adapter?.notifyItemChanged(position)
+        showSnackBar("Контент добавлен в избранное") {
+            vm.toggleFavorite(contentItem)
+            recycler.adapter?.notifyItemChanged(position)
+        }
+
         // if (!FakeBackend.favorites.contains(contentItem)) {
         //     FakeBackend.addToFavorite(contentItem)
         //     recycler.adapter?.notifyItemChanged(position)
