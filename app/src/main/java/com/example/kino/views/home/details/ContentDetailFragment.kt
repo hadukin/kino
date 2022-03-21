@@ -1,6 +1,7 @@
 package com.example.kino.views.home.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.models.Movie
+import com.example.kino.models.posterUrl
 
 class ContentDetailFragment() : Fragment() {
     private lateinit var binding: FragmentContentDetailBinding
@@ -32,8 +34,8 @@ class ContentDetailFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val content = arguments?.getParcelable<Movie>(CONTENT)
 
-        content?.posterPath.let {
-            binding.poster.load("https://image.tmdb.org/t/p/original/$it")
+        content?.posterUrl.let {
+            binding.poster.load(it)
         }
 
         binding.toolbar.apply {

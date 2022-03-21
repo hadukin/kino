@@ -58,3 +58,5 @@ class App : Application() {
             private set
     }
 }
+// https://api.themoviedb.org/3/movie/508947/credits?api_key=6cd5ff50f548e8ae4e99db6d336a460b
+// https://api.themoviedb.org/3/movie/508947?api_key=6cd5ff50f548e8ae4e99db6d336a460b&append_to_response=credits
