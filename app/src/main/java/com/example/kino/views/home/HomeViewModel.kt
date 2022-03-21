@@ -3,21 +3,20 @@ package com.example.kino.views.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kino.models.Content
 import com.example.kino.models.Movie
 
 class HomeViewModel : ViewModel() {
-    private val _favoriteItems = MutableLiveData<ArrayList<Content>>().apply {
+    private val _favoriteItems = MutableLiveData<ArrayList<Movie>>().apply {
         value = arrayListOf()
     }
 
-    val favoriteItems: LiveData<ArrayList<Content>> = _favoriteItems
+    val favoriteItems: LiveData<ArrayList<Movie>> = _favoriteItems
 
-    fun addFavorite(item: Content) {
+    fun addFavorite(item: Movie) {
         _favoriteItems.value?.add(item)
     }
 
-    fun removeFavorite(item: Content) {
+    fun removeFavorite(item: Movie) {
         _favoriteItems.value?.remove(item)
     }
 

@@ -43,7 +43,6 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         recycler = binding.recycler
         initRecycler()
         fetchPlaylist(vm.page.value ?: 1)
-        // fetchContent(vm.page.value ?: 1)
     }
 
     private fun initRecycler() {
@@ -126,23 +125,5 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                     // Log.d("RESULT", "ERROR: ${t}")
                 }
             })
-    }
-
-    private fun fetchContent(page: Int) {
-        // App.instance.contentApi.getContent(page, 10).enqueue(object : Callback<List<Content>?> {
-        //     override fun onResponse(
-        //         call: Call<List<Content>?>,
-        //         response: Response<List<Content>?>
-        //     ) {
-        //         response.body().let {
-        //             // vm.contentList.value?.addAll(response.body()!!)
-        //             recycler.adapter?.notifyDataSetChanged()
-        //         }
-        //     }
-        //
-        //     override fun onFailure(call: Call<List<Content>?>, t: Throwable) {
-        //         // Log.d("RESULT", "ERROR: ${t}")
-        //     }
-        // })
     }
 }

@@ -16,8 +16,14 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     private val image = itemView.findViewById<ImageView>(R.id.image)
     private val buttonDetail = itemView.findViewById<TextView>(R.id.button)
     private val buttonFavorite = itemView.findViewById<ImageView>(R.id.favorite)
+    private val voteCountText = itemView.findViewById<TextView>(R.id.vote_count)
 
     fun bind(item: Movie, listener: ContentItemAdapter.ContentClickListener) {
+
+        // voteCountText.apply {
+        //     text = "${item.voteCount}"
+        // }
+
         title.apply {
             text = item.title
         }
