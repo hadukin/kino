@@ -9,11 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.App
+import com.example.kino.MovieViewModel
 import com.example.kino.views.home.details.ContentDetailFragment
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.R
@@ -29,7 +31,9 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var recycler: RecyclerView
-    private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
+    private val vm: MovieViewModel by activityViewModels()
+    // private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
