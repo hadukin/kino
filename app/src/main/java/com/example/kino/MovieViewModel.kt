@@ -1,10 +1,8 @@
 package com.example.kino
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kino.App
 import com.example.kino.models.Movie
 
 class MovieViewModel : ViewModel() {
@@ -13,7 +11,7 @@ class MovieViewModel : ViewModel() {
         var current: Movie = item
         _contentList.value?.map {
             if (it.id == item.id) {
-                current = item.apply {
+                current = it.apply {
                     isFavorite = !item.isFavorite
                 }
             }
@@ -29,7 +27,7 @@ class MovieViewModel : ViewModel() {
     fun addFavorite(item: Movie) {
         _contentList.value?.map {
             if (it.id == item.id) {
-                item.apply {
+                it.apply {
                     isFavorite = true
                 }
             }
@@ -39,7 +37,7 @@ class MovieViewModel : ViewModel() {
     fun removeFavorite(item: Movie) {
         _contentList.value?.map {
             if (it.id == item.id) {
-                item.apply {
+                it.apply {
                     isFavorite = false
                 }
             }

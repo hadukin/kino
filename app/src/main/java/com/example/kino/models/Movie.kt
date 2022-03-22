@@ -19,9 +19,5 @@ data class Movie(
     var isFavorite: Boolean = false,
 ) : Parcelable
 
-// fun Movie.posterUrl(): String {
-//     return "https://image.tmdb.org/t/p/original/${this.posterPath}"
-// }
-
 val Movie.posterUrl: String
     get() = "https://image.tmdb.org/t/p/original/${this.posterPath}"
