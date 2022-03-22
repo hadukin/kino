@@ -1,16 +1,13 @@
 package com.example.kino.views.home
 
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -47,7 +44,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
 
-        if (vm.contentList.value?.isEmpty() == true){
+        if (vm.contentList.value?.isEmpty() == true) {
             fetchPlaylist(vm.page.value ?: 1)
         }
         initRecycler()
@@ -85,31 +82,12 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
-
-        vm.toggleFavorite(contentItem)
+        val toggleResult = vm.toggleFavorite(contentItem)
         recycler.adapter?.notifyItemChanged(position)
-        showSnackBar("Контент добавлен в избранное") {
+        showSnackBar(toggleResult) {
             vm.toggleFavorite(contentItem)
             recycler.adapter?.notifyItemChanged(position)
         }
-
-        // if (!FakeBackend.favorites.contains(contentItem)) {
-        //     FakeBackend.addToFavorite(contentItem)
-        //     recycler.adapter?.notifyItemChanged(position)
-        //     showSnackBar("Контент добавлен в избранное") {
-        //         FakeBackend.removeFromFavorite(contentItem)
-        //         recycler.adapter?.notifyItemChanged(position)
-        //     }
-        //
-        // } else {
-        //     FakeBackend.removeFromFavorite(contentItem)
-        //     recycler.adapter?.notifyItemChanged(position)
-        //
-        //     showSnackBar("Контент удален из избранного") {
-        //         FakeBackend.addToFavorite(contentItem)
-        //         recycler.adapter?.notifyItemChanged(position)
-        //     }
-        // }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {

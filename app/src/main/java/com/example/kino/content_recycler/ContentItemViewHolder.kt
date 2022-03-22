@@ -22,10 +22,6 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     fun bind(item: Movie, listener: ContentItemAdapter.ContentClickListener) {
 
-        // voteCountText.apply {
-        //     text = "${item.voteCount}"
-        // }
-
         Log.d("ISFAV","${item.isFavorite}")
 
         if (item.isFavorite) {

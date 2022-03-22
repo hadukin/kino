@@ -1,22 +1,11 @@
 package com.example.kino
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.ActivityMainBinding
-import com.example.kino.models.Content
-import com.example.kino.utils.FakeBackend
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 

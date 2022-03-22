@@ -8,13 +8,20 @@ import com.example.kino.App
 import com.example.kino.models.Movie
 
 class MovieViewModel : ViewModel() {
-    fun toggleFavorite(item: Movie) {
+
+    fun toggleFavorite(item: Movie): String {
+        var current: Movie = item
         _contentList.value?.map {
             if (it.id == item.id) {
-                item.apply {
+                current = item.apply {
                     isFavorite = !item.isFavorite
                 }
             }
+        }
+        if (current.isFavorite) {
+            return "Контент добавлен в избранное"
+        } else {
+            return "Контент удален из избранного"
         }
     }
 
@@ -38,6 +45,9 @@ class MovieViewModel : ViewModel() {
             }
         }
     }
+
+    val favorites: ArrayList<Movie>
+        get() = _contentList.value?.filter { it.isFavorite } as ArrayList<Movie>
 
     private val _contentList = MutableLiveData<ArrayList<Movie>>().apply {
         value = arrayListOf()

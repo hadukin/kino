@@ -46,7 +46,7 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             LinearLayoutManager(requireContext())
         }
 
-        val adapter = ContentItemAdapter(vm.contentList.value?.filter { it.isFavorite } as ArrayList<Movie>, this)
+        val adapter = ContentItemAdapter(vm.favorites, this)
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
     }
@@ -61,9 +61,9 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
-        vm.toggleFavorite(contentItem)
+        val toggleResult = vm.toggleFavorite(contentItem)
         recycler.adapter?.notifyItemChanged(position)
-        showSnackBar("Контент добавлен в избранное") {
+        showSnackBar(toggleResult) {
             vm.toggleFavorite(contentItem)
             recycler.adapter?.notifyItemChanged(position)
         }
