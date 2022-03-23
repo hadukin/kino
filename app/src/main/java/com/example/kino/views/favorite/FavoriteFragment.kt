@@ -22,6 +22,7 @@ import com.google.android.material.snackbar.Snackbar
 class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var recycler: RecyclerView
+    private lateinit var adapter: ContentItemAdapter
     private val vm: MovieViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -46,7 +47,7 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             LinearLayoutManager(requireContext())
         }
 
-        val adapter = ContentItemAdapter(vm.favorites, this)
+        adapter = ContentItemAdapter(vm.favorites, vm, this)
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
     }
@@ -61,11 +62,9 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
-        val toggleResult = vm.toggleFavorite(contentItem)
-        recycler.adapter?.notifyItemChanged(position)
-        showSnackBar(toggleResult) {
-            vm.toggleFavorite(contentItem)
-            recycler.adapter?.notifyItemChanged(position)
+        val resultText = adapter.removeFavorite(contentItem, position)
+        showSnackBar(resultText) {
+            adapter.addFavorite(contentItem, position)
         }
     }
 

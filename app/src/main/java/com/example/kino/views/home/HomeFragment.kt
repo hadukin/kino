@@ -29,6 +29,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private val binding get() = _binding!!
     private lateinit var recycler: RecyclerView
     private val vm: MovieViewModel by activityViewModels()
+    private lateinit var adapter: ContentItemAdapter
     // private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
 
 
@@ -52,14 +53,15 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
     private fun initRecycler() {
         val orientation = resources.configuration.orientation
-        val layoutManager = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        var layoutManager = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             GridLayoutManager(requireContext(), 3)
         } else {
             LinearLayoutManager(requireContext())
         }
+        adapter = ContentItemAdapter(vm.contentList.value!!, vm, this)
 
         recycler.layoutManager = layoutManager
-        recycler.adapter = ContentItemAdapter(vm.contentList.value!!, this)
+        recycler.adapter = adapter
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -82,11 +84,9 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
-        val toggleResult = vm.toggleFavorite(contentItem)
-        recycler.adapter?.notifyItemChanged(position)
-        showSnackBar(toggleResult) {
-            vm.toggleFavorite(contentItem)
-            recycler.adapter?.notifyItemChanged(position)
+        val result = adapter.toggleFavorite(contentItem, position)
+        showSnackBar(result) {
+            adapter.toggleFavorite(contentItem, position)
         }
     }
 
@@ -109,7 +109,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                     response.body().let {
                         if (it != null) {
                             vm.contentList.value?.addAll(it.results)
-                            recycler.adapter?.notifyDataSetChanged()
+                            adapter?.notifyDataSetChanged()
                         }
                     }
                 }
