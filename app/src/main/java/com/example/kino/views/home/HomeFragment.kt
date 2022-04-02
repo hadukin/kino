@@ -2,6 +2,7 @@ package com.example.kino.views.home
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,14 +18,21 @@ import com.example.kino.views.home.details.ContentDetailFragment
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
+import com.example.kino.features.content.data.datasource.ContentLocalDataSourceImpl
+import com.example.kino.features.content.data.datasource.ContentRemoteDataSourceImpl
+import com.example.kino.features.content.domain.repository.ContentRepositoryImpl
 import com.example.kino.models.*
+import com.example.kino.utils.NetworkConnectionChecker
 import retrofit2.Callback
 import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Response
 
 
-class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
+class HomeFragment : Fragment(),
+    ContentItemAdapter.ContentClickListener,
+    NetworkConnectionChecker.NetworkServiceListener {
+
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var recycler: RecyclerView
@@ -45,6 +53,15 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
 
+        context?.let {
+            NetworkConnectionChecker(it, this)
+        }
+
+        ContentRepositoryImpl(
+            remote = ContentRemoteDataSourceImpl(App.instance.movieClient),
+            local = ContentLocalDataSourceImpl()
+        )
+
         if (vm.contentList.value?.isEmpty() == true) {
             fetchPlaylist(vm.page.value ?: 1)
         }
@@ -53,7 +70,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
     private fun initRecycler() {
         val orientation = resources.configuration.orientation
-        var layoutManager = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        val layoutManager = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             GridLayoutManager(requireContext(), 3)
         } else {
             LinearLayoutManager(requireContext())
@@ -118,5 +135,9 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
                     // Log.d("RESULT", "ERROR: ${t}")
                 }
             })
+    }
+
+    override fun onChangeNetworkStatus(status: Boolean) {
+        Log.d("&&&", "$status")
     }
 }

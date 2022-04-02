@@ -2,6 +2,7 @@ package com.example.kino
 
 import android.app.Application
 import com.example.kino.api.ContentApi
+import com.example.kino.api.MovieClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,6 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class App : Application() {
 
     lateinit var contentApi: ContentApi
+    lateinit var movieClient: MovieClient
 
     override fun onCreate() {
         super.onCreate()
@@ -47,6 +49,7 @@ class App : Application() {
             .client(client).build()
 
         contentApi = retrofit.create(ContentApi::class.java)
+        movieClient = retrofit.create(MovieClient::class.java)
     }
 
     companion object {
