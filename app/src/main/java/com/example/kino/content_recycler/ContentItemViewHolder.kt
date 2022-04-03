@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,7 +13,6 @@ import com.example.kino.models.Movie
 import com.example.kino.models.posterUrl
 
 class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
     private val title = itemView.findViewById<TextView>(R.id.title)
     private val description = itemView.findViewById<TextView>(R.id.description)
     private val image = itemView.findViewById<ImageView>(R.id.image)
@@ -22,7 +22,7 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
 
     fun bind(item: Movie, listener: ContentItemAdapter.ContentClickListener) {
 
-        Log.d("ISFAV","${item.isFavorite}")
+        Log.d("ISFAV", "${item.isFavorite}")
 
         if (item.isFavorite) {
             buttonFavorite.setColorFilter(Color.RED)

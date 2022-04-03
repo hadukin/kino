@@ -30,6 +30,7 @@ import kotlinx.coroutines.GlobalScope
 import retrofit2.Call
 import retrofit2.Response
 import androidx.lifecycle.coroutineScope
+import com.example.kino.features.content.domain.repository.ContentRepository
 import kotlinx.coroutines.*
 
 
@@ -42,6 +43,7 @@ class HomeFragment : Fragment(),
     private lateinit var recycler: RecyclerView
     private val vm: MovieViewModel by activityViewModels()
     private lateinit var adapter: ContentItemAdapter
+    private lateinit var repo: ContentRepository
     // private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
 
 
@@ -50,30 +52,37 @@ class HomeFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        vm.contentList.observe(viewLifecycleOwner) {
-            Log.d("!!!", "$it")
-        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
+        repo = ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
 
+        vm.contentList.observe(viewLifecycleOwner) {
+            Log.d("!!!", "$it")
+        }
 
         // context?.let {
         //     NetworkConnectionChecker(it, this)
         // }
-
-        // val repo = ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
-        // viewLifecycleOwner.lifecycle.coroutineScope.launch {
-        //     val result = repo.getMoviePopular(1, App.API_KEY)
+        // if (vm.contentList.value?.isEmpty() == true) {
+        //     fetchPlaylist(vm.page.value ?: 1)
         // }
 
-        if (vm.contentList.value?.isEmpty() == true) {
-            fetchPlaylist(vm.page.value ?: 1)
-        }
         initRecycler()
+
+        if (vm.contentList.value?.isEmpty() == true) {
+            viewLifecycleOwner.lifecycle.coroutineScope.launch {
+                // fetchPlaylist(vm.page.value ?: 1)
+                val result = repo.getMoviePopular(1, App.API_KEY)
+                result?.let {
+                    vm.contentList.value?.addAll(it)
+                    adapter?.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
     private fun initRecycler() {
@@ -91,8 +100,8 @@ class HomeFragment : Fragment(),
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    vm.nextPage()
-                    fetchPlaylist(vm.page.value ?: 1)
+                    // vm.nextPage()
+                    // fetchPlaylist(vm.page.value ?: 1)
                 }
             }
         })

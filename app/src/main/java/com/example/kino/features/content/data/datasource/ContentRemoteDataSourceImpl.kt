@@ -14,24 +14,6 @@ class ContentRemoteDataSourceImpl(private val api: MovieClient) : ContentRemoteD
     override suspend fun getMoviePopular(page: Int, apiKey: String): List<Movie> {
         val result = api.getMoviePopular(page, apiKey)
         return result.body()?.results ?: listOf()
-        // val list = mutableListOf<Movie>()
-        // api.getMoviePopular(page, apiKey).enqueue(object : Callback<MoviesResponse> {
-        //     override fun onResponse(
-        //         call: Call<MoviesResponse>,
-        //         response: Response<MoviesResponse>
-        //     ) {
-        //         response.body().let {
-        //             if (it != null) {
-        //                 list.addAll(it.results)
-        //             }
-        //         }
-        //     }
-        //
-        //     override fun onFailure(call: Call<MoviesResponse>?, t: Throwable) {
-        //
-        //     }
-        // })
-        // return list
     }
 
     override suspend fun getMovieDetail(): MovieDetails {

@@ -18,4 +18,8 @@ class ContentRepositoryImpl(
     override suspend fun getMovieDetail(): MovieDetails {
         TODO("Not yet implemented")
     }
+
+    private fun fetchMoviePopular(page: Int, apiKey: String) {
+        // TODO: here logic get data from remote or local repository
+    }
 }

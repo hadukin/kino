@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSourceImpl
 import com.example.kino.features.content.domain.repository.ContentRepositoryImpl
 import com.example.kino.models.Movie
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MovieViewModel : ViewModel() {
@@ -13,14 +14,14 @@ class MovieViewModel : ViewModel() {
         ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
 
     init {
-        viewModelScope.launch {
-            val result = repo.getMoviePopular(1, App.API_KEY)
-            if (result != null) {
-                Log.d("VMODELRESULT", "${result.size}")
-                // _contentList.value?.addAll(result)
-                contentList.value?.addAll(result)
-            }
-        }
+        // TODO: initial loading content
+        // viewModelScope.launch(Dispatchers.IO) {
+        //     val result = repo.getMoviePopular(1, App.API_KEY)
+        //     if (result != null) {
+        //         Log.d("VMODELRESULT", "${result.size}")
+        //         contentList.value?.addAll(result)
+        //     }
+        // }
     }
 
     suspend fun getMovies() {
