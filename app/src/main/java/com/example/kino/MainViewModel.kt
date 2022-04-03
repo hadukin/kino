@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import com.example.kino.models.Movie
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) : ViewModel() {
@@ -18,8 +19,9 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = getMoviePopularUseCase.execute(1, App.API_KEY)
-            content.postValue(result.toMutableList())
+            loadMore(1, App.API_KEY)
+            // val result = getMoviePopularUseCase.execute(1, App.API_KEY)
+            // content.postValue(result.toMutableList())
         }
     }
 
@@ -31,6 +33,19 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     val content = MutableLiveData<MutableList<Movie>>().apply { mutableListOf<Movie>() }
     val isLoading = MutableLiveData<Boolean>().apply { false }
 
+    suspend fun loadMore(page: Int, apiKey: String) {
+        // _page.postValue(_page.value?.plus(1))
+        isLoading.postValue(true)
+        loadMoreContent(page, apiKey)
+        isLoading.postValue(false)
+    }
+
+    private suspend fun loadMoreContent(page: Int, apiKey: String) = coroutineScope {
+        launch {
+            val result = getMoviePopularUseCase.execute(page, App.API_KEY)
+            content.postValue(result.toMutableList())
+        }
+    }
 
     fun toggleFavorite(item: Movie): String {
         var current: Movie = item
@@ -84,9 +99,5 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
 
     fun nextPage() {
         _page.value = _page.value?.plus(1)
-    }
-
-    fun loadMore() {
-
     }
 }

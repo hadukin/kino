@@ -60,6 +60,10 @@ class HomeFragment : Fragment(),
             vm.contentList.value?.addAll(it)
             adapter?.notifyDataSetChanged()
         })
+
+        vm.isLoading.observe(viewLifecycleOwner, Observer {
+            Log.d("LOADING", "$it")
+        })
     }
 
     private fun initRecycler() {
@@ -77,7 +81,10 @@ class HomeFragment : Fragment(),
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    // vm.nextPage()
+                    vm.nextPage()
+                    GlobalScope.launch {
+                        vm.loadMore(vm.page.value ?: 1, App.API_KEY)
+                    }
                     // fetchPlaylist(vm.page.value ?: 1)
                 }
             }
