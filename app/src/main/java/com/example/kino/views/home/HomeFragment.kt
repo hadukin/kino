@@ -25,6 +25,7 @@ import com.example.kino.utils.NetworkConnectionChecker
 import com.google.android.material.snackbar.Snackbar
 import androidx.lifecycle.coroutineScope
 import com.example.kino.features.content.domain.repository.ContentRepository
+import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import kotlinx.coroutines.*
 
 
@@ -39,12 +40,14 @@ class HomeFragment : Fragment(),
     private lateinit var adapter: ContentItemAdapter
     // private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
 
-    private val repo: ContentRepository by lazy {
+    private val contentRepository: ContentRepository by lazy {
         ContentRepositoryImpl(
             context = requireActivity().applicationContext,
             remote = ContentRemoteDataSourceImpl(App.instance.movieClient)
         )
     }
+
+    private val getMoviePopularUseCase by lazy { GetMoviePopularUseCase(contentRepository) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,8 +66,8 @@ class HomeFragment : Fragment(),
         if (vm.contentList.value?.isEmpty() == true) {
             viewLifecycleOwner.lifecycle.coroutineScope.launch {
                 fetchPlaylist(vm.page.value ?: 1)
-                val result = repo.getMoviePopular(1, App.API_KEY)
-                result?.let {
+                val result = getMoviePopularUseCase.execute(1, App.API_KEY)
+                result.let {
                     vm.contentList.value?.addAll(it)
                     adapter?.notifyDataSetChanged()
                 }
