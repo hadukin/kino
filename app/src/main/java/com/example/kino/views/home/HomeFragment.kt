@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.App
-import com.example.kino.MovieViewModel
+import com.example.kino.MainViewModel
 import com.example.kino.views.home.details.ContentDetailFragment
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.R
@@ -36,7 +36,7 @@ class HomeFragment : Fragment(),
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private lateinit var recycler: RecyclerView
-    private val vm: MovieViewModel by activityViewModels()
+    private val vm: MainViewModel by activityViewModels()
     private lateinit var adapter: ContentItemAdapter
     // private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
 

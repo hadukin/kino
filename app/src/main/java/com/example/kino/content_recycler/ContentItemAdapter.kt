@@ -3,13 +3,13 @@ package com.example.kino.content_recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kino.MovieViewModel
+import com.example.kino.MainViewModel
 import com.example.kino.R
 import com.example.kino.models.Movie
 
 class ContentItemAdapter(
     private val items: ArrayList<Movie>,
-    private val vm: MovieViewModel,
+    private val vm: MainViewModel,
     private val listener: ContentClickListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

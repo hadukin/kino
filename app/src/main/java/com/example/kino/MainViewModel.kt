@@ -6,9 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSourceImpl
 import com.example.kino.features.content.data.repository.ContentRepositoryImpl
+import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import com.example.kino.models.Movie
 
-class MovieViewModel : ViewModel() {
+class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) : ViewModel() {
 
     companion object {
         private const val TAG = "MovieViewModel"

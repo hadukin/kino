@@ -11,7 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kino.MovieViewModel
+import com.example.kino.MainViewModel
 import com.example.kino.R
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.FragmentFavoriteBinding
@@ -23,7 +23,7 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
-    private val vm: MovieViewModel by activityViewModels()
+    private val vm: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
