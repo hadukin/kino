@@ -1,28 +1,27 @@
-package com.example.kino.api
+package com.example.kino.features.content.data.api
 
 import com.example.kino.models.CastResponse
-import com.example.kino.models.Content
 import com.example.kino.models.MoviesResponse
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieClient {
     @GET("movie/popular")
-    fun getMoviePopular(
+    suspend fun getMoviePopular(
         @Query("page") page: Int,
         @Query("api_key") api_key: String,
-    ): Call<MoviesResponse>
+    ): Response<MoviesResponse>
 
     @GET("movie/{id}/credits")
-    fun getMovieCredits(
+    suspend fun getMovieCredits(
         @Path("id") id: Int,
         @Query("api_key") api_key: String,
-    ): Call<CastResponse>
+    ): Response<CastResponse>
 
     @GET("movie/{id}")
-    fun getMovieDetail(
+    suspend fun getMovieDetail(
         @Query("api_key") api_key: String,
-    ): Call<CastResponse>
+    ): Response<CastResponse>
 }

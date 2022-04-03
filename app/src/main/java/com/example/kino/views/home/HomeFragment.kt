@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,8 +26,11 @@ import com.example.kino.models.*
 import com.example.kino.utils.NetworkConnectionChecker
 import retrofit2.Callback
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.GlobalScope
 import retrofit2.Call
 import retrofit2.Response
+import androidx.lifecycle.coroutineScope
+import kotlinx.coroutines.*
 
 
 class HomeFragment : Fragment(),
@@ -46,6 +50,9 @@ class HomeFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        vm.contentList.observe(viewLifecycleOwner) {
+            Log.d("!!!", "$it")
+        }
         return binding.root
     }
 
@@ -53,14 +60,15 @@ class HomeFragment : Fragment(),
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
 
-        context?.let {
-            NetworkConnectionChecker(it, this)
-        }
 
-        ContentRepositoryImpl(
-            remote = ContentRemoteDataSourceImpl(App.instance.movieClient),
-            local = ContentLocalDataSourceImpl()
-        )
+        // context?.let {
+        //     NetworkConnectionChecker(it, this)
+        // }
+
+        // val repo = ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
+        // viewLifecycleOwner.lifecycle.coroutineScope.launch {
+        //     val result = repo.getMoviePopular(1, App.API_KEY)
+        // }
 
         if (vm.contentList.value?.isEmpty() == true) {
             fetchPlaylist(vm.page.value ?: 1)
@@ -117,24 +125,24 @@ class HomeFragment : Fragment(),
     }
 
     private fun fetchPlaylist(page: Int) {
-        App.instance.contentApi.getMoviePopular(page, App.API_KEY)
-            .enqueue(object : Callback<MoviesResponse> {
-                override fun onResponse(
-                    call: Call<MoviesResponse>,
-                    response: Response<MoviesResponse>
-                ) {
-                    response.body().let {
-                        if (it != null) {
-                            vm.contentList.value?.addAll(it.results)
-                            adapter?.notifyDataSetChanged()
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<MoviesResponse>?, t: Throwable) {
-                    // Log.d("RESULT", "ERROR: ${t}")
-                }
-            })
+        // App.instance.contentApi.getMoviePopular(page, App.API_KEY)
+        //     .enqueue(object : Callback<MoviesResponse> {
+        //         override fun onResponse(
+        //             call: Call<MoviesResponse>,
+        //             response: Response<MoviesResponse>
+        //         ) {
+        //             response.body().let {
+        //                 if (it != null) {
+        //                     vm.contentList.value?.addAll(it.results)
+        //                     adapter?.notifyDataSetChanged()
+        //                 }
+        //             }
+        //         }
+        //
+        //         override fun onFailure(call: Call<MoviesResponse>?, t: Throwable) {
+        //             // Log.d("RESULT", "ERROR: ${t}")
+        //         }
+        //     })
     }
 
     override fun onChangeNetworkStatus(status: Boolean) {

@@ -2,7 +2,7 @@ package com.example.kino
 
 import android.app.Application
 import com.example.kino.api.ContentApi
-import com.example.kino.api.MovieClient
+import com.example.kino.features.content.data.api.MovieClient
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

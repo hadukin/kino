@@ -1,11 +1,32 @@
 package com.example.kino
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import android.util.Log
+import androidx.lifecycle.*
+import com.example.kino.features.content.data.datasource.ContentRemoteDataSourceImpl
+import com.example.kino.features.content.domain.repository.ContentRepositoryImpl
 import com.example.kino.models.Movie
+import kotlinx.coroutines.launch
 
 class MovieViewModel : ViewModel() {
+
+    private var repo: ContentRepositoryImpl =
+        ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
+
+    init {
+        viewModelScope.launch {
+            val result = repo.getMoviePopular(1, App.API_KEY)
+            if (result != null) {
+                Log.d("VMODELRESULT", "${result.size}")
+                // _contentList.value?.addAll(result)
+                contentList.value?.addAll(result)
+            }
+        }
+    }
+
+    suspend fun getMovies() {
+        val repo = ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
+        val result = repo.getMoviePopular(1, App.API_KEY)
+    }
 
     fun toggleFavorite(item: Movie): String {
         var current: Movie = item
