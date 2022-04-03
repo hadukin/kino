@@ -2,7 +2,9 @@ package com.example.kino
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         viewModel =
             ViewModelProvider(this, MainViewModelFactory(this)).get(MainViewModel::class.java)
-
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment

@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,19 +37,10 @@ class HomeFragment : Fragment(),
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var recycler: RecyclerView
     private val vm: MainViewModel by activityViewModels()
+    private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
-    // private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
 
-    private val contentRepository: ContentRepository by lazy {
-        ContentRepositoryImpl(
-            context = requireActivity().applicationContext,
-            remote = ContentRemoteDataSourceImpl(App.instance.movieClient)
-        )
-    }
-
-    private val getMoviePopularUseCase by lazy { GetMoviePopularUseCase(contentRepository) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,16 +56,10 @@ class HomeFragment : Fragment(),
 
         initRecycler()
 
-        if (vm.contentList.value?.isEmpty() == true) {
-            viewLifecycleOwner.lifecycle.coroutineScope.launch {
-                fetchPlaylist(vm.page.value ?: 1)
-                val result = getMoviePopularUseCase.execute(1, App.API_KEY)
-                result.let {
-                    vm.contentList.value?.addAll(it)
-                    adapter?.notifyDataSetChanged()
-                }
-            }
-        }
+        vm.content.observe(viewLifecycleOwner, Observer {
+            vm.contentList.value?.addAll(it)
+            adapter?.notifyDataSetChanged()
+        })
     }
 
     private fun initRecycler() {
@@ -121,27 +108,6 @@ class HomeFragment : Fragment(),
             }
             .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
             .show()
-    }
-
-    private fun fetchPlaylist(page: Int) {
-        // App.instance.contentApi.getMoviePopular(page, App.API_KEY)
-        //     .enqueue(object : Callback<MoviesResponse> {
-        //         override fun onResponse(
-        //             call: Call<MoviesResponse>,
-        //             response: Response<MoviesResponse>
-        //         ) {
-        //             response.body().let {
-        //                 if (it != null) {
-        //                     vm.contentList.value?.addAll(it.results)
-        //                     adapter?.notifyDataSetChanged()
-        //                 }
-        //             }
-        //         }
-        //
-        //         override fun onFailure(call: Call<MoviesResponse>?, t: Throwable) {
-        //             // Log.d("RESULT", "ERROR: ${t}")
-        //         }
-        //     })
     }
 
     override fun onChangeNetworkStatus(status: Boolean) {

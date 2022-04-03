@@ -4,10 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kino.features.content.data.datasource.ContentRemoteDataSourceImpl
-import com.example.kino.features.content.data.repository.ContentRepositoryImpl
+import androidx.lifecycle.viewModelScope
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import com.example.kino.models.Movie
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) : ViewModel() {
 
@@ -15,20 +16,11 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
         private const val TAG = "MovieViewModel"
     }
 
-    // private var repo: ContentRepositoryImpl =
-    //     ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
-
-
     init {
-        Log.d(TAG, "init")
-        // TODO: initial loading content
-        // viewModelScope.launch(Dispatchers.IO) {
-        //     val result = repo.getMoviePopular(1, App.API_KEY)
-        //     if (result != null) {
-        //         Log.d("VMODELRESULT", "${result.size}")
-        //         contentList.value?.addAll(result)
-        //     }
-        // }
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = getMoviePopularUseCase.execute(1, App.API_KEY)
+            content.postValue(result.toMutableList())
+        }
     }
 
     override fun onCleared() {
@@ -36,10 +28,9 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
         super.onCleared()
     }
 
-    // suspend fun getMovies() {
-    //     val repo = ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
-    //     val result = repo.getMoviePopular(1, App.API_KEY)
-    // }
+    val content = MutableLiveData<MutableList<Movie>>().apply { mutableListOf<Movie>() }
+    val isLoading = MutableLiveData<Boolean>().apply { false }
+
 
     fun toggleFavorite(item: Movie): String {
         var current: Movie = item
