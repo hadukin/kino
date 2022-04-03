@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,16 +18,11 @@ import com.example.kino.views.home.details.ContentDetailFragment
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
-import com.example.kino.features.content.data.datasource.ContentLocalDataSourceImpl
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSourceImpl
-import com.example.kino.features.content.domain.repository.ContentRepositoryImpl
+import com.example.kino.features.content.data.repository.ContentRepositoryImpl
 import com.example.kino.models.*
 import com.example.kino.utils.NetworkConnectionChecker
-import retrofit2.Callback
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.GlobalScope
-import retrofit2.Call
-import retrofit2.Response
 import androidx.lifecycle.coroutineScope
 import com.example.kino.features.content.domain.repository.ContentRepository
 import kotlinx.coroutines.*
@@ -43,9 +37,14 @@ class HomeFragment : Fragment(),
     private lateinit var recycler: RecyclerView
     private val vm: MovieViewModel by activityViewModels()
     private lateinit var adapter: ContentItemAdapter
-    private lateinit var repo: ContentRepository
     // private val vm: HomeViewModel by lazy { ViewModelProvider(requireActivity())[HomeViewModel::class.java] }
 
+    private val repo: ContentRepository by lazy {
+        ContentRepositoryImpl(
+            context = requireActivity().applicationContext,
+            remote = ContentRemoteDataSourceImpl(App.instance.movieClient)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,24 +57,12 @@ class HomeFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
-        repo = ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
-
-        vm.contentList.observe(viewLifecycleOwner) {
-            Log.d("!!!", "$it")
-        }
-
-        // context?.let {
-        //     NetworkConnectionChecker(it, this)
-        // }
-        // if (vm.contentList.value?.isEmpty() == true) {
-        //     fetchPlaylist(vm.page.value ?: 1)
-        // }
 
         initRecycler()
 
         if (vm.contentList.value?.isEmpty() == true) {
             viewLifecycleOwner.lifecycle.coroutineScope.launch {
-                // fetchPlaylist(vm.page.value ?: 1)
+                fetchPlaylist(vm.page.value ?: 1)
                 val result = repo.getMoviePopular(1, App.API_KEY)
                 result?.let {
                     vm.contentList.value?.addAll(it)

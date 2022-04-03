@@ -5,5 +5,5 @@ import com.example.kino.models.MovieDetails
 
 interface ContentRepository {
     suspend fun getMoviePopular(page: Int, apiKey: String): List<Movie>?
-    suspend fun getMovieDetail(): MovieDetails
+    // fun getMovieDetail(): MovieDetails
 }

@@ -1,19 +1,25 @@
 package com.example.kino
 
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSourceImpl
-import com.example.kino.features.content.domain.repository.ContentRepositoryImpl
+import com.example.kino.features.content.data.repository.ContentRepositoryImpl
 import com.example.kino.models.Movie
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MovieViewModel : ViewModel() {
 
-    private var repo: ContentRepositoryImpl =
-        ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
+    companion object {
+        private const val TAG = "MovieViewModel"
+    }
+
+    // private var repo: ContentRepositoryImpl =
+    //     ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
+
 
     init {
+        Log.d(TAG, "init")
         // TODO: initial loading content
         // viewModelScope.launch(Dispatchers.IO) {
         //     val result = repo.getMoviePopular(1, App.API_KEY)
@@ -24,10 +30,15 @@ class MovieViewModel : ViewModel() {
         // }
     }
 
-    suspend fun getMovies() {
-        val repo = ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
-        val result = repo.getMoviePopular(1, App.API_KEY)
+    override fun onCleared() {
+        Log.d(TAG, "onCleared")
+        super.onCleared()
     }
+
+    // suspend fun getMovies() {
+    //     val repo = ContentRepositoryImpl(ContentRemoteDataSourceImpl(App.instance.movieClient))
+    //     val result = repo.getMoviePopular(1, App.API_KEY)
+    // }
 
     fun toggleFavorite(item: Movie): String {
         var current: Movie = item
@@ -81,5 +92,9 @@ class MovieViewModel : ViewModel() {
 
     fun nextPage() {
         _page.value = _page.value?.plus(1)
+    }
+
+    fun loadMore() {
+
     }
 }
