@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,14 +19,9 @@ import com.example.kino.views.home.details.ContentDetailFragment
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
-import com.example.kino.features.content.data.datasource.ContentRemoteDataSourceImpl
-import com.example.kino.features.content.data.repository.ContentRepositoryImpl
 import com.example.kino.models.*
 import com.example.kino.utils.NetworkConnectionChecker
 import com.google.android.material.snackbar.Snackbar
-import androidx.lifecycle.coroutineScope
-import com.example.kino.features.content.domain.repository.ContentRepository
-import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import kotlinx.coroutines.*
 
 
@@ -41,6 +35,7 @@ class HomeFragment : Fragment(),
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
 
+    private var movies = arrayListOf<Movie>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,14 +50,9 @@ class HomeFragment : Fragment(),
         recycler = binding.recycler
 
         initRecycler()
-
         vm.content.observe(viewLifecycleOwner, Observer {
-            vm.contentList.value?.addAll(it)
+            movies.addAll(it)
             adapter?.notifyDataSetChanged()
-        })
-
-        vm.isLoading.observe(viewLifecycleOwner, Observer {
-            Log.d("LOADING", "$it")
         })
     }
 
@@ -73,7 +63,7 @@ class HomeFragment : Fragment(),
         } else {
             LinearLayoutManager(requireContext())
         }
-        adapter = ContentItemAdapter(vm.contentList.value!!, vm, this)
+        adapter = ContentItemAdapter(movies, vm, this)
 
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
@@ -85,7 +75,6 @@ class HomeFragment : Fragment(),
                     GlobalScope.launch {
                         vm.loadMore(vm.page.value ?: 1, App.API_KEY)
                     }
-                    // fetchPlaylist(vm.page.value ?: 1)
                 }
             }
         })
