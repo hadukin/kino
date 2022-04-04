@@ -50,10 +50,17 @@ class HomeFragment : Fragment(),
         recycler = binding.recycler
 
         initRecycler()
-        vm.content.observe(viewLifecycleOwner, Observer {
-            movies.addAll(it)
-            adapter.notifyDataSetChanged()
-        })
+        vm.content.observe(viewLifecycleOwner, movieObserver)
+    }
+
+    private val movieObserver = Observer<List<Movie>> {
+        movies.addAll(it)
+        adapter.notifyDataSetChanged()
+    }
+
+    override fun onDestroy() {
+        vm.content.removeObserver(movieObserver)
+        super.onDestroy()
     }
 
     private fun initRecycler() {
