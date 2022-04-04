@@ -5,7 +5,7 @@ import com.example.kino.models.Movie
 
 class GetMoviePopularUseCase(private val contentRepository: ContentRepository) {
 
-    suspend fun execute(page: Int, apiKey: String): List<Movie> {
-        return contentRepository.getMoviePopular(page, apiKey) ?: listOf()
+    suspend fun execute(page: Int, apiKey: String): ArrayList<Movie> {
+        return contentRepository.getMoviePopular(page, apiKey) ?: arrayListOf()
     }
 }

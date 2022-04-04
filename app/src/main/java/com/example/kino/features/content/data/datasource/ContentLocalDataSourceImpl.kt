@@ -8,7 +8,7 @@ class ContentLocalDataSourceImpl : ContentLocalDataSource {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getMoviePopular(page: Int, apiKey: String): List<Movie>? {
+    override suspend fun getMoviePopular(page: Int, apiKey: String): ArrayList<Movie>? {
         TODO("Not yet implemented")
     }
 }

@@ -34,10 +34,18 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     val isLoading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>(false) }
 
     suspend fun loadMore(page: Int, apiKey: String) = coroutineScope {
+
+        Log.d("PAGE", "$page")
         launch {
             val result = getMoviePopularUseCase.execute(page, App.API_KEY)
-            _content.postValue(result as ArrayList<Movie>?)
-            _content.value?.addAll(result)
+
+
+            val nn = concatenate(_content.value ?: arrayListOf(), result)
+
+
+            _content.postValue(nn as ArrayList<Movie>?)
+            // _content.postValue(result as ArrayList<Movie>?)
+            _content.value?.addAll(nn)
         }
     }
 
@@ -95,4 +103,9 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     fun nextPage() {
         _page.value = _page.value?.plus(1)
     }
+}
+
+
+fun <T> concatenate(vararg lists: List<T>): List<T> {
+    return listOf(*lists).flatten()
 }

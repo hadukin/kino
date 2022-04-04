@@ -19,7 +19,7 @@ class ContentRepositoryImpl(
         // TODO: here logic get data from remote or local repository
     }
 
-    override suspend fun getMoviePopular(page: Int, apiKey: String): List<Movie>? {
+    override suspend fun getMoviePopular(page: Int, apiKey: String): ArrayList<Movie>? {
         return remote.getMoviePopular(page, apiKey)
     }
 }
