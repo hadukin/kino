@@ -27,7 +27,6 @@ class NetworkConnectionChecker(ctx: Context, listener: NetworkServiceListener) {
             super.onCapabilitiesChanged(network, networkCapabilities)
             val unmetered =
                 networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-            // Log.d(TAG, "${unmetered}")
         }
 
         // lost network connection
@@ -56,54 +55,3 @@ class NetworkConnectionChecker(ctx: Context, listener: NetworkServiceListener) {
         fun onChangeNetworkStatus(status: Boolean)
     }
 }
-
-
-// class NetworkConnectionChecker(ctx: Context, listener: ((Boolean) -> Unit)) {
-//     companion object {
-//         private const val TAG: String = "NETWORK_SERVICE"
-//     }
-//
-//     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
-//         // network is available for use
-//         override fun onAvailable(network: Network) {
-//             super.onAvailable(network)
-//             listener(true)
-//         }
-//
-//         // Network capabilities have changed for the network
-//         override fun onCapabilitiesChanged(
-//             network: Network,
-//             networkCapabilities: NetworkCapabilities
-//         ) {
-//             super.onCapabilitiesChanged(network, networkCapabilities)
-//             val unmetered =
-//                 networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-//             // Log.d(TAG, "${unmetered}")
-//         }
-//
-//         // lost network connection
-//         override fun onLost(network: Network) {
-//             super.onLost(network)
-//             listener(false)
-//         }
-//     }
-//
-//     init {
-//         val networkRequest = NetworkRequest.Builder()
-//             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-//             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-//             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
-//             .build()
-//
-//         val connectivityManager =
-//             ContextCompat.getSystemService(
-//                 ctx,
-//                 ConnectivityManager::class.java
-//             ) as ConnectivityManager
-//         connectivityManager.requestNetwork(networkRequest, networkCallback)
-//     }
-//
-//     interface NetworkServiceListener {
-//         fun onChangeNetworkStatus(status: Boolean)
-//     }
-// }

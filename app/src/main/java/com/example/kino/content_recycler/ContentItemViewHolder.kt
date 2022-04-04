@@ -21,9 +21,6 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     private val voteCountText = itemView.findViewById<TextView>(R.id.vote_count)
 
     fun bind(item: Movie, listener: ContentItemAdapter.ContentClickListener) {
-
-        Log.d("ISFAV", "${item.isFavorite}")
-
         if (item.isFavorite) {
             buttonFavorite.setColorFilter(Color.RED)
         } else {

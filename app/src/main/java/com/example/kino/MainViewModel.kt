@@ -21,8 +21,6 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     init {
         viewModelScope.launch(Dispatchers.Default) {
             loadMore(1, App.API_KEY)
-            // val result = getMoviePopularUseCase.execute(1, App.API_KEY)
-            // content.postValue(result.toMutableList())
         }
     }
 
@@ -39,7 +37,7 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
         launch {
             val result = getMoviePopularUseCase.execute(page, App.API_KEY)
             _content.postValue(result as ArrayList<Movie>?)
-            _content.value?.addAll(result as ArrayList<Movie>)
+            _content.value?.addAll(result)
         }
     }
 
@@ -51,50 +49,44 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     // }
 
     fun toggleFavorite(item: Movie): String {
-        // var current: Movie = item
-        // _contentList.value?.map {
-        //     if (it.id == item.id) {
-        //         current = it.apply {
-        //             isFavorite = !item.isFavorite
-        //         }
-        //     }
-        // }
-        // if (current.isFavorite) {
-        //     return "Контент добавлен в избранное"
-        // } else {
-        //     return "Контент удален из избранного"
-        // }
-        return ""
+        var current: Movie = item
+        _content.value?.map {
+            if (it.id == item.id) {
+                current = it.apply {
+                    isFavorite = !item.isFavorite
+                }
+            }
+        }
+        if (current.isFavorite) {
+            return "Контент добавлен в избранное"
+        } else {
+            return "Контент удален из избранного"
+        }
     }
 
 
     fun addFavorite(item: Movie) {
-        // _contentList.value?.map {
-        //     if (it.id == item.id) {
-        //         it.apply {
-        //             isFavorite = true
-        //         }
-        //     }
-        // }
+        _content.value?.map {
+            if (it.id == item.id) {
+                it.apply {
+                    isFavorite = true
+                }
+            }
+        }
     }
 
     fun removeFavorite(item: Movie) {
-        // _contentList.value?.map {
-        //     if (it.id == item.id) {
-        //         it.apply {
-        //             isFavorite = false
-        //         }
-        //     }
-        // }
+        _content.value?.map {
+            if (it.id == item.id) {
+                it.apply {
+                    isFavorite = false
+                }
+            }
+        }
     }
 
     val favorites: ArrayList<Movie>
         get() = _content.value?.filter { it.isFavorite } as ArrayList<Movie>
-
-    // private val _contentList = MutableLiveData<ArrayList<Movie>>().apply {
-    //     value = arrayListOf()
-    // }
-    // val contentList: LiveData<ArrayList<Movie>> = _contentList
 
     private val _page = MutableLiveData<Int>().apply { value = 1 }
 

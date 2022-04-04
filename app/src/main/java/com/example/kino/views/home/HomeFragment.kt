@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +36,7 @@ class HomeFragment : Fragment(),
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
 
-    private var movies = arrayListOf<Movie>()
+    private var movies = mutableListOf<Movie>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +71,7 @@ class HomeFragment : Fragment(),
         } else {
             LinearLayoutManager(requireContext())
         }
-        adapter = ContentItemAdapter(movies, vm, this)
+        adapter = ContentItemAdapter(movies as ArrayList<Movie>, vm, this)
 
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
@@ -114,6 +115,6 @@ class HomeFragment : Fragment(),
     }
 
     override fun onChangeNetworkStatus(status: Boolean) {
-        Log.d("&&&", "$status")
+        Log.d("NETWORK_STATUS", "$status")
     }
 }
