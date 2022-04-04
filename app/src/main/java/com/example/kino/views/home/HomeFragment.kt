@@ -52,7 +52,7 @@ class HomeFragment : Fragment(),
         initRecycler()
         vm.content.observe(viewLifecycleOwner, Observer {
             movies.addAll(it)
-            adapter?.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         })
     }
 
