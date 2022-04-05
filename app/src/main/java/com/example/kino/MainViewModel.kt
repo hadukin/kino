@@ -10,7 +10,6 @@ import com.example.kino.models.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import okhttp3.internal.notify
 
 class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) : ViewModel() {
 
@@ -34,19 +33,14 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     val isLoading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>(false) }
 
     suspend fun loadMore(page: Int, apiKey: String) = coroutineScope {
-
-        Log.d("PAGE", "$page")
-        launch {
-            val result = getMoviePopularUseCase.execute(page, App.API_KEY)
-
-
-            val nn = concatenate(_content.value ?: arrayListOf(), result)
-
-
-            _content.postValue(nn as ArrayList<Movie>?)
-            // _content.postValue(result as ArrayList<Movie>?)
-            _content.value?.addAll(nn)
+        val result = getMoviePopularUseCase.execute(page, App.API_KEY)
+        val data = arrayListOf<Movie>()
+        for (item in result) {
+            if (content.value?.contains(item) == false) {
+                data.add(item)
+            }
         }
+        _content.postValue(data)
     }
 
     // private suspend fun loadMoreContent(page: Int, apiKey: String) = coroutineScope {
@@ -103,9 +97,4 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     fun nextPage() {
         _page.value = _page.value?.plus(1)
     }
-}
-
-
-fun <T> concatenate(vararg lists: List<T>): List<T> {
-    return listOf(*lists).flatten()
 }

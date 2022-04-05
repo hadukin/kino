@@ -24,6 +24,7 @@ import com.example.kino.models.*
 import com.example.kino.utils.NetworkConnectionChecker
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class HomeFragment : Fragment(),
@@ -32,7 +33,8 @@ class HomeFragment : Fragment(),
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val vm: MainViewModel by activityViewModels()
+    // private val vm: MainViewModel by activityViewModels()
+    private val vm by viewModel<MainViewModel>()
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
 

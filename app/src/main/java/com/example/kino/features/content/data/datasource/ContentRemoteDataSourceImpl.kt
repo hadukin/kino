@@ -5,6 +5,6 @@ import com.example.kino.models.Movie
 
 class ContentRemoteDataSourceImpl(private val api: MovieClient) : ContentRemoteDataSource {
     override suspend fun getMoviePopular(page: Int, apiKey: String): ArrayList<Movie> {
-        return api.getMoviePopular(page, apiKey).body()?.results ?: arrayListOf()
+        return api.getMoviePopular(page, apiKey).results
     }
 }

@@ -18,12 +18,14 @@ import com.example.kino.databinding.FragmentFavoriteBinding
 import com.example.kino.models.Movie
 import com.example.kino.views.home.details.ContentDetailFragment
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
-    private val vm: MainViewModel by activityViewModels()
+    // private val vm: MainViewModel by activityViewModels()
+    private val vm by viewModel<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

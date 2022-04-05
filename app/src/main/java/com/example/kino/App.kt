@@ -3,57 +3,34 @@ package com.example.kino
 import android.app.Application
 import com.example.kino.api.ContentApi
 import com.example.kino.features.content.data.api.MovieClient
+import com.example.kino.features.di.appModule
+import com.example.kino.features.di.dataModule
+import com.example.kino.features.di.domainModule
+import com.example.kino.features.di.networkModule
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class App : Application() {
 
-    lateinit var contentApi: ContentApi
-    lateinit var movieClient: MovieClient
-
     override fun onCreate() {
         super.onCreate()
 
         instance = this
-        initRetrofit()
-    }
 
-    private fun initRetrofit() {
-        val client = OkHttpClient.Builder().addInterceptor { chain ->
-            val url = chain
-                .request()
-                .url
-                .newBuilder()
-                .build()
-            val response = chain.proceed(
-                chain.request()
-                    .newBuilder()
-                    .addHeader("apikey", API_KEY)
-                    .url(url)
-                    .build()
-            )
-            return@addInterceptor response
+        startKoin {
+            androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
+            androidContext(this@App)
+            modules(listOf(appModule, networkModule, domainModule, dataModule))
         }
-            .addInterceptor(HttpLoggingInterceptor()
-                .apply {
-                    // if (BuildConfig.DEBUG) {
-                    //     level = HttpLoggingInterceptor.Level.BODY
-                    // }
-                }).build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client).build()
-
-        contentApi = retrofit.create(ContentApi::class.java)
-        movieClient = retrofit.create(MovieClient::class.java)
     }
 
     companion object {
-
         const val BASE_URL = "https://api.themoviedb.org/3/"
         const val API_KEY = "6cd5ff50f548e8ae4e99db6d336a460b"
 
