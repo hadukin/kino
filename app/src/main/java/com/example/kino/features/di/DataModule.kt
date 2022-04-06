@@ -11,8 +11,6 @@ import retrofit2.Retrofit
 
 
 val dataModule = module {
-
-
     single<ContentRemoteDataSource> { ContentRemoteDataSourceImpl(api = get()) }
     single<ContentRepository> { ContentRepositoryImpl(remote = get(), context = get()) }
 }

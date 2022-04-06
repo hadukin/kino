@@ -25,7 +25,6 @@ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         .build()
 }
 
-
 fun provideOkHttpClient(): OkHttpClient {
     return OkHttpClient.Builder()
         .addInterceptor(AppInterceptor())
@@ -40,13 +39,10 @@ fun provideMovieApi(retrofit: Retrofit): MovieClient = retrofit.create(MovieClie
 class AppInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var req = chain.request()
-
-
-
         // val url = req.url.newBuilder().addQueryParameter("api_key", API_KEY).build()
-
         val url = req.url.newBuilder().build()
-        req = req.newBuilder().url(url).build().newBuilder().addHeader("Authorization", BuildConfig.API_HEADER)
+        req = req.newBuilder().url(url).build().newBuilder()
+            .addHeader("Authorization", BuildConfig.API_HEADER)
             .build()
         return chain.proceed(req)
     }
