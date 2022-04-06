@@ -83,7 +83,7 @@ class HomeFragment : Fragment(),
                 if (!recyclerView.canScrollVertically(1)) {
                     vm.nextPage()
                     GlobalScope.launch {
-                        vm.loadMore(vm.page.value ?: 1, App.API_KEY)
+                        vm.loadMore(vm.page.value ?: 1)
                     }
                 }
             }

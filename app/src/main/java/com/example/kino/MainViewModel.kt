@@ -19,7 +19,7 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
 
     init {
         viewModelScope.launch(Dispatchers.Default) {
-            loadMore(1, App.API_KEY)
+            loadMore(1)
         }
     }
 
@@ -32,7 +32,7 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     val content: LiveData<ArrayList<Movie>> = _content
     val isLoading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>(false) }
 
-    suspend fun loadMore(page: Int, apiKey: String) = coroutineScope {
+    suspend fun loadMore(page: Int) = coroutineScope {
         val result = getMoviePopularUseCase.execute(page)
         val data = arrayListOf<Movie>()
         for (item in result) {
