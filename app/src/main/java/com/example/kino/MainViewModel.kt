@@ -18,7 +18,7 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     }
 
     init {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             loadMore(1)
         }
     }
@@ -43,13 +43,6 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
         _content.postValue(data)
     }
 
-    // private suspend fun loadMoreContent(page: Int, apiKey: String) = coroutineScope {
-    //     launch {
-    //         val result = getMoviePopularUseCase.execute(page, App.API_KEY)
-    //         content.postValue(result.toMutableList())
-    //     }
-    // }
-
     fun toggleFavorite(item: Movie): String {
         var current: Movie = item
         _content.value?.map {
@@ -59,10 +52,10 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
                 }
             }
         }
-        if (current.isFavorite) {
-            return "Контент добавлен в избранное"
+        return if (current.isFavorite) {
+            "Контент добавлен в избранное"
         } else {
-            return "Контент удален из избранного"
+            "Контент удален из избранного"
         }
     }
 

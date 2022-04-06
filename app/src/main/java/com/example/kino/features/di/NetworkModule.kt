@@ -27,11 +27,11 @@ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
 
 fun provideOkHttpClient(): OkHttpClient {
     return OkHttpClient.Builder()
-        .addInterceptor(AppInterceptor())
-        .addInterceptor(HttpLoggingInterceptor()
-            .apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }).build()
+        .addInterceptor(AppInterceptor()).build()
+    // .addInterceptor(HttpLoggingInterceptor()
+    //     .apply {
+    //         level = HttpLoggingInterceptor.Level.BODY
+    //     }).build()
 }
 
 fun provideMovieApi(retrofit: Retrofit): MovieClient = retrofit.create(MovieClient::class.java)
