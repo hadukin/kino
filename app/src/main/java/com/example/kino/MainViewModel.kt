@@ -33,7 +33,7 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
     val isLoading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>(false) }
 
     suspend fun loadMore(page: Int, apiKey: String) = coroutineScope {
-        val result = getMoviePopularUseCase.execute(page, App.API_KEY)
+        val result = getMoviePopularUseCase.execute(page)
         val data = arrayListOf<Movie>()
         for (item in result) {
             if (content.value?.contains(item) == false) {

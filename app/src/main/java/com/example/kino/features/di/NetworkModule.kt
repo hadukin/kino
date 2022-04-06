@@ -1,10 +1,15 @@
 package com.example.kino.features.di
 
+import com.example.kino.BuildConfig
 import com.example.kino.features.content.data.api.MovieClient
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 val networkModule = module {
     factory { provideOkHttpClient() }
@@ -14,7 +19,7 @@ val networkModule = module {
 
 fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("https://api.themoviedb.org/3/")
+        .baseUrl(BuildConfig.BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -22,39 +27,28 @@ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
 
 
 fun provideOkHttpClient(): OkHttpClient {
-    return OkHttpClient.Builder().build()
+    return OkHttpClient.Builder()
+        .addInterceptor(AppInterceptor())
+        .addInterceptor(HttpLoggingInterceptor()
+            .apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }).build()
 }
 
 fun provideMovieApi(retrofit: Retrofit): MovieClient = retrofit.create(MovieClient::class.java)
 
-// private fun initRetrofit() {
-//     val client = OkHttpClient.Builder().addInterceptor { chain ->
-//         val url = chain
-//             .request()
-//             .url
-//             .newBuilder()
-//             .build()
-//         val response = chain.proceed(
-//             chain.request()
-//                 .newBuilder()
-//                 .addHeader("apikey", API_KEY)
-//                 .url(url)
-//                 .build()
-//         )
-//         return@addInterceptor response
-//     }
-//         .addInterceptor(HttpLoggingInterceptor()
-//             .apply {
-//                 // if (BuildConfig.DEBUG) {
-//                 //     level = HttpLoggingInterceptor.Level.BODY
-//                 // }
-//             }).build()
-//
-//     val retrofit = Retrofit.Builder()
-//         .baseUrl(BASE_URL)
-//         .addConverterFactory(GsonConverterFactory.create())
-//         .client(client).build()
-//
-//     contentApi = retrofit.create(ContentApi::class.java)
-//     movieClient = retrofit.create(MovieClient::class.java)
-// }
+class AppInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        var req = chain.request()
+
+
+
+        // val url = req.url.newBuilder().addQueryParameter("api_key", API_KEY).build()
+
+        val url = req.url.newBuilder().build()
+        req = req.newBuilder().url(url).build().newBuilder().addHeader("Authorization", BuildConfig.API_HEADER)
+            .build()
+        return chain.proceed(req)
+    }
+}
+
