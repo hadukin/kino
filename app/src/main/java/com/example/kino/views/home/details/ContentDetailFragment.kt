@@ -1,22 +1,22 @@
 package com.example.kino.views.home.details
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import coil.load
 import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
-import com.example.kino.models.Content
-import com.example.kino.views.home.HomeViewModel
+import com.example.kino.models.Movie
+import com.example.kino.models.posterUrl
 
 class ContentDetailFragment() : Fragment() {
     private lateinit var binding: FragmentContentDetailBinding
 
-    constructor(content: Content) : this() {
+    constructor(content: Movie) : this() {
         arguments = Bundle().apply {
             putParcelable(CONTENT, content)
         }
@@ -30,32 +30,24 @@ class ContentDetailFragment() : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("ResourceAsColor")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val content = arguments?.getParcelable<Movie>(CONTENT)
 
-        val content = arguments?.getParcelable<Content>(CONTENT)
-
-        binding.poster.apply {
-            content?.poster.let {
-                if (it != null) {
-                    setImageResource(it)
-                }
-            }
+        content?.posterUrl.let {
+            binding.poster.load(it)
         }
-
-        binding.description.text = content?.description
 
         binding.toolbar.apply {
             setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
             setNavigationOnClickListener {
                 activity?.onBackPressed()
             }
-            title = "${content?.name}"
+            title = "${content?.title}"
         }
 
         binding.description.apply {
-            text = "${content?.description}"
+            text = "${content?.overview}"
         }
     }
 

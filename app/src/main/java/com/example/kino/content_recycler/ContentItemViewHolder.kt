@@ -1,46 +1,51 @@
 package com.example.kino.content_recycler
 
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.kino.R
-import com.example.kino.models.Content
+import com.example.kino.models.Movie
+import com.example.kino.models.posterUrl
 
 class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    private val name = itemView.findViewById<TextView>(R.id.title)
-    private val details = itemView.findViewById<TextView>(R.id.button)
+    private val title = itemView.findViewById<TextView>(R.id.title)
     private val description = itemView.findViewById<TextView>(R.id.description)
     private val image = itemView.findViewById<ImageView>(R.id.image)
-    private val favorite = itemView.findViewById<ImageView>(R.id.favorite)
+    private val buttonDetail = itemView.findViewById<TextView>(R.id.button)
+    private val buttonFavorite = itemView.findViewById<ImageView>(R.id.favorite)
+    private val voteCountText = itemView.findViewById<TextView>(R.id.vote_count)
 
-    fun bind(item: Content, listener: ContentItemAdapter.ContentClickListener) {
+    fun bind(item: Movie, listener: ContentItemAdapter.ContentClickListener) {
         if (item.isFavorite) {
-            favorite.setColorFilter(Color.RED)
+            buttonFavorite.setColorFilter(Color.RED)
         } else {
-            favorite.setColorFilter(Color.GRAY)
+            buttonFavorite.setColorFilter(Color.GRAY)
         }
 
-        name.apply {
-            text = item.name
+        title.apply {
+            text = item.title
         }
 
         description.apply {
-            text = item.description
+            text = item.overview
             maxLines = 2
         }
 
-        image.apply {
-            setImageResource(item.poster)
-        }
+        Glide.with(image.context)
+            .load(item.posterUrl)
+            .centerCrop()
+            .into(image)
 
-        details.setOnClickListener {
+        buttonDetail.setOnClickListener {
             listener.onClickDetails(item, adapterPosition)
         }
 
-        favorite.setOnClickListener {
+        buttonFavorite.setOnClickListener {
             listener.onClickFavorite(item, adapterPosition)
         }
     }

@@ -1,36 +1,35 @@
 package com.example.kino.views.favorite
 
-import android.content.Intent
 import android.content.res.Configuration
-import android.hardware.lights.Light
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kino.MainViewModel
 import com.example.kino.R
 import com.example.kino.content_recycler.ContentItemAdapter
-import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.databinding.FragmentFavoriteBinding
-import com.example.kino.databinding.FragmentHomeBinding
-import com.example.kino.models.Content
-import com.example.kino.utils.FakeBackend
-import com.example.kino.views.home.HomeFragment
-import com.example.kino.views.home.HomeViewModel
+import com.example.kino.models.Movie
 import com.example.kino.views.home.details.ContentDetailFragment
+import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
+    // private val vm: MainViewModel by activityViewModels()
+
     private lateinit var binding: FragmentFavoriteBinding
     private lateinit var recycler: RecyclerView
+    private lateinit var adapter: ContentItemAdapter
+
+    private val vm by viewModel<MainViewModel>()
+    private val movies = arrayListOf<Movie>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +42,13 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        vm.content.observe(viewLifecycleOwner) {
+            it.forEach { item ->
+                if (item.isFavorite) {
+                    movies.add(item)
+                }
+            }
+        }
         initRecycler()
     }
 
@@ -53,12 +59,13 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         } else {
             LinearLayoutManager(requireContext())
         }
-        val adapter = ContentItemAdapter(FakeBackend.favorites, this)
+
+        adapter = ContentItemAdapter(movies, vm, this)
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
     }
 
-    override fun onClickDetails(contentItem: Content, position: Int) {
+    override fun onClickDetails(contentItem: Movie, position: Int) {
         childFragmentManager
             .beginTransaction()
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
@@ -67,8 +74,20 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             .commit()
     }
 
-    override fun onClickFavorite(contentItem: Content, position: Int) {
-        FakeBackend.removeFromFavorite(contentItem)
-        recycler.adapter?.notifyItemRemoved(position)
+    override fun onClickFavorite(contentItem: Movie, position: Int) {
+        val resultText = adapter.removeFavorite(contentItem, position)
+        showSnackBar(resultText) {
+            adapter.addFavorite(contentItem, position)
+        }
     }
+
+    private fun showSnackBar(text: String, onCancel: () -> Unit) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .setAction("Отмена") {
+                onCancel()
+            }
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+            .show()
+    }
+
 }
