@@ -1,7 +1,6 @@
-package com.example.kino.views.home.details
+package com.example.kino.features.content.presentation.home.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

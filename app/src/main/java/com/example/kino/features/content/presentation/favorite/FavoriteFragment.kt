@@ -1,26 +1,22 @@
-package com.example.kino.views.favorite
+package com.example.kino.features.content.presentation.favorite
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.MainViewModel
 import com.example.kino.R
-import com.example.kino.content_recycler.ContentItemAdapter
+import com.example.kino.features.content.presentation.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.FragmentFavoriteBinding
 import com.example.kino.features.content.data.models.Movie
-import com.example.kino.views.home.details.ContentDetailFragment
-import com.google.android.material.snackbar.Snackbar
+import com.example.kino.features.content.presentation.home.details.ContentDetailFragment
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     // private val vm: MainViewModel by activityViewModels()

@@ -1,10 +1,7 @@
 package com.example.kino
 
 import android.app.Application
-import com.example.kino.features.di.appModule
-import com.example.kino.features.di.dataModule
-import com.example.kino.features.di.domainModule
-import com.example.kino.features.di.networkModule
+import com.example.kino.features.content.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -20,7 +17,7 @@ class App : Application() {
         startKoin {
             androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
             androidContext(this@App)
-            modules(listOf(appModule, networkModule, domainModule, dataModule))
+            modules(listOf(movieModule, movieNetworkModule, movieDomainModule, movieDataModule))
         }
     }
 

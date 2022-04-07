@@ -1,6 +1,5 @@
-package com.example.kino.content_recycler
+package com.example.kino.features.content.presentation.content_recycler
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

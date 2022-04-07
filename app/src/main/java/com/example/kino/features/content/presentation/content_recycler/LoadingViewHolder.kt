@@ -1,11 +1,8 @@
-package com.example.kino.content_recycler
+package com.example.kino.features.content.presentation.content_recycler
 
-import android.graphics.Color
-import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.kino.R
 import com.example.kino.features.content.data.models.Movie
 

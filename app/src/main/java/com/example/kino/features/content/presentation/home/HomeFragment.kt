@@ -1,4 +1,4 @@
-package com.example.kino.views.home
+package com.example.kino.features.content.presentation.home
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -8,25 +8,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.kino.App
 import com.example.kino.MainViewModel
-import com.example.kino.views.home.details.ContentDetailFragment
-import com.example.kino.content_recycler.ContentItemAdapter
+import com.example.kino.features.content.presentation.home.details.ContentDetailFragment
+import com.example.kino.features.content.presentation.content_recycler.ContentItemAdapter
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.features.content.data.models.Movie
-import com.example.kino.models.*
 import com.example.kino.utils.NetworkConnectionChecker
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class HomeFragment : Fragment(),

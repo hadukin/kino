@@ -8,13 +8,13 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.kino.views.home.HomeFragment"
+        android:name="com.example.kino.features.content.presentation.home.HomeFragment"
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_favorite"
-        android:name="com.example.kino.views.favorite.FavoriteFragment"
+        android:name="com.example.kino.features.content.presentation.favorite.FavoriteFragment"
         android:label="Favorite"
         tools:layout="@layout/fragment_favorite" />
 

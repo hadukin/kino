@@ -10,11 +10,6 @@ class ContentRepositoryImpl(
     private val context: Context,
     private val remote: ContentRemoteDataSource,
 ) : ContentRepository {
-
-    // override fun getMoviePopular(page: Int, apiKey: String): List<Movie>? {
-    //     return remote.getMoviePopular(page, apiKey)
-    // }
-
     private fun fetchMoviePopular(page: Int) {
         // TODO: here logic get data from remote or local repository
     }

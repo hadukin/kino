@@ -5,7 +5,7 @@
     android:id="@+id/fragment_home_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.home.HomeFragment">
+    tools:context=".features.content.presentation.home.HomeFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

@@ -1,9 +1,8 @@
-package com.example.kino.features.di
+package com.example.kino.features.content.di
 
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
-import org.koin.dsl.factory
 import org.koin.dsl.module
 
-val domainModule = module {
+val movieDomainModule = module {
     factory { GetMoviePopularUseCase(contentRepository = get()) }
 }

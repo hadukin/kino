@@ -1,10 +1,9 @@
-package com.example.kino.features.di
+package com.example.kino.features.content.di
 
 import com.example.kino.MainViewModel
-import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val appModule = module {
+val movieModule = module {
     // viewModel { MainViewModel(getMoviePopularUseCase = get()) }
     single { MainViewModel(getMoviePopularUseCase = get()) }
 }
