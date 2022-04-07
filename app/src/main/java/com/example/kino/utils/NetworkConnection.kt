@@ -7,7 +7,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.core.content.ContextCompat
 
-class NetworkConnectionChecker(ctx: Context, listener: NetworkServiceListener) {
+class NetworkConnection(ctx: Context, listener: NetworkServiceListener) {
     companion object {
         private const val TAG: String = "NETWORK_SERVICE"
     }

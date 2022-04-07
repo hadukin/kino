@@ -18,7 +18,7 @@ import com.example.kino.features.content.presentation.content_recycler.ContentIt
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.features.content.data.models.Movie
-import com.example.kino.utils.NetworkConnectionChecker
+import com.example.kino.utils.NetworkConnection
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -26,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class HomeFragment : Fragment(),
     ContentItemAdapter.ContentClickListener,
-    NetworkConnectionChecker.NetworkServiceListener {
+    NetworkConnection.NetworkServiceListener {
 
     // private val vm by viewModel<MainViewModel>()
     // private val vm: MainViewModel by activityViewModels()
@@ -78,9 +78,7 @@ class HomeFragment : Fragment(),
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
                     vm.nextPage()
-                    GlobalScope.launch {
-                        vm.loadMore(vm.page.value ?: 1)
-                    }
+                    CoroutineScope(Dispatchers.IO).launch { vm.loadMore(vm.page.value ?: 1) }
                 }
             }
         })

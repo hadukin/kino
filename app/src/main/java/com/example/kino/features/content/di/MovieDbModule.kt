@@ -18,7 +18,7 @@ val movieDatabaseModule = module {
     }
 
     fun provideCountriesDao(database: MoviesDatabase): MoviesDao {
-        return database.movieDao
+        return database.movieDao()
     }
 
     single { provideDatabase(get()) }

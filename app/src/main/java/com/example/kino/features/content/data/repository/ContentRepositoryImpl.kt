@@ -13,14 +13,23 @@ class ContentRepositoryImpl(
     private val local: MoviesDao
 ) : ContentRepository {
 
-    private fun localMoviePopular(page: Int) {
-        local.getAll()
+    override suspend fun getMoviePopular(page: Int): ArrayList<Movie>? {
+        val all = local.getAll()
+        Log.d("GET_ALL_LOCAL_MOVIE", "${all.size}")
+        return remote.getMoviePopular(page)
     }
 
-    override suspend fun getMoviePopular(page: Int): ArrayList<Movie>? {
-        val _local = local.getAll()
+    override suspend fun saveToFavorite(item: Movie) {
+        Log.d("INSERT_MOVIE", "${item}")
+        local.insert(item)
+        val all = local.getAll()
+        Log.d("AFTER_INSERT", "${all.size}")
+    }
 
-        Log.d("LLLLL", "${_local.value}")
-        return remote.getMoviePopular(page)
+    override suspend fun deleteFromFavorite(item: Movie) {
+        Log.d("DELETE_MOVIE", "${item}")
+        local.delete(item)
+        val all = local.getAll()
+        Log.d("AFTER_DELETE", "${all.size}")
     }
 }

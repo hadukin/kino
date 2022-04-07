@@ -1,38 +1,30 @@
 package com.example.kino
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
+import com.example.kino.features.content.domain.usecase.SaveToFavoriteUseCase
+import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) : ViewModel() {
-
-    companion object {
-        private const val TAG = "MovieViewModel"
-    }
+class MainViewModel(
+    private val getMoviePopularUseCase: GetMoviePopularUseCase,
+    private val saveToFavoriteUseCase: SaveToFavoriteUseCase,
+) : ViewModel() {
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             loadMore(1)
         }
     }
 
-    override fun onCleared() {
-        Log.d(TAG, "onCleared")
-        super.onCleared()
-    }
-
-    val movieList = MutableLiveData<List<Movie>>()
-
     private val _content = MutableLiveData<ArrayList<Movie>>().apply { value = arrayListOf() }
     val content: LiveData<ArrayList<Movie>> = _content
-    val isLoading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>(false) }
 
     suspend fun loadMore(page: Int) = coroutineScope {
         val result = getMoviePopularUseCase.execute(page)
@@ -42,11 +34,8 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
                 data.add(item)
             }
         }
-
         val list = _content.value
-
         list?.addAll(result)
-
         _content.postValue(list)
     }
 
@@ -59,13 +48,15 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
                 }
             }
         }
+        viewModelScope.launch(Dispatchers.IO) {
+            saveToFavoriteUseCase.execute(current)
+        }
         return if (current.isFavorite) {
             "Контент добавлен в избранное"
         } else {
             "Контент удален из избранного"
         }
     }
-
 
     fun addFavorite(item: Movie) {
         _content.value?.map {
@@ -87,14 +78,15 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
         }
     }
 
-    val favorites: ArrayList<Movie>
-        get() = _content.value?.filter { it.isFavorite } as ArrayList<Movie>
-
     private val _page = MutableLiveData<Int>().apply { value = 1 }
 
     val page: LiveData<Int> = _page
 
     fun nextPage() {
         _page.value = _page.value?.plus(1)
+    }
+
+    companion object {
+        private const val TAG = "MovieViewModel"
     }
 }

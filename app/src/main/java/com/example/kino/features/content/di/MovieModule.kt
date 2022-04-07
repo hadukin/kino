@@ -5,5 +5,5 @@ import org.koin.dsl.module
 
 val movieModule = module {
     // viewModel { MainViewModel(getMoviePopularUseCase = get()) }
-    single { MainViewModel(getMoviePopularUseCase = get()) }
+    single { MainViewModel(getMoviePopularUseCase = get(), saveToFavoriteUseCase = get()) }
 }

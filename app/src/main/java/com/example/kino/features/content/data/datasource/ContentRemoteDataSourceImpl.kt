@@ -7,4 +7,12 @@ class ContentRemoteDataSourceImpl(private val api: MovieClient) : ContentRemoteD
     override suspend fun getMoviePopular(page: Int): ArrayList<Movie> {
         return api.getMoviePopular(page).results
     }
+
+    override suspend fun saveToFavorite(item: Movie) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteFromFavorite(item: Movie) {
+        TODO("Not yet implemented")
+    }
 }

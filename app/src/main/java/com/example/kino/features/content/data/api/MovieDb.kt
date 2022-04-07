@@ -6,18 +6,18 @@ import com.example.kino.features.content.data.models.Movie
 
 @Dao
 interface MoviesDao {
-    @Query("SELECT * FROM movie")
-    fun getAll(): LiveData<Movie>
+    @Query("SELECT * FROM movies")
+    fun getAll(): List<Movie>
 
     @Insert
-    fun insertAll(vararg users: Movie)
+    fun insert(vararg movie: Movie)
 
     @Delete
-    fun delete(user: Movie)
+    fun delete(movie: Movie)
 }
 
 @Database(entities = [Movie::class], version = 1)
 abstract class MoviesDatabase : RoomDatabase() {
-    abstract val movieDao: MoviesDao
+    abstract fun movieDao(): MoviesDao
 }
 
