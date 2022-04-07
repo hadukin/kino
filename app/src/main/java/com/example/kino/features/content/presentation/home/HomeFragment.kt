@@ -28,16 +28,14 @@ class HomeFragment : Fragment(),
     ContentItemAdapter.ContentClickListener,
     NetworkConnectionChecker.NetworkServiceListener {
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
-
     // private val vm by viewModel<MainViewModel>()
     // private val vm: MainViewModel by activityViewModels()
+
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private val vm: MainViewModel by sharedViewModel()
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
-
-    private var movies = arrayListOf<Movie>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
