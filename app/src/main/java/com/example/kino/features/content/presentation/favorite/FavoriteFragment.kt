@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +18,7 @@ import com.example.kino.features.content.presentation.content_recycler.ContentIt
 import com.example.kino.databinding.FragmentFavoriteBinding
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.presentation.home.details.ContentDetailFragment
+import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
@@ -27,8 +29,6 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private lateinit var adapter: ContentItemAdapter
 
     private val vm: MainViewModel by sharedViewModel()
-
-    private val movies = arrayListOf<Movie>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +41,13 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vm.content.observe(viewLifecycleOwner) {
-            it.forEach { item ->
-                if (item.isFavorite) {
-                    movies.add(item)
-                }
-            }
-        }
         initRecycler()
+        vm.content.observe(viewLifecycleOwner, movieObserver)
+    }
+
+    private val movieObserver = Observer<ArrayList<Movie>> {
+        val favoriteMovies = it.filter { it.isFavorite }
+        adapter.setMovieList(favoriteMovies as ArrayList<Movie>)
     }
 
     private fun initRecycler() {
@@ -76,19 +75,19 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     override fun onClickFavorite(contentItem: Movie, position: Int) {
         val resultText = adapter.removeFavorite(contentItem, position)
         vm.removeFavorite(contentItem)
-        // showSnackBar(resultText) {
-        //     vm.addFavorite(contentItem)
-        //     adapter.addFavorite(contentItem, position)
-        // }
+        showSnackBar(resultText) {
+            vm.addFavorite(contentItem)
+            adapter.addFavorite(contentItem, position)
+        }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        // Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-        //     .setAction("Отмена") {
-        //         onCancel()
-        //     }
-        //     .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-        //     .show()
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .setAction("Отмена") {
+                onCancel()
+            }
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+            .show()
     }
 
 }

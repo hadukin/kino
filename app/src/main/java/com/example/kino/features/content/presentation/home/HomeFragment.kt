@@ -19,6 +19,7 @@ import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.utils.NetworkConnectionChecker
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -99,20 +100,20 @@ class HomeFragment : Fragment(),
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
         val result = adapter.toggleFavorite(position)
-        // vm.addFavorite(contentItem)
-        // showSnackBar(result) {
-        //     vm.removeFavorite(contentItem)
-        //     adapter.toggleFavorite(contentItem, position)
-        // }
+        vm.toggleFavorite(contentItem)
+        showSnackBar(result) {
+            vm.toggleFavorite(contentItem)
+            adapter.toggleFavorite(position)
+        }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        // Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-        //     .setAction("Отмена") {
-        //         onCancel()
-        //     }
-        //     .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-        //     .show()
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+            .setAction("Отмена") {
+                onCancel()
+            }
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+            .show()
     }
 
     override fun onChangeNetworkStatus(status: Boolean) {
