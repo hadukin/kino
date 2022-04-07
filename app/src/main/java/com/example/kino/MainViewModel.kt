@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import com.example.kino.models.Movie
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
@@ -68,6 +67,10 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
                 }
             }
         }
+
+        for (i in _content.value!!) {
+            Log.d("TTT", "${i.isFavorite} : ${i.title}")
+        }
     }
 
     fun removeFavorite(item: Movie) {
@@ -77,6 +80,10 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
                     isFavorite = false
                 }
             }
+        }
+
+        for (i in _content.value!!) {
+            Log.d("TTT", "${i.isFavorite} : ${i.title}")
         }
     }
 

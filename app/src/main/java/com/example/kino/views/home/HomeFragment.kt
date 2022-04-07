@@ -24,6 +24,7 @@ import com.example.kino.models.*
 import com.example.kino.utils.NetworkConnectionChecker
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -33,8 +34,10 @@ class HomeFragment : Fragment(),
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    // private val vm by viewModel<MainViewModel>()
     // private val vm: MainViewModel by activityViewModels()
-    private val vm by viewModel<MainViewModel>()
+    private val vm: MainViewModel by sharedViewModel()
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
 
@@ -56,8 +59,8 @@ class HomeFragment : Fragment(),
         vm.content.observe(viewLifecycleOwner, movieObserver)
     }
 
-    private val movieObserver = Observer<List<Movie>> {
-        movies.addAll(it)
+    private val movieObserver = Observer<ArrayList<Movie>> {
+        movies = it
         adapter.notifyDataSetChanged()
     }
 
@@ -102,18 +105,20 @@ class HomeFragment : Fragment(),
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
         val result = adapter.toggleFavorite(contentItem, position)
+        vm.addFavorite(contentItem)
         showSnackBar(result) {
+            vm.removeFavorite(contentItem)
             adapter.toggleFavorite(contentItem, position)
         }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-            .setAction("Отмена") {
-                onCancel()
-            }
-            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-            .show()
+        // Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+        //     .setAction("Отмена") {
+        //         onCancel()
+        //     }
+        //     .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+        //     .show()
     }
 
     override fun onChangeNetworkStatus(status: Boolean) {

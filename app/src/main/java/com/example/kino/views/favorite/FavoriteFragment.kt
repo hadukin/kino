@@ -19,6 +19,7 @@ import com.example.kino.databinding.FragmentFavoriteBinding
 import com.example.kino.models.Movie
 import com.example.kino.views.home.details.ContentDetailFragment
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
@@ -28,7 +29,8 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
 
-    private val vm by viewModel<MainViewModel>()
+    private val vm: MainViewModel by sharedViewModel()
+
     private val movies = arrayListOf<Movie>()
 
     override fun onCreateView(
@@ -76,18 +78,20 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
         val resultText = adapter.removeFavorite(contentItem, position)
-        showSnackBar(resultText) {
-            adapter.addFavorite(contentItem, position)
-        }
+        vm.removeFavorite(contentItem)
+        // showSnackBar(resultText) {
+        //     vm.addFavorite(contentItem)
+        //     adapter.addFavorite(contentItem, position)
+        // }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
-            .setAction("Отмена") {
-                onCancel()
-            }
-            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-            .show()
+        // Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
+        //     .setAction("Отмена") {
+        //         onCancel()
+        //     }
+        //     .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+        //     .show()
     }
 
 }
