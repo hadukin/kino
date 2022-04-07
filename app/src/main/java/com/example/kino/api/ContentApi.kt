@@ -1,8 +1,7 @@
 package com.example.kino.api
 
-import com.example.kino.models.CastResponse
-import com.example.kino.models.Content
-import com.example.kino.models.MoviesResponse
+import com.example.kino.features.content.data.models.CastResponse
+import com.example.kino.features.content.data.models.MoviesResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

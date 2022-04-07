@@ -9,8 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.kino.R
-import com.example.kino.models.Movie
-import com.example.kino.models.posterUrl
+import com.example.kino.features.content.data.models.Movie
+import com.example.kino.features.content.data.models.posterUrl
+
 
 class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val title = itemView.findViewById<TextView>(R.id.title)

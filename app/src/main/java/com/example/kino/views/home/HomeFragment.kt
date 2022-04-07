@@ -20,6 +20,7 @@ import com.example.kino.views.home.details.ContentDetailFragment
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
+import com.example.kino.features.content.data.models.Movie
 import com.example.kino.models.*
 import com.example.kino.utils.NetworkConnectionChecker
 import com.google.android.material.snackbar.Snackbar

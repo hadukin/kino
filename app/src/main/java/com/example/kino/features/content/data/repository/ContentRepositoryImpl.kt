@@ -2,8 +2,8 @@ package com.example.kino.features.content.data.repository
 
 import android.content.Context
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSource
+import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.domain.repository.ContentRepository
-import com.example.kino.models.Movie
 import com.example.kino.models.MovieDetails
 
 class ContentRepositoryImpl(

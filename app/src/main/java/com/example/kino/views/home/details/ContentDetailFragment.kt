@@ -10,8 +10,8 @@ import coil.load
 import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
-import com.example.kino.models.Movie
-import com.example.kino.models.posterUrl
+import com.example.kino.features.content.data.models.Movie
+import com.example.kino.features.content.data.models.posterUrl
 
 class ContentDetailFragment() : Fragment() {
     private lateinit var binding: FragmentContentDetailBinding

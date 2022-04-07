@@ -16,7 +16,7 @@ import com.example.kino.MainViewModel
 import com.example.kino.R
 import com.example.kino.content_recycler.ContentItemAdapter
 import com.example.kino.databinding.FragmentFavoriteBinding
-import com.example.kino.models.Movie
+import com.example.kino.features.content.data.models.Movie
 import com.example.kino.views.home.details.ContentDetailFragment
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel

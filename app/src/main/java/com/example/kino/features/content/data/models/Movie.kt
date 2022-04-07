@@ -1,4 +1,4 @@
-package com.example.kino.models
+package com.example.kino.features.content.data.models
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

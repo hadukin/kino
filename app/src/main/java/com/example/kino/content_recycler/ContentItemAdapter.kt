@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kino.MainViewModel
 import com.example.kino.R
-import com.example.kino.models.Movie
+import com.example.kino.features.content.data.models.Movie
 
 class ContentItemAdapter(
     private val items: ArrayList<Movie>,

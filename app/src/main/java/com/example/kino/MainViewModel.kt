@@ -5,8 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
-import com.example.kino.models.Movie
+
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 

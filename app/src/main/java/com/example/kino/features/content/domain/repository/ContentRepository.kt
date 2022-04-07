@@ -1,6 +1,6 @@
 package com.example.kino.features.content.domain.repository
 
-import com.example.kino.models.Movie
+import com.example.kino.features.content.data.models.Movie
 import com.example.kino.models.MovieDetails
 
 interface ContentRepository {
