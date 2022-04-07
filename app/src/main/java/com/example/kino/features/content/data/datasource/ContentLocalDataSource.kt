@@ -5,5 +5,7 @@ import com.example.kino.features.content.domain.repository.ContentRepository
 
 
 interface ContentLocalDataSource : ContentRepository {
-    fun saveToFavorite(content: List<Movie>)
+    fun saveToFavorite(item: Movie)
+
+    fun removeFromFavorite(item: Movie)
 }
