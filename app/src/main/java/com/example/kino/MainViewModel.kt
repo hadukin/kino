@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kino.features.content.data.models.Movie
+import com.example.kino.features.content.domain.usecase.DeleteFromFavoriteUseCase
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import com.example.kino.features.content.domain.usecase.SaveToFavoriteUseCase
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,7 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val getMoviePopularUseCase: GetMoviePopularUseCase,
     private val saveToFavoriteUseCase: SaveToFavoriteUseCase,
+    private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
 ) : ViewModel() {
 
     init {
@@ -29,6 +31,7 @@ class MainViewModel(
     suspend fun loadMore(page: Int) = coroutineScope {
         val result = getMoviePopularUseCase.execute(page)
         val data = arrayListOf<Movie>()
+
         for (item in result) {
             if (content.value?.contains(item) == false) {
                 data.add(item)
@@ -48,12 +51,15 @@ class MainViewModel(
                 }
             }
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            saveToFavoriteUseCase.execute(current)
-        }
         return if (current.isFavorite) {
+            viewModelScope.launch(Dispatchers.IO) {
+                saveToFavoriteUseCase.execute(current)
+            }
             "Контент добавлен в избранное"
         } else {
+            viewModelScope.launch(Dispatchers.IO) {
+                deleteFromFavoriteUseCase.execute(current)
+            }
             "Контент удален из избранного"
         }
     }
