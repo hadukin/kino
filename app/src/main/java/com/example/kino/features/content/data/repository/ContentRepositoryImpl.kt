@@ -21,16 +21,10 @@ class ContentRepositoryImpl(
     }
 
     override suspend fun saveToFavorite(item: Movie) {
-        Log.d("INSERT_MOVIE", "${item}")
         local.saveToFavorite(item)
-        val all = local.getMoviePopular(0)
-        Log.d("AFTER_INSERT", "${all?.size}")
     }
 
     override suspend fun deleteFromFavorite(item: Movie) {
-        Log.d("DELETE_MOVIE", "${item}")
         local.deleteFromFavorite(item)
-        val all = local.getMoviePopular(0)
-        Log.d("AFTER_DELETE", "${all?.size}")
     }
 }

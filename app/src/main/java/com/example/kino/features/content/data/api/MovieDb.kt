@@ -1,6 +1,5 @@
 package com.example.kino.features.content.data.api
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.kino.features.content.data.models.Movie
 

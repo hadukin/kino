@@ -10,8 +10,7 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "movies")
 @Parcelize
 data class Movie(
-    @PrimaryKey(autoGenerate = true) val uid: Int,
-    @ColumnInfo(name = "id") @SerializedName("id") val id: Int,
+    @PrimaryKey @ColumnInfo(name = "id") @SerializedName("id") val id: Int,
     @ColumnInfo(name = "adult") @SerializedName("adult") val adult: Boolean,
     @ColumnInfo(name = "title") @SerializedName("title") val title: String,
     @ColumnInfo(name = "poster_path") @SerializedName("poster_path") val posterPath: String,
