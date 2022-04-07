@@ -28,6 +28,8 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
         super.onCleared()
     }
 
+    val movieList = MutableLiveData<List<Movie>>()
+
     private val _content = MutableLiveData<ArrayList<Movie>>().apply { value = arrayListOf() }
     val content: LiveData<ArrayList<Movie>> = _content
     val isLoading: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>(false) }
@@ -40,7 +42,12 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
                 data.add(item)
             }
         }
-        _content.postValue(data)
+
+        val list = _content.value
+
+        list?.addAll(result)
+
+        _content.postValue(list)
     }
 
     fun toggleFavorite(item: Movie): String {
@@ -68,10 +75,6 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
                 }
             }
         }
-
-        for (i in _content.value!!) {
-            Log.d("TTT", "${i.isFavorite} : ${i.title}")
-        }
     }
 
     fun removeFavorite(item: Movie) {
@@ -81,10 +84,6 @@ class MainViewModel(private val getMoviePopularUseCase: GetMoviePopularUseCase) 
                     isFavorite = false
                 }
             }
-        }
-
-        for (i in _content.value!!) {
-            Log.d("TTT", "${i.isFavorite} : ${i.title}")
         }
     }
 

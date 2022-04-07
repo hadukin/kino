@@ -2,6 +2,7 @@ package com.example.kino.features.content.presentation.favorite
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -58,7 +59,7 @@ class FavoriteFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             LinearLayoutManager(requireContext())
         }
 
-        adapter = ContentItemAdapter(movies, vm, this)
+        adapter = ContentItemAdapter(this)
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
     }

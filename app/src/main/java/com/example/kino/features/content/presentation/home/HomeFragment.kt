@@ -36,7 +36,7 @@ class HomeFragment : Fragment(),
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
 
-    private var movies = mutableListOf<Movie>()
+    private var movies = arrayListOf<Movie>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,8 +55,7 @@ class HomeFragment : Fragment(),
     }
 
     private val movieObserver = Observer<ArrayList<Movie>> {
-        movies = it
-        adapter.notifyDataSetChanged()
+        adapter.setMovieList(it)
     }
 
     override fun onDestroy() {
@@ -71,7 +70,7 @@ class HomeFragment : Fragment(),
         } else {
             LinearLayoutManager(requireContext())
         }
-        adapter = ContentItemAdapter(movies as ArrayList<Movie>, vm, this)
+        adapter = ContentItemAdapter(this)
 
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
@@ -99,12 +98,12 @@ class HomeFragment : Fragment(),
 
 
     override fun onClickFavorite(contentItem: Movie, position: Int) {
-        val result = adapter.toggleFavorite(contentItem, position)
-        vm.addFavorite(contentItem)
-        showSnackBar(result) {
-            vm.removeFavorite(contentItem)
-            adapter.toggleFavorite(contentItem, position)
-        }
+        val result = adapter.toggleFavorite(position)
+        // vm.addFavorite(contentItem)
+        // showSnackBar(result) {
+        //     vm.removeFavorite(contentItem)
+        //     adapter.toggleFavorite(contentItem, position)
+        // }
     }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
