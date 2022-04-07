@@ -17,7 +17,15 @@ class App : Application() {
         startKoin {
             androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
             androidContext(this@App)
-            modules(listOf(movieModule, movieNetworkModule, movieDomainModule, movieDataModule))
+            modules(
+                listOf(
+                    movieModule,
+                    movieNetworkModule,
+                    movieDomainModule,
+                    movieDataModule,
+                    movieDatabaseModule,
+                )
+            )
         }
     }
 
