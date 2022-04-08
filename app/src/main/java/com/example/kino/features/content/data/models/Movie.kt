@@ -20,7 +20,8 @@ data class Movie(
     @ColumnInfo(name = "vote_count") @SerializedName("vote_count") val voteCount: Int,
     @ColumnInfo(name = "overview") @SerializedName("overview") val overview: String,
 
-    var isFavorite: Boolean = false,
+    // Custom field
+    @ColumnInfo(name = "is_favorite") @SerializedName("is_favorite") var isFavorite: Boolean = false,
 ) : Parcelable
 
 

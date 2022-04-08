@@ -16,11 +16,15 @@ class ContentRepositoryImpl(
     override suspend fun getMovies(page: Int): List<Movie>? {
         val all = local.getMovies(0)
         Log.d("GET_ALL_LOCAL_MOVIE", "${all?.size}")
-        return remote.getMovies(page)
+        val result = remote.getMovies(page)
+        if (result != null) {
+            local.saveAllMovies(result)
+        }
+        return result
     }
 
-    override suspend fun saveAllMovies(page: List<Movie>) {
-        TODO("Not yet implemented")
+    override suspend fun saveAllMovies(items: List<Movie>) {
+        local.saveAllMovies(items)
     }
 
     override suspend fun saveToFavorite(item: Movie) {

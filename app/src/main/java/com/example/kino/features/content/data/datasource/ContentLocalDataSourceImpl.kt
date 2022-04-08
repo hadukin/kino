@@ -10,8 +10,8 @@ class ContentLocalDataSourceImpl(private val dao: MoviesDao) : ContentLocalDataS
         return dao.getAll()
     }
 
-    override suspend fun saveAllMovies(page: List<Movie>) {
-        TODO("Not yet implemented")
+    override suspend fun saveAllMovies(items: List<Movie>) {
+        return dao.insertAll(items)
     }
 
     override suspend fun saveToFavorite(item: Movie) {

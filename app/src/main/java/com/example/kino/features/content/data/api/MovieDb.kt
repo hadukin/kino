@@ -9,10 +9,13 @@ interface MoviesDao {
     fun getAll(): List<Movie>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(vararg movie: Movie)
+    fun insertAll(movie: List<Movie>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(vararg movie: Movie)
+    fun insert(movie: Movie)
+
+    @Query("SELECT * FROM movies WHERE is_favorite IN (:favorite)")
+    fun getAllFavorites(favorite: Boolean): List<Movie>
 
     @Delete
     fun delete(movie: Movie)
@@ -22,4 +25,3 @@ interface MoviesDao {
 abstract class MoviesDatabase : RoomDatabase() {
     abstract fun movieDao(): MoviesDao
 }
-
