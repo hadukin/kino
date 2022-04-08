@@ -1,7 +1,7 @@
 package com.example.kino.features.content.di
 
 import com.example.kino.BuildConfig
-import com.example.kino.features.content.data.api.MovieClient
+import com.example.kino.features.content.data.api.MovieApi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
@@ -33,7 +33,7 @@ private fun provideOkHttpClient(): OkHttpClient {
     //     }).build()
 }
 
-private fun provideMovieApi(retrofit: Retrofit): MovieClient = retrofit.create(MovieClient::class.java)
+private fun provideMovieApi(retrofit: Retrofit): MovieApi = retrofit.create(MovieApi::class.java)
 
 private class AppInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

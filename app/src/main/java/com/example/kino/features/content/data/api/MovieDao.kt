@@ -5,8 +5,8 @@ import com.example.kino.features.content.data.models.Movie
 
 @Dao
 interface MoviesDao {
-    @Query("SELECT * FROM movies")
-    fun getAll(): List<Movie>
+    @Query("SELECT * FROM movies LIMIT 10 OFFSET (:page * 10)")
+    fun getAll(page: Int): List<Movie>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(movie: List<Movie>)

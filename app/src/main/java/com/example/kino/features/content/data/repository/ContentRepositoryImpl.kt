@@ -14,9 +14,10 @@ class ContentRepositoryImpl(
 ) : ContentRepository {
 
     override suspend fun getMovies(page: Int): List<Movie>? {
-        val all = local.getMovies(0)
-        Log.d("GET_ALL_LOCAL_MOVIE", "${all?.size}")
+        // val all = local.getMovies(page)
+        // return all
         val result = remote.getMovies(page)
+
         if (result != null) {
             local.saveAllMovies(result)
         }
