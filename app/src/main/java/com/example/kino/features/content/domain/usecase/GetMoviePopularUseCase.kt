@@ -6,6 +6,6 @@ import com.example.kino.features.content.domain.repository.ContentRepository
 class GetMoviePopularUseCase(private val contentRepository: ContentRepository) {
 
     suspend fun execute(page: Int): List<Movie> {
-        return contentRepository.getMoviePopular(page) ?: listOf()
+        return contentRepository.getMovies(page) ?: listOf()
     }
 }

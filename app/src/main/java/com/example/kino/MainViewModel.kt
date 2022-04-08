@@ -67,8 +67,9 @@ class MainViewModel(
     fun addFavorite(item: Movie) {
         _content.value?.map {
             if (it.id == item.id) {
-                it.apply {
-                    isFavorite = true
+                it.apply { isFavorite = true }
+                viewModelScope.launch(Dispatchers.IO) {
+                    saveToFavoriteUseCase.execute(it)
                 }
             }
         }
@@ -79,6 +80,9 @@ class MainViewModel(
             if (it.id == item.id) {
                 it.apply {
                     isFavorite = false
+                }
+                viewModelScope.launch(Dispatchers.IO) {
+                    deleteFromFavoriteUseCase.execute(it)
                 }
             }
         }

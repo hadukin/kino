@@ -6,8 +6,12 @@ import com.example.kino.features.content.data.models.Movie
 
 
 class ContentLocalDataSourceImpl(private val dao: MoviesDao) : ContentLocalDataSource {
-    override suspend fun getMoviePopular(page: Int): List<Movie>? {
+    override suspend fun getMovies(page: Int): List<Movie>? {
         return dao.getAll()
+    }
+
+    override suspend fun saveAllMovies(page: List<Movie>) {
+        TODO("Not yet implemented")
     }
 
     override suspend fun saveToFavorite(item: Movie) {

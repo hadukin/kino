@@ -9,6 +9,9 @@ interface MoviesDao {
     fun getAll(): List<Movie>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg movie: Movie)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg movie: Movie)
 
     @Delete
