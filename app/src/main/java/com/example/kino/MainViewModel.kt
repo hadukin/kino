@@ -1,5 +1,6 @@
 package com.example.kino
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class MainViewModel(
     private val getMoviePopularUseCase: GetMoviePopularUseCase,
@@ -29,17 +31,24 @@ class MainViewModel(
     val content: LiveData<ArrayList<Movie>> = _content
 
     suspend fun loadMore(page: Int) = coroutineScope {
-        val result = getMoviePopularUseCase.execute(page)
-        val data = arrayListOf<Movie>()
+        try {
+            val result = getMoviePopularUseCase.execute(page)
+            val data = arrayListOf<Movie>()
 
-        for (item in result) {
-            if (content.value?.contains(item) == false) {
-                data.add(item)
+            for (item in result) {
+                if (content.value?.contains(item) == false) {
+                    data.add(item)
+                }
             }
+            val list = _content.value
+            list?.addAll(result)
+            _content.postValue(list)
+
+        } catch (error: HttpException) {
+            Log.d("ERROR_HTTP", "$error")
+        } catch (error: Exception) {
+            Log.d("ERROR_EXCEPTION", "$error")
         }
-        val list = _content.value
-        list?.addAll(result)
-        _content.postValue(list)
     }
 
     fun toggleFavorite(item: Movie): String {

@@ -7,7 +7,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import androidx.core.content.ContextCompat
 
-class NetworkConnection(ctx: Context, listener: NetworkServiceListener) {
+class NetworkConnection(context: Context, listener: (Boolean) -> Unit) {
     companion object {
         private const val TAG: String = "NETWORK_SERVICE"
     }
@@ -16,7 +16,7 @@ class NetworkConnection(ctx: Context, listener: NetworkServiceListener) {
         // network is available for use
         override fun onAvailable(network: Network) {
             super.onAvailable(network)
-            listener.onChangeNetworkStatus(true)
+            listener(true)
         }
 
         // Network capabilities have changed for the network
@@ -32,7 +32,7 @@ class NetworkConnection(ctx: Context, listener: NetworkServiceListener) {
         // lost network connection
         override fun onLost(network: Network) {
             super.onLost(network)
-            listener.onChangeNetworkStatus(false)
+            listener(false)
         }
     }
 
@@ -45,7 +45,7 @@ class NetworkConnection(ctx: Context, listener: NetworkServiceListener) {
 
         val connectivityManager =
             ContextCompat.getSystemService(
-                ctx,
+                context,
                 ConnectivityManager::class.java
             ) as ConnectivityManager
         connectivityManager.requestNetwork(networkRequest, networkCallback)

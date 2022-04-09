@@ -8,7 +8,7 @@ class ContentRemoteDataSourceImpl(private val api: MovieApi) : ContentRemoteData
         return api.getMoviePopular(page).results
     }
 
-    override suspend fun saveAllMovies(page: List<Movie>) {
+    override suspend fun saveAllMovies(items: List<Movie>) {
         TODO("Not yet implemented")
     }
 
