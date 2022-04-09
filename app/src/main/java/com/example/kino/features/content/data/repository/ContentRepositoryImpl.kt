@@ -15,16 +15,6 @@ class ContentRepositoryImpl(
 ) : ContentRepository {
     override suspend fun getMovies(page: Int): List<Movie> {
         // TODO: check internet connection
-        // if (isNetworkAvailable) {
-        //     val result = local.getMovies(page)
-        //     return result
-        // } else {
-        //     val result = remote.getMovies(page)
-        //     if (result != null) {
-        //         local.saveAllMovies(result)
-        //     }
-        //     return result
-        // }
 
         // delay(1500)
         // throw Exception("Test for no internet case")
