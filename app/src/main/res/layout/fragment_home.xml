@@ -23,7 +23,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:title="@string/nav_home" />
+                app:title="@string/nav_home" >
+                <ProgressBar
+                    android:id="@+id/progress_indicator"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp" />
+            </androidx.appcompat.widget.Toolbar>
 
             <!--<Button
                 android:id="@+id/increment"

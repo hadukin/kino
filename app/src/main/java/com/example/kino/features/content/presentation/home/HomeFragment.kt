@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
@@ -36,29 +37,47 @@ class HomeFragment : Fragment(),
     private val vm: MainViewModel by sharedViewModel()
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
+    var isLoading = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         recycler = binding.recycler
 
         initRecycler()
         vm.content.observe(viewLifecycleOwner, movieObserver)
+        vm.isLoading.observe(viewLifecycleOwner, isLoadingObserver)
+
+        return binding.root
     }
 
     private val movieObserver = Observer<ArrayList<Movie>> {
         adapter.setMovieList(it)
     }
 
+    private val isLoadingObserver = Observer<Boolean> {
+        isLoading = it
+        binding.progressIndicator.isVisible = it
+    }
+
+    override fun onPause() {
+        vm.content.removeObserver(movieObserver)
+        vm.isLoading.removeObserver(isLoadingObserver)
+        super.onPause()
+    }
+
+    override fun onResume() {
+        vm.content.observe(viewLifecycleOwner, movieObserver)
+        vm.isLoading.observe(viewLifecycleOwner, isLoadingObserver)
+        super.onResume()
+    }
+
     override fun onDestroy() {
         vm.content.removeObserver(movieObserver)
+        vm.isLoading.removeObserver(isLoadingObserver)
         super.onDestroy()
     }
 
@@ -76,7 +95,7 @@ class HomeFragment : Fragment(),
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
+                if (!recyclerView.canScrollVertically(1) && !isLoading) {
                     vm.nextPage()
                     CoroutineScope(Dispatchers.IO).launch { vm.loadMore(vm.page.value ?: 1) }
                 }

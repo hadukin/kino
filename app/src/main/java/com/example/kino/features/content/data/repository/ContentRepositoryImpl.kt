@@ -6,6 +6,7 @@ import com.example.kino.features.content.data.datasource.ContentLocalDataSource
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSource
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.domain.repository.ContentRepository
+import kotlinx.coroutines.delay
 
 class ContentRepositoryImpl(
     private val context: Context,
@@ -25,23 +26,22 @@ class ContentRepositoryImpl(
         //     return result
         // }
 
+        // delay(3000)
+        // throw Exception("Hi There!")
+
         val localData = local.getMovies()
-        val remoteData = remote.getMovies(page)?.toMutableList()
+        val remoteData = remote.getMovies(page)
 
         val favoriteListId = localData.filter { it.isFavorite }.map { it.filmId }
 
-        if (remoteData != null) {
-            for (item in remoteData) {
-                if (favoriteListId.contains(item.filmId) == true) {
-                    val id = item.filmId
-                    remoteData.find { it.filmId == id }?.isFavorite = true
-                }
+        for (item in remoteData) {
+            if (favoriteListId.contains(item.filmId)) {
+                val id = item.filmId
+                remoteData.find { it.filmId == id }?.isFavorite = true
             }
         }
 
-        if (remoteData != null) {
-            local.saveAllMovies(remoteData)
-        }
+        local.saveAllMovies(remoteData)
         return remoteData
     }
 

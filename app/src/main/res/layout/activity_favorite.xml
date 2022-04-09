@@ -17,7 +17,14 @@
             android:layout_height="?android:attr/actionBarSize"
             app:subtitleTextColor="@color/white"
             app:title="@string/favorite"
-            app:titleTextColor="@color/white" />
+            app:titleTextColor="@color/white">
+
+            <ProgressBar
+                android:id="@+id/progress_indicator"
+                android:layout_width="30dp"
+                android:layout_height="30dp" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
 
     </com.google.android.material.appbar.AppBarLayout>
 

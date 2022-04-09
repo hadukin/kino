@@ -30,7 +30,11 @@ class MainViewModel(
     private val _content = MutableLiveData<ArrayList<Movie>>().apply { value = arrayListOf() }
     val content: LiveData<ArrayList<Movie>> = _content
 
+    private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
+    val isLoading: LiveData<Boolean> = _isLoading
+
     suspend fun loadMore(page: Int) = coroutineScope {
+        _isLoading.postValue(true)
         try {
             val result = getMoviePopularUseCase.execute(page)
             val data = arrayListOf<Movie>()
@@ -48,6 +52,8 @@ class MainViewModel(
             Log.e("ERROR_HTTP", "$error")
         } catch (error: Exception) {
             Log.e("ERROR_EXCEPTION", "$error")
+        } finally {
+            _isLoading.postValue(false)
         }
     }
 
