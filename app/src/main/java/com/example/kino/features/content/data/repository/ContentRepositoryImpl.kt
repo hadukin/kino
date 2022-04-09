@@ -6,7 +6,6 @@ import com.example.kino.features.content.data.datasource.ContentLocalDataSource
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSource
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.domain.repository.ContentRepository
-import com.example.kino.utils.NetworkConnection
 
 class ContentRepositoryImpl(
     private val context: Context,
@@ -26,11 +25,24 @@ class ContentRepositoryImpl(
         //     return result
         // }
 
-        val result = remote.getMovies(page)
-        if (result != null) {
-            local.saveAllMovies(result)
+        val localData = local.getMovies()
+        val remoteData = remote.getMovies(page)?.toMutableList()
+
+        val favoriteListId = localData.filter { it.isFavorite }.map { it.filmId }
+
+        if (remoteData != null) {
+            for (item in remoteData) {
+                if (favoriteListId.contains(item.filmId) == true) {
+                    val id = item.filmId
+                    remoteData.find { it.filmId == id }?.isFavorite = true
+                }
+            }
         }
-        return result
+
+        if (remoteData != null) {
+            local.saveAllMovies(remoteData)
+        }
+        return remoteData
     }
 
     override suspend fun saveAllMovies(items: List<Movie>) {

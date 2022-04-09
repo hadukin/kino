@@ -54,7 +54,7 @@ class MainViewModel(
     fun toggleFavorite(item: Movie): String {
         var current: Movie = item
         _content.value?.map {
-            if (it.id == item.id) {
+            if (it.filmId == item.filmId) {
                 current = it.apply {
                     isFavorite = !item.isFavorite
                 }
@@ -75,7 +75,7 @@ class MainViewModel(
 
     fun addFavorite(item: Movie) {
         _content.value?.map {
-            if (it.id == item.id) {
+            if (it.filmId == item.filmId) {
                 it.apply { isFavorite = true }
                 viewModelScope.launch(Dispatchers.IO) {
                     saveToFavoriteUseCase.execute(it)
@@ -86,7 +86,7 @@ class MainViewModel(
 
     fun removeFavorite(item: Movie) {
         _content.value?.map {
-            if (it.id == item.id) {
+            if (it.filmId == item.filmId) {
                 it.apply {
                     isFavorite = false
                 }

@@ -10,7 +10,7 @@ import kotlinx.parcelize.Parcelize
 @Entity(tableName = "movies")
 @Parcelize
 data class Movie(
-    @PrimaryKey @ColumnInfo(name = "filmId") @SerializedName("filmId") val id: Int,
+    @PrimaryKey @ColumnInfo(name = "filmId") @SerializedName("filmId") val filmId: Int,
     @ColumnInfo(name = "nameRu") @SerializedName("nameRu") val nameRu: String,
     // @ColumnInfo(name = "nameEn") @SerializedName("nameEn") val nameEn: String,
     @ColumnInfo(name = "year") @SerializedName("year") val year: String,
@@ -20,7 +20,7 @@ data class Movie(
     @ColumnInfo(name = "posterUrlPreview") @SerializedName("posterUrlPreview") val posterUrlPreview: String,
 
     // Custom field, does not come from api
-    @ColumnInfo(name = "is_favorite") @SerializedName("is_favorite") var isFavorite: Boolean = false,
+    @ColumnInfo(name = "isFavorite") @SerializedName("isFavorite") var isFavorite: Boolean = false,
 ) : Parcelable
 
 

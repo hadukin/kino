@@ -8,15 +8,13 @@ class ContentRemoteDataSourceImpl(private val api: MovieApi) : ContentRemoteData
         return api.getMoviePopular(page).results
     }
 
-    override suspend fun saveAllMovies(items: List<Movie>) {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun saveToFavorite(item: Movie) {
         TODO("Not yet implemented")
+        // save to remote database with real api
     }
 
     override suspend fun deleteFromFavorite(item: Movie) {
         TODO("Not yet implemented")
+        // delete from remote database with real api
     }
 }
