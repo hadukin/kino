@@ -45,9 +45,9 @@ class MainViewModel(
             _content.postValue(list)
 
         } catch (error: HttpException) {
-            Log.d("ERROR_HTTP", "$error")
+            Log.e("ERROR_HTTP", "$error")
         } catch (error: Exception) {
-            Log.d("ERROR_EXCEPTION", "$error")
+            Log.e("ERROR_EXCEPTION", "$error")
         }
     }
 
