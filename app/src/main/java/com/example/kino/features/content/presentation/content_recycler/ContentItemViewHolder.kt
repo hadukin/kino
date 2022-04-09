@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.kino.R
 import com.example.kino.features.content.data.models.Movie
-import com.example.kino.features.content.data.models.posterUrl
+
 
 
 class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,11 +27,11 @@ class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         }
 
         title.apply {
-            text = item.title
+            text = item.nameRu
         }
 
         description.apply {
-            text = item.overview
+            text = item.nameRu
             maxLines = 2
         }
 

@@ -18,11 +18,9 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField "String", "X_API_KEY", localProperties['x_api_key']
 
-        buildConfigField "String", "API_KEY", api_key
-        buildConfigField "String", "API_HEADER", api_header
-        buildConfigField "String", "BASE_URL", base_url
+        buildConfigField "String", "API_KEY", localProperties['api_key']
+        buildConfigField "String", "BASE_URL", localProperties['base_url']
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

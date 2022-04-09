@@ -10,7 +10,6 @@ import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.features.content.data.models.Movie
-import com.example.kino.features.content.data.models.posterUrl
 
 class ContentDetailFragment() : Fragment() {
     private lateinit var binding: FragmentContentDetailBinding
@@ -34,7 +33,9 @@ class ContentDetailFragment() : Fragment() {
         val content = arguments?.getParcelable<Movie>(CONTENT)
 
         content?.posterUrl.let {
-            binding.poster.load(it)
+            if (it != null) {
+                binding.poster.load(it)
+            }
         }
 
         binding.toolbar.apply {
@@ -42,11 +43,11 @@ class ContentDetailFragment() : Fragment() {
             setNavigationOnClickListener {
                 activity?.onBackPressed()
             }
-            title = "${content?.title}"
+            title = "${content?.nameRu}"
         }
 
         binding.description.apply {
-            text = "${content?.overview}"
+            text = "${content?.nameRu}"
         }
     }
 

@@ -14,10 +14,19 @@ class ContentRepositoryImpl(
     private val local: ContentLocalDataSource
 ) : ContentRepository {
     override suspend fun getMovies(page: Int): List<Movie>? {
-        // val all = local.getMovies(page)
-        // return all
-        val result = remote.getMovies(page)
 
+        // if (isNetworkAvailable) {
+        //     val result = local.getMovies(page)
+        //     return result
+        // } else {
+        //     val result = remote.getMovies(page)
+        //     if (result != null) {
+        //         local.saveAllMovies(result)
+        //     }
+        //     return result
+        // }
+
+        val result = remote.getMovies(page)
         if (result != null) {
             local.saveAllMovies(result)
         }

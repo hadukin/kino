@@ -7,7 +7,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieApi {
-    @GET("movie/popular")
+    @GET("top?type=TOP_250_BEST_FILMS")
     suspend fun getMoviePopular(
         @Query("page") page: Int,
     ): MoviesResponse
