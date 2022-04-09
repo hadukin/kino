@@ -1,5 +1,7 @@
 package com.example.kino.features.content.presentation.content_recycler
 
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,8 +11,24 @@ import com.example.kino.features.content.data.models.Movie
 class ContentItemAdapter(
     private val listener: ContentClickListener,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        const val TYPE_MOVIE = 0
+        const val TYPE_LOADER = 1
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
+
+        when (viewType) {
+            TYPE_MOVIE -> {
+                return ContentItemViewHolder(inflater.inflate(R.layout.content_item, parent, false))
+            }
+            TYPE_LOADER -> {
+                return LoadingViewHolder(inflater.inflate(R.layout.loader_item, parent, false))
+            }
+        }
+
         return ContentItemViewHolder(inflater.inflate(R.layout.content_item, parent, false))
     }
 
@@ -26,11 +44,32 @@ class ContentItemAdapter(
             is ContentItemViewHolder -> {
                 holder.bind(movies[position], listener)
             }
+            is LoadingViewHolder -> {
+                holder.bind()
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when {
+            movies[position] is Movie -> TYPE_MOVIE
+            else -> TYPE_LOADER
         }
     }
 
     override fun getItemCount(): Int {
         return movies.size
+    }
+
+    fun addLoadingView() {
+        Handler().post {
+            notifyItemInserted(movies.size - 1)
+        }
+    }
+
+    fun removeLoadingView() {
+        movies.removeAt(movies.size - 1)
+        notifyItemRemoved(movies.size)
     }
 
     interface ContentClickListener {

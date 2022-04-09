@@ -9,8 +9,6 @@ import com.bumptech.glide.Glide
 import com.example.kino.R
 import com.example.kino.features.content.data.models.Movie
 
-
-
 class ContentItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val title = itemView.findViewById<TextView>(R.id.title)
     private val description = itemView.findViewById<TextView>(R.id.description)

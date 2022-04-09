@@ -61,6 +61,12 @@ class HomeFragment : Fragment(),
     private val isLoadingObserver = Observer<Boolean> {
         isLoading = it
         binding.progressIndicator.isVisible = it
+
+        // if (it == true) {
+        //     adapter.addLoadingView()
+        // } else {
+        //     adapter.addLoadingView()
+        // }
     }
 
     override fun onPause() {

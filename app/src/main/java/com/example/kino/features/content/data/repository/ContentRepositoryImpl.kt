@@ -13,8 +13,8 @@ class ContentRepositoryImpl(
     private val remote: ContentRemoteDataSource,
     private val local: ContentLocalDataSource
 ) : ContentRepository {
-    override suspend fun getMovies(page: Int): List<Movie>? {
-
+    override suspend fun getMovies(page: Int): List<Movie> {
+        // TODO: check internet connection
         // if (isNetworkAvailable) {
         //     val result = local.getMovies(page)
         //     return result
@@ -26,9 +26,10 @@ class ContentRepositoryImpl(
         //     return result
         // }
 
-        // delay(3000)
-        // throw Exception("Hi There!")
+        // delay(1500)
+        // throw Exception("Test for no internet case")
 
+        delay(1500)
         val localData = local.getMovies()
         val remoteData = remote.getMovies(page)
 
