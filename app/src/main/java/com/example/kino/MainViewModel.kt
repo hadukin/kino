@@ -10,8 +10,8 @@ import com.example.kino.features.content.domain.usecase.DeleteFromFavoriteUseCas
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import com.example.kino.features.content.domain.usecase.SaveToFavoriteUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
@@ -27,16 +27,19 @@ class MainViewModel(
         }
     }
 
+    val isNetworkAvailable = MutableLiveData<Boolean>().apply { value = false }
+
     private val _content = MutableLiveData<ArrayList<Movie>>().apply { value = arrayListOf() }
     val content: LiveData<ArrayList<Movie>> = _content
 
     private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
     val isLoading: LiveData<Boolean> = _isLoading
 
-    suspend fun loadMore(page: Int) = coroutineScope {
+    suspend fun loadMore(page: Int) = viewModelScope.launch(Dispatchers.IO) {
         _isLoading.postValue(true)
         try {
-            val result = getMoviePopularUseCase.execute(page)
+            val resultDeferred = async { getMoviePopularUseCase.execute(page) }
+            val result = resultDeferred.await()
             val data = arrayListOf<Movie>()
 
             for (item in result) {

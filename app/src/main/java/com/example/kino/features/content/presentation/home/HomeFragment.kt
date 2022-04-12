@@ -19,6 +19,7 @@ import com.example.kino.features.content.presentation.content_recycler.ContentIt
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.features.content.data.models.Movie
+import com.example.kino.utils.ConnectionLiveData
 import com.example.kino.utils.NetworkConnection
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
@@ -37,6 +38,7 @@ class HomeFragment : Fragment(),
     private val vm: MainViewModel by sharedViewModel()
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
+    private lateinit var connectionLiveData: ConnectionLiveData
     var isLoading = false
 
     override fun onCreateView(
@@ -44,6 +46,11 @@ class HomeFragment : Fragment(),
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        connectionLiveData = ConnectionLiveData(requireContext())
+        connectionLiveData.observe(viewLifecycleOwner) {
+            vm.isNetworkAvailable.value = it
+        }
 
         recycler = binding.recycler
 
@@ -61,12 +68,6 @@ class HomeFragment : Fragment(),
     private val isLoadingObserver = Observer<Boolean> {
         isLoading = it
         binding.progressIndicator.isVisible = it
-
-        // if (it == true) {
-        //     adapter.addLoadingView()
-        // } else {
-        //     adapter.addLoadingView()
-        // }
     }
 
     override fun onPause() {

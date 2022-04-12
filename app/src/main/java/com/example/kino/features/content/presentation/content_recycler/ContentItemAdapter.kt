@@ -9,7 +9,7 @@ import com.example.kino.R
 import com.example.kino.features.content.data.models.Movie
 
 class ContentItemAdapter(
-    private val listener: ContentClickListener,
+    private val listener: ContentClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
