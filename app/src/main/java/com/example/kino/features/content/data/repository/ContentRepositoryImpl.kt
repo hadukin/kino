@@ -33,7 +33,8 @@ class ContentRepositoryImpl(
 
         // throw Exception("ERROR")
 
-        Log.d("isConnected", "$isConnected")
+
+        Log.d("isConnected", "${localData.size}")
 
         if (isConnected) {
             val remoteData = remote.getMovies(page)

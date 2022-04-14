@@ -37,6 +37,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private lateinit var connectionLiveData: ConnectionLiveData
     private var isLoading = false
     private var isNetworkAccess = false
+    private var isFirstLoading = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +49,11 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         connectionLiveData.observe(viewLifecycleOwner) {
             isNetworkAccess = it
             if (vm.isNetworkAvailable.value != it) {
+                isFirstLoading = false
                 vm.isNetworkAvailable.value = it
-                onChangeInternetConnectionSnackBar(it)
+                if (!isFirstLoading) {
+                    onChangeInternetConnectionSnackBar(it)
+                }
             }
         }
 
