@@ -1,6 +1,7 @@
 package com.example.kino.features.content.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.example.kino.features.content.data.datasource.ContentLocalDataSource
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSource
 import com.example.kino.features.content.data.models.Movie
@@ -29,6 +30,10 @@ class ContentRepositoryImpl(
         // delay(1500)
 
         val localData = local.getMovies()
+
+        // throw Exception("ERROR")
+
+        Log.d("isConnected", "$isConnected")
 
         if (isConnected) {
             val remoteData = remote.getMovies(page)

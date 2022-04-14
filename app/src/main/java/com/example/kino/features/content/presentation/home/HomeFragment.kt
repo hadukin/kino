@@ -3,10 +3,13 @@ package com.example.kino.features.content.presentation.home
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
@@ -39,7 +42,8 @@ class HomeFragment : Fragment(),
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: ContentItemAdapter
     private lateinit var connectionLiveData: ConnectionLiveData
-    var isLoading = false
+    private var isLoading = false
+    private var isNetworkAccess = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +54,8 @@ class HomeFragment : Fragment(),
         connectionLiveData = ConnectionLiveData(requireContext())
         connectionLiveData.observe(viewLifecycleOwner) {
             vm.isNetworkAvailable.value = it
+            // binding.loading.text = "$it"
+            onChangeInternetConnectionSnackBar("$it")
         }
 
         recycler = binding.recycler
@@ -70,21 +76,29 @@ class HomeFragment : Fragment(),
         binding.progressIndicator.isVisible = it
     }
 
+    private val isConnectedInternetObserver = Observer<Boolean> {
+        isNetworkAccess = it
+        binding.loading.text = "$isNetworkAccess"
+    }
+
     override fun onPause() {
         vm.content.removeObserver(movieObserver)
         vm.isLoading.removeObserver(isLoadingObserver)
+        vm.isConnectedInternet.removeObserver(isConnectedInternetObserver)
         super.onPause()
     }
 
     override fun onResume() {
         vm.content.observe(viewLifecycleOwner, movieObserver)
         vm.isLoading.observe(viewLifecycleOwner, isLoadingObserver)
+        vm.isConnectedInternet.observe(viewLifecycleOwner, isConnectedInternetObserver)
         super.onResume()
     }
 
     override fun onDestroy() {
         vm.content.removeObserver(movieObserver)
         vm.isLoading.removeObserver(isLoadingObserver)
+        vm.isConnectedInternet.removeObserver(isConnectedInternetObserver)
         super.onDestroy()
     }
 
@@ -133,6 +147,15 @@ class HomeFragment : Fragment(),
         Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
             .setAction("Отмена") {
                 onCancel()
+            }
+            .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+            .show()
+    }
+
+    private fun onChangeInternetConnectionSnackBar(text: String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG)
+            .setAction("Обновить") {
+                CoroutineScope(Dispatchers.IO).launch { vm.loadMore(1, true) }
             }
             .setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
             .show()

@@ -1,5 +1,6 @@
 package com.example.kino
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,6 +10,7 @@ import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.domain.usecase.DeleteFromFavoriteUseCase
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import com.example.kino.features.content.domain.usecase.SaveToFavoriteUseCase
+import com.example.kino.utils.NetworkConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 
@@ -16,6 +18,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class MainViewModel(
+    private val context: Context,
     private val getMoviePopularUseCase: GetMoviePopularUseCase,
     private val saveToFavoriteUseCase: SaveToFavoriteUseCase,
     private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
@@ -27,6 +30,8 @@ class MainViewModel(
         }
     }
 
+    val isConnectedInternet = MutableLiveData<Boolean>().apply { value = false }
+
     val isNetworkAvailable = MutableLiveData<Boolean>().apply { value = false }
 
     private val _content = MutableLiveData<ArrayList<Movie>>().apply { value = arrayListOf() }
@@ -35,30 +40,34 @@ class MainViewModel(
     private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
     val isLoading: LiveData<Boolean> = _isLoading
 
-    suspend fun loadMore(page: Int) = viewModelScope.launch(Dispatchers.IO) {
-        _isLoading.postValue(true)
-        try {
-            val resultDeferred = async { getMoviePopularUseCase.execute(page) }
-            val result = resultDeferred.await()
-            val data = arrayListOf<Movie>()
-
-            for (item in result) {
-                if (content.value?.contains(item) == false) {
-                    data.add(item)
+    suspend fun loadMore(page: Int, isReload: Boolean = false) =
+        viewModelScope.launch(Dispatchers.IO) {
+            _isLoading.postValue(true)
+            try {
+                if (isReload) {
+                    _content.postValue(arrayListOf())
                 }
-            }
-            val list = _content.value
-            list?.addAll(result)
-            _content.postValue(list)
+                val resultDeferred = async { getMoviePopularUseCase.execute(page) }
+                val result = resultDeferred.await()
+                val data = arrayListOf<Movie>()
 
-        } catch (error: HttpException) {
-            Log.e("ERROR_HTTP", "$error")
-        } catch (error: Exception) {
-            Log.e("ERROR_EXCEPTION", "$error")
-        } finally {
-            _isLoading.postValue(false)
+                for (item in result) {
+                    if (content.value?.contains(item) == false) {
+                        data.add(item)
+                    }
+                }
+                val list = _content.value
+                list?.addAll(result)
+                _content.postValue(list)
+
+            } catch (error: HttpException) {
+                Log.e("ERROR_HTTP", "$error")
+            } catch (error: Exception) {
+                Log.e("ERROR_EXCEPTION", "$error")
+            } finally {
+                _isLoading.postValue(false)
+            }
         }
-    }
 
     fun toggleFavorite(item: Movie): String {
         var current: Movie = item
@@ -112,9 +121,5 @@ class MainViewModel(
 
     fun nextPage() {
         _page.value = _page.value?.plus(1)
-    }
-
-    companion object {
-        private const val TAG = "MovieViewModel"
     }
 }
