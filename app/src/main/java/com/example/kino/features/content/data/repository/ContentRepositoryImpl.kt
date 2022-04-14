@@ -1,38 +1,54 @@
 package com.example.kino.features.content.data.repository
 
 import android.content.Context
-import android.util.Log
 import com.example.kino.features.content.data.datasource.ContentLocalDataSource
 import com.example.kino.features.content.data.datasource.ContentRemoteDataSource
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.domain.repository.ContentRepository
-import kotlinx.coroutines.delay
+import com.example.kino.utils.NetworkConnection
 
 class ContentRepositoryImpl(
     private val context: Context,
     private val remote: ContentRemoteDataSource,
     private val local: ContentLocalDataSource
 ) : ContentRepository {
-    override suspend fun getMovies(page: Int): List<Movie> {
-        // TODO: check internet connection
 
-        delay(1500)
-        // throw Exception("Test for no internet case")
+    var isConnected = false
+
+    init {
+        isNetworkConnected()
+    }
+
+    private fun isNetworkConnected() {
+        NetworkConnection(context) {
+            isConnected = it
+        }
+    }
+
+    override suspend fun getMovies(page: Int): List<Movie> {
+        // delay(1500)
 
         val localData = local.getMovies()
-        val remoteData = remote.getMovies(page)
 
-        val favoriteListId = localData.filter { it.isFavorite }.map { it.filmId }
+        if (isConnected) {
+            val remoteData = remote.getMovies(page)
 
-        for (item in remoteData) {
-            if (favoriteListId.contains(item.filmId)) {
-                val id = item.filmId
-                remoteData.find { it.filmId == id }?.isFavorite = true
+            val favoriteListId = localData.filter { it.isFavorite }.map { it.filmId }
+
+            for (item in remoteData) {
+                if (favoriteListId.contains(item.filmId)) {
+                    val id = item.filmId
+                    remoteData.find { it.filmId == id }?.isFavorite = true
+                }
             }
+
+            local.saveAllMovies(remoteData)
+            return remoteData
+        } else {
+            return localData
         }
 
-        local.saveAllMovies(remoteData)
-        return remoteData
+
     }
 
     override suspend fun saveAllMovies(items: List<Movie>) {
