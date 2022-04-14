@@ -2,9 +2,11 @@
 <resources>
     <string name="app_name">Kino</string>
     <string name="button_detail">Details</string>
+    <string name="button_update">Update</string>
     <string name="checkbox_favorite">Like</string>
     <string name="text_field_comment">Comment</string>
     <string name="favorite">Favorite</string>
     <string name="nav_home">Home</string>
     <string name="nav_favorite">Favorite</string>
+    <string name="error_internet_connection">Check your internet connection</string>
 </resources>

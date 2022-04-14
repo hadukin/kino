@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Кино</string>
     <string name="button_detail">Детали</string>
+    <string name="button_update">Обновить</string>
     <string name="checkbox_favorite">Нравится</string>
     <string name="text_field_comment">Комментарий</string>
     <string name="favorite">Избранное</string>
     <string name="nav_home">Главная</string>
     <string name="nav_favorite">Избранное</string>
+    <string name="error_internet_connection">Проверьте подключение к интернету</string>
 </resources>
