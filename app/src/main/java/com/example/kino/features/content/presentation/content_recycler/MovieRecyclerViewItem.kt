@@ -1,0 +1,33 @@
+package com.example.kino.features.content.presentation.content_recycler
+
+import android.os.Parcelable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+
+sealed class MovieRecyclerViewItem {
+
+    class Title(
+        val id: Int,
+        val title: String
+    ) : MovieRecyclerViewItem()
+
+
+    @Entity(tableName = "movies")
+    @Parcelize
+    data class Movie(
+        @PrimaryKey @ColumnInfo(name = "filmId") @SerializedName("filmId") val filmId: Int,
+        @ColumnInfo(name = "nameRu") @SerializedName("nameRu") val nameRu: String,
+        // @ColumnInfo(name = "nameEn") @SerializedName("nameEn") val nameEn: String,
+        @ColumnInfo(name = "year") @SerializedName("year") val year: String,
+        @ColumnInfo(name = "rating") @SerializedName("rating") val rating: String,
+        @ColumnInfo(name = "ratingVoteCount") @SerializedName("ratingVoteCount") val ratingVoteCount: Int,
+        @ColumnInfo(name = "posterUrl") @SerializedName("posterUrl") val posterUrl: String,
+        @ColumnInfo(name = "posterUrlPreview") @SerializedName("posterUrlPreview") val posterUrlPreview: String,
+
+        // Custom field, does not come from api
+        @ColumnInfo(name = "isFavorite") @SerializedName("isFavorite") var isFavorite: Boolean = false,
+    ) : Parcelable, MovieRecyclerViewItem()
+}

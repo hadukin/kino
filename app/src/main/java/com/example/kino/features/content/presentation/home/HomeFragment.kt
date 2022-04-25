@@ -19,13 +19,15 @@ import com.example.kino.features.content.presentation.content_recycler.ContentIt
 import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.features.content.data.models.Movie
+import com.example.kino.features.content.presentation.content_recycler.MovieRecyclerViewAdapter
+import com.example.kino.features.content.presentation.content_recycler.MovieRecyclerViewItem
 import com.example.kino.utils.ConnectionLiveData
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
+class HomeFragment : Fragment(), MovieRecyclerViewAdapter.MovieClickListener {
     // private val vm by viewModel<MainViewModel>()
     // private val vm: MainViewModel by activityViewModels()
 
@@ -33,7 +35,7 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     private val binding get() = _binding!!
     private val vm: MainViewModel by sharedViewModel()
     private lateinit var recycler: RecyclerView
-    private lateinit var adapter: ContentItemAdapter
+    private lateinit var adapter: MovieRecyclerViewAdapter
     private lateinit var connectionLiveData: ConnectionLiveData
     private var isLoading = false
     private var isNetworkAccess = false
@@ -67,7 +69,8 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
     }
 
     private val movieObserver = Observer<ArrayList<Movie>> {
-        adapter.setMovieList(it)
+        // adapter.setMovieList(it)
+        // adapter.setMovieList()
     }
 
     private val isLoadingObserver = Observer<Boolean> {
@@ -100,7 +103,8 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         } else {
             LinearLayoutManager(requireContext())
         }
-        adapter = ContentItemAdapter(this)
+        // adapter = ContentItemAdapter(this)
+        adapter = MovieRecyclerViewAdapter(this)
 
         recycler.layoutManager = layoutManager
         recycler.adapter = adapter
@@ -115,24 +119,24 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
         })
     }
 
-    override fun onClickDetails(contentItem: Movie, position: Int) {
-        childFragmentManager
-            .beginTransaction()
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .add(R.id.fragment_home_id, ContentDetailFragment(contentItem))
-            .addToBackStack(null)
-            .commit()
-    }
-
-
-    override fun onClickFavorite(contentItem: Movie, position: Int) {
-        val result = adapter.toggleFavorite(position)
-        vm.toggleFavorite(contentItem)
-        showSnackBar(result) {
-            vm.toggleFavorite(contentItem)
-            adapter.toggleFavorite(position)
-        }
-    }
+    // override fun onClickDetails(contentItem: Movie, position: Int) {
+    //     childFragmentManager
+    //         .beginTransaction()
+    //         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+    //         .add(R.id.fragment_home_id, ContentDetailFragment(contentItem))
+    //         .addToBackStack(null)
+    //         .commit()
+    // }
+    //
+    //
+    // override fun onClickFavorite(contentItem: Movie, position: Int) {
+    //     val result = adapter.toggleFavorite(position)
+    //     vm.toggleFavorite(contentItem)
+    //     showSnackBar(result) {
+    //         vm.toggleFavorite(contentItem)
+    //         adapter.toggleFavorite(position)
+    //     }
+    // }
 
     private fun showSnackBar(text: String, onCancel: () -> Unit) {
         Snackbar.make(binding.root, text, Snackbar.LENGTH_SHORT)
@@ -165,5 +169,23 @@ class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
             snackBar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE).show()
         }
 
+    }
+
+    override fun onClickDetails(contentItem: MovieRecyclerViewItem.Movie, position: Int) {
+        // childFragmentManager
+        //     .beginTransaction()
+        //     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        //     .add(R.id.fragment_home_id, ContentDetailFragment(contentItem))
+        //     .addToBackStack(null)
+        //     .commit()
+    }
+
+    override fun onClickFavorite(contentItem: MovieRecyclerViewItem.Movie, position: Int) {
+        // val result = adapter.toggleFavorite(position)
+        // vm.toggleFavorite(contentItem)
+        // showSnackBar(result) {
+        //     vm.toggleFavorite(contentItem)
+        //     adapter.toggleFavorite(position)
+        // }
     }
 }
