@@ -1,4 +1,4 @@
-package com.example.kino.features.content.data.datasource
+package com.example.kino.features.content.data.datasource.content
 
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.domain.repository.ContentRepository
