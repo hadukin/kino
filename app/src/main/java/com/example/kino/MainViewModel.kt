@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.kino.features.content.data.models.Movie
+import com.example.kino.features.content.data.models.Schedule
+import com.example.kino.features.content.domain.usecase.CreateScheduleUseCase
 import com.example.kino.features.content.domain.usecase.DeleteFromFavoriteUseCase
 import com.example.kino.features.content.domain.usecase.GetMoviePopularUseCase
 import com.example.kino.features.content.domain.usecase.SaveToFavoriteUseCase
@@ -22,7 +24,14 @@ class MainViewModel(
     private val getMoviePopularUseCase: GetMoviePopularUseCase,
     private val saveToFavoriteUseCase: SaveToFavoriteUseCase,
     private val deleteFromFavoriteUseCase: DeleteFromFavoriteUseCase,
+    private val createScheduleUseCase: CreateScheduleUseCase,
 ) : ViewModel() {
+
+    suspend fun createSchedule(schedule: Schedule) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val resultDeferred = async { createScheduleUseCase.execute(schedule) }
+        }
+    }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

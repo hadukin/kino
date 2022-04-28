@@ -5,8 +5,8 @@ import com.example.kino.features.content.data.models.Schedule
 import com.example.kino.features.content.domain.repository.ScheduleRepository
 
 class ScheduleRepositoryImpl(private val local: ScheduleLocalDataSource) : ScheduleRepository {
-    override suspend fun readAllSchedule() {
-        local.readAllSchedule()
+    override suspend fun readAllSchedule(): List<Schedule> {
+        return local.readAllSchedule()
     }
 
     override suspend fun createSchedule(schedule: Schedule) {

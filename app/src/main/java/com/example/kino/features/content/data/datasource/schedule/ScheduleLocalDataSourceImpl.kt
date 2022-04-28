@@ -4,8 +4,8 @@ import com.example.kino.features.content.data.api.ScheduleDao
 import com.example.kino.features.content.data.models.Schedule
 
 class ScheduleLocalDataSourceImpl(private var dao: ScheduleDao) : ScheduleLocalDataSource {
-    override suspend fun readAllSchedule() {
-        dao.getAll()
+    override suspend fun readAllSchedule(): List<Schedule> {
+        return dao.getAll()
     }
 
     override suspend fun createSchedule(schedule: Schedule) {
