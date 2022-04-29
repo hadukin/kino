@@ -11,4 +11,5 @@ val movieDomainModule = module {
 
     factory { ReadAllScheduleUseCase(repository = get()) }
     factory { CreateScheduleUseCase(repository = get()) }
+    factory { GetScheduleByIdUseCase(repository = get()) }
 }

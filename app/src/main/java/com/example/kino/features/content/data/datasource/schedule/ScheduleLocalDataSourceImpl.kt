@@ -15,4 +15,8 @@ class ScheduleLocalDataSourceImpl(private var dao: ScheduleDao) : ScheduleLocalD
     override suspend fun deleteSchedule(schedule: Schedule) {
         dao.delete(schedule)
     }
+
+    override suspend fun getScheduleById(filmId: Int): Schedule {
+        return dao.getScheduleById(filmId)
+    }
 }

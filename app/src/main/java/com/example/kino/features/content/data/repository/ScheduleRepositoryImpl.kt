@@ -16,4 +16,8 @@ class ScheduleRepositoryImpl(private val local: ScheduleLocalDataSource) : Sched
     override suspend fun deleteSchedule(schedule: Schedule) {
         local.deleteSchedule(schedule)
     }
+
+    override suspend fun getScheduleById(filmId: Int): Schedule {
+        return local.getScheduleById(filmId)
+    }
 }

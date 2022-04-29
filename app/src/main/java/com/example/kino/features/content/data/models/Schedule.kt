@@ -11,7 +11,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Schedule(
     @PrimaryKey @ColumnInfo(name = "filmId") @SerializedName("filmId") val filmId: Int,
-    // @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") @SerializedName("id") val id: Int? = null,
     @ColumnInfo(name = "title") @SerializedName("title") val title: String,
     @ColumnInfo(name = "body") @SerializedName("body") val body: String,
     @ColumnInfo(name = "time") @SerializedName("time") val time: String,

@@ -27,11 +27,11 @@ class MainViewModel(
     private val createScheduleUseCase: CreateScheduleUseCase,
 ) : ViewModel() {
 
-    suspend fun createSchedule(schedule: Schedule) {
-        viewModelScope.launch(Dispatchers.IO) {
-            val resultDeferred = async { createScheduleUseCase.execute(schedule) }
-        }
-    }
+    // suspend fun createSchedule(schedule: Schedule) {
+    //     viewModelScope.launch(Dispatchers.IO) {
+    //         val resultDeferred = async { createScheduleUseCase.execute(schedule) }
+    //     }
+    // }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

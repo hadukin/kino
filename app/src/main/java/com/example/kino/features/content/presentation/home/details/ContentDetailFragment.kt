@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -28,11 +29,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
-    // private val vm by viewModel<ContentDetailViewModel>()
-    private val vm: MainViewModel by sharedViewModel()
-
-    // private val vm: ContentDetailViewModel by viewModels()
-    // private lateinit var vm: ContentDetailViewModel
+    private val vm: ContentDetailViewModel by sharedViewModel()
     private lateinit var binding: FragmentContentDetailBinding
     private lateinit var movie: Movie
 
@@ -52,30 +49,29 @@ class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val content = arguments?.getParcelable<Movie>(CONTENT)
+        vm.schedule.observe(viewLifecycleOwner) {
+            binding.scheduleText.apply {
+                visibility = View.VISIBLE
+                text = "${it.time}"
+            }
+        }
 
-        content.let {
+        arguments?.getParcelable<Movie>(CONTENT).let {
             if (it != null) {
                 movie = it
             }
         }
 
+        CoroutineScope(Dispatchers.IO).launch {
+            vm.getScheduleByIdUseCase(movie.filmId)
+        }
+
         binding.schedule.setOnClickListener {
-            // val schedule =
-            //     Schedule(
-            //         title = movie.nameRu,
-            //         body = movie.nameRu,
-            //         time = "01:02",
-            //         filmId = movie.filmId
-            //     )
-            // CoroutineScope(Dispatchers.IO).launch { vm.createSchedule(schedule) }
             showScheduleDialog()
         }
 
-        content?.posterUrl.let {
-            if (it != null) {
-                binding.poster.load(it)
-            }
+        movie.posterUrl.let {
+            binding.poster.load(it)
         }
 
         binding.toolbar.apply {
@@ -83,11 +79,11 @@ class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
             setNavigationOnClickListener {
                 activity?.onBackPressed()
             }
-            title = "${content?.nameRu}"
+            title = "${movie.nameRu}"
         }
 
         binding.description.apply {
-            text = "${content?.nameRu}"
+            // text = "${hasSchedule?.time}"
         }
     }
 
