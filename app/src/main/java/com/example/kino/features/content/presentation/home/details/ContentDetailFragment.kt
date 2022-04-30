@@ -11,6 +11,7 @@ import android.widget.TimePicker
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
@@ -20,6 +21,7 @@ import com.example.kino.R
 import com.example.kino.databinding.FragmentContentDetailBinding
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.features.content.data.models.Schedule
+import com.example.kino.utils.hide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -47,15 +49,20 @@ class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        vm.schedule.observe(viewLifecycleOwner) {
+    private val scheduleObserver = Observer<Schedule> {
+        if (it != null) {
             binding.scheduleText.apply {
                 visibility = View.VISIBLE
-                text = "${it.time}"
+                text = it.time
             }
+        } else {
+            binding.scheduleText.hide()
         }
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        vm.schedule.observe(viewLifecycleOwner, scheduleObserver)
         arguments?.getParcelable<Movie>(CONTENT).let {
             if (it != null) {
                 movie = it
