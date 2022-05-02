@@ -2,20 +2,16 @@ package com.example.kino.features.content.presentation.home.details
 
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TimePicker
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import coil.load
-import com.example.kino.MainViewModel
 import com.example.kino.R
 
 import com.example.kino.databinding.FragmentContentDetailBinding
@@ -24,11 +20,11 @@ import com.example.kino.features.content.data.models.Schedule
 import com.example.kino.utils.hide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
+
 
 class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
     private val vm: ContentDetailViewModel by sharedViewModel()
@@ -49,7 +45,7 @@ class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
         return binding.root
     }
 
-    private val scheduleObserver = Observer<Schedule> {
+    private val scheduleObserver = Observer<Schedule?> {
         if (it != null) {
             binding.scheduleText.apply {
                 visibility = View.VISIBLE
@@ -59,6 +55,7 @@ class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
             binding.scheduleText.hide()
         }
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,8 +70,55 @@ class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
             vm.getScheduleByIdUseCase(movie.filmId)
         }
 
+        parentFragmentManager.setFragmentResultListener(
+            SCHEDULE_DIALOG_RESULT,
+            this
+        ) { _, result ->
+
+            val r = result.getParcelable<ScheduleResult>(SCHEDULE_RESULT)
+
+            when (r) {
+                is ScheduleResult.CreateSchedule -> {
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        vm.createSchedule(
+                            Schedule(
+                                title = movie.nameRu,
+                                body = movie.nameRu,
+                                time = r.time,
+                                filmId = movie.filmId
+                            )
+                        )
+                    }
+                }
+                is ScheduleResult.DeleteSchedule -> {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        vm.schedule.value?.let {
+                            vm.deleteSchedule(it)
+                        }
+                    }
+                }
+                else -> {}
+            }
+        }
+
         binding.schedule.setOnClickListener {
-            showScheduleDialog()
+            if (vm.schedule.value != null) {
+                DeleteScheduleFragmentDialog().show(
+                    parentFragmentManager,
+                    SCHEDULE_DIALOG_RESULT
+                )
+            } else {
+                CreateScheduleTimePickerFragmentDialog().show(
+                    parentFragmentManager,
+                    SCHEDULE_DIALOG_RESULT
+                )
+            }
+
+            // DeleteScheduleFragmentDialog().show(
+            //     childFragmentManager, "DeleteScheduleFragmentDialog"
+            // )
+            // showScheduleDialog()
         }
 
         movie.posterUrl.let {
@@ -121,5 +165,9 @@ class ContentDetailFragment() : Fragment(), TimePickerDialog.OnTimeSetListener {
 
     companion object {
         private const val CONTENT = "content"
+        const val SCHEDULE_DIALOG_RESULT = "SCHEDULE_DIALOG_RESULT"
+        const val SCHEDULE_RESULT = "SCHEDULE_RESULT"
     }
 }
+
+

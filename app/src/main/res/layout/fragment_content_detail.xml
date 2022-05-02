@@ -64,12 +64,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/button_put_reminder"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/schedule"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.appbar.AppBarLayout>

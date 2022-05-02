@@ -20,10 +20,11 @@ class ContentDetailViewModel(
     private val deleteScheduleUseCase: DeleteScheduleUseCase,
 ) : ViewModel() {
 
-    private val _schedule = MutableLiveData<Schedule>()
-    val schedule: LiveData<Schedule> = _schedule
+    private val _schedule = MutableLiveData<Schedule?>()
+    val schedule: LiveData<Schedule?> = _schedule
 
     suspend fun deleteSchedule(item: Schedule) {
+        _schedule.postValue(null)
         deleteScheduleUseCase.execute(item)
     }
 
