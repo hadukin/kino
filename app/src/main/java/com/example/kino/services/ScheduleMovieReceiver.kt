@@ -11,11 +11,32 @@ import com.example.kino.utils.NotificationHelper
 class ScheduleMovieReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("calendar_receiver", "1111")
         val i = Intent(context, MainActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, i, 0)
-        val notificationHelper = NotificationHelper(context!!)
-        notificationHelper.notify("TITLE ScheduleMovieReceiver", "BODY ScheduleMovieReceiver")
+
+        val bundle = intent?.extras
+        var movieName: String? = null
+
+        if (bundle != null) {
+
+            movieName = bundle.getString("movie_name")
+
+            // for (key in bundle.keySet()) {
+            //     Log.e("TAG", "$key : ${bundle[key]}")
+            // }
+        }
+
+        // intent?.extras?.keySet()?.map { it to intent?.extras?.get(it) }
+
+
+        if (context != null) {
+            val notificationHelper = NotificationHelper(context)
+            notificationHelper.notify(
+                "Вы хотели посмотреть фильм",
+                "${movieName ?: ""}",
+                pendingIntent
+            )
+        }
     }
 }

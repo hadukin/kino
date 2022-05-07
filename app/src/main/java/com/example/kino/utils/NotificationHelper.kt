@@ -1,7 +1,9 @@
 package com.example.kino.utils
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -34,24 +36,27 @@ class NotificationHelper(private val context: Context) {
 
     private fun notificationBuilder(
         title: String,
-        body: String
+        body: String,
+        pendingIntent: PendingIntent,
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, channelId)
             .setContentTitle(title)
+            .setContentText(body)
             .setSmallIcon(R.drawable.ic_baseline_arrow_back_24)
             .setChannelId(channelId)
-            .setContentText(body)
             .setAutoCancel(true)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setContentIntent(pendingIntent)
     }
 
     fun notify(
         title: String,
-        body: String
+        body: String,
+        pendingIntent: PendingIntent,
     ) {
         manager.notify(
             notificationId++,
-            notificationBuilder(title, body).build()
+            notificationBuilder(title, body, pendingIntent).build()
         )
     }
 }

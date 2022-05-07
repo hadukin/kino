@@ -68,10 +68,6 @@ class HomeFragment(private val notificationHelper: NotificationHelper) : Fragmen
         vm.content.observe(viewLifecycleOwner, movieObserver)
         vm.isLoading.observe(viewLifecycleOwner, isLoadingObserver)
 
-        binding.showNotification.setOnClickListener {
-            notificationHelper.notify("ttt", "bbb")
-        }
-
         return binding.root
     }
 

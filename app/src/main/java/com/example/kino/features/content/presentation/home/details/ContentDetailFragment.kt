@@ -2,17 +2,12 @@ package com.example.kino.features.content.presentation.home.details
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
-import android.text.format.DateFormat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TimePicker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import coil.load
@@ -26,7 +21,6 @@ import com.example.kino.utils.hide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.parcelize.Parcelize
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.util.*
 
@@ -37,25 +31,6 @@ class ContentDetailFragment() : Fragment() {
     private lateinit var movie: Movie
     private lateinit var alarmManager: AlarmManager
     private lateinit var pendingIntent: PendingIntent
-
-    private fun setAlarm(hours: Int, minute: Int) {
-        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(requireContext(), ScheduleMovieReceiver::class.java)
-        pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, 0)
-
-        val calendar = Calendar.getInstance()
-        calendar[Calendar.HOUR_OF_DAY] = hours
-        calendar[Calendar.MINUTE] = minute
-        calendar[Calendar.SECOND] = 0
-        calendar[Calendar.MILLISECOND] = 0
-
-        Log.d("calendar", "${calendar.time}")
-
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP, calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY, pendingIntent
-        )
-    }
 
     constructor(content: Movie) : this() {
         arguments = Bundle().apply {
@@ -115,7 +90,7 @@ class ContentDetailFragment() : Fragment() {
                             )
                         )
                     }
-                    setAlarm(hours = r.hourOfDay, minute = r.minute)
+                    setScheduleAlarm(hours = r.hourOfDay, minute = r.minute)
                 }
                 is ScheduleResult.DeleteSchedule -> {
                     CoroutineScope(Dispatchers.IO).launch {
@@ -140,11 +115,6 @@ class ContentDetailFragment() : Fragment() {
                     SCHEDULE_DIALOG_RESULT
                 )
             }
-
-            // DeleteScheduleFragmentDialog().show(
-            //     childFragmentManager, "DeleteScheduleFragmentDialog"
-            // )
-            // showScheduleDialog()
         }
 
         movie.posterUrl.let {
@@ -164,30 +134,23 @@ class ContentDetailFragment() : Fragment() {
         }
     }
 
-    // private fun showScheduleDialog() {
-    //     val c = Calendar.getInstance()
-    //     val hour = c.get(Calendar.HOUR_OF_DAY)
-    //     val minute = c.get(Calendar.MINUTE)
-    //     TimePickerDialog(
-    //         activity,
-    //         this,
-    //         hour,
-    //         minute,
-    //         DateFormat.is24HourFormat(activity)
-    //     ).show()
-    // }
+    private fun setScheduleAlarm(hours: Int, minute: Int) {
+        alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(requireContext(), ScheduleMovieReceiver::class.java)
+        intent.putExtra("movie_name", "${movie.nameRu}")
+        pendingIntent = PendingIntent.getBroadcast(requireContext(), 0, intent, 0)
 
-    // override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-    //     Log.d("TIME_PICKER", "${hourOfDay} ${minute}")
-    //     val schedule =
-    //         Schedule(
-    //             title = movie.nameRu,
-    //             body = movie.nameRu,
-    //             time = "${hourOfDay}:${minute}",
-    //             filmId = movie.filmId
-    //         )
-    //     CoroutineScope(Dispatchers.IO).launch { vm.createSchedule(schedule) }
-    // }
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.HOUR_OF_DAY] = hours
+        calendar[Calendar.MINUTE] = minute
+        calendar[Calendar.SECOND] = 0
+        calendar[Calendar.MILLISECOND] = 0
+
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP, calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY, pendingIntent
+        )
+    }
 
     companion object {
         private const val CONTENT = "content"

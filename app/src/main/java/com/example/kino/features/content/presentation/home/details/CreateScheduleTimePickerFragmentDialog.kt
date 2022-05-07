@@ -1,16 +1,11 @@
 package com.example.kino.features.content.presentation.home.details
 
-import android.app.AlarmManager
 import android.app.Dialog
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.widget.TimePicker
 import androidx.fragment.app.DialogFragment
-import com.example.kino.services.ScheduleMovieReceiver
 import java.util.*
 
 
