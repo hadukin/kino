@@ -21,10 +21,23 @@ class CreateScheduleTimePickerFragmentDialog : DialogFragment(),
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
+
+        val hours = if (hourOfDay < 10) {
+            "0${hourOfDay}"
+        } else {
+            "$hourOfDay"
+        }
+
+        val minutes = if (minute < 10) {
+            "0${minute}"
+        } else {
+            minute
+        }
+
         val result = Bundle().apply {
             putParcelable(
                 ContentDetailFragment.SCHEDULE_RESULT,
-                ScheduleResult.CreateSchedule(time = "${hourOfDay}:${minute}")
+                ScheduleResult.CreateSchedule(time = "${hours}:${minutes}")
             )
         }
 
