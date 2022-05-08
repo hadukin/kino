@@ -7,14 +7,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.kino.databinding.ActivityMainBinding
 import com.example.kino.services.ScheduleMovieReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 
@@ -25,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var alarmManager: AlarmManager
-    private lateinit var pendingIntent: PendingIntent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +42,13 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    override fun onStop() {
+        setNotificationBackgroundAlarmManager()
+        super.onStop()
+    }
+
     private fun setNotificationBackgroundAlarmManager() {
+        Log.d("BACKGROUND_ALARM", "BACKGROUND_ALARM_MANAGER")
         val myIntent = Intent(applicationContext, ScheduleMovieReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, myIntent, 0)
 

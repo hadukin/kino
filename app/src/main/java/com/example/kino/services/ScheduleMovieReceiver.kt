@@ -22,11 +22,9 @@ import java.util.*
 class ScheduleMovieReceiver : BroadcastReceiver(), KoinComponent {
     private val readAllScheduleUseCase: ReadAllScheduleUseCase by inject()
     private val deleteScheduleUseCase: DeleteScheduleUseCase by inject()
-    // private val notificationHelper: NotificationHelper by inject()
-    // private val readAllScheduleUseCase: ReadAllScheduleUseCase = get()
-
 
     override fun onReceive(context: Context?, intent: Intent?) {
+        Log.d("SCHEDULE_MOVIE_RECEIVER", "SCHEDULE_MOVIE_RECEIVER")
         val i = Intent(context, MainActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, i, 0)
@@ -48,7 +46,8 @@ class ScheduleMovieReceiver : BroadcastReceiver(), KoinComponent {
                         body = item.title,
                         pendingIntent = pendingIntent,
                     )
-                    // val resultDeferred = async { deleteScheduleUseCase.execute() }
+                    val resultDeferred = async { deleteScheduleUseCase.execute(item) }
+                    val result = resultDeferred.await()
                 }
             }
         }
