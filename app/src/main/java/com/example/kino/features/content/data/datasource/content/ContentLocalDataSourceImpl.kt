@@ -1,6 +1,7 @@
-package com.example.kino.features.content.data.datasource
+package com.example.kino.features.content.data.datasource.content
 
 import com.example.kino.features.content.data.api.MoviesDao
+import com.example.kino.features.content.data.datasource.content.ContentLocalDataSource
 import com.example.kino.features.content.data.models.Movie
 
 

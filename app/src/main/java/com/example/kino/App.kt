@@ -1,9 +1,11 @@
 package com.example.kino
 
 import android.app.Application
+import com.example.kino.core.di.coreDiModule
 import com.example.kino.features.content.di.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.fragment.koin.fragmentFactory
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 
@@ -17,13 +19,16 @@ class App : Application() {
         startKoin {
             androidLogger(if (BuildConfig.DEBUG) Level.ERROR else Level.NONE)
             androidContext(this@App)
+            fragmentFactory()
             modules(
                 listOf(
+                    coreDiModule,
                     movieModule,
                     movieNetworkModule,
                     movieDomainModule,
                     movieDataModule,
                     movieDatabaseModule,
+                    moviePresentationModule,
                 )
             )
         }

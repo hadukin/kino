@@ -1,5 +1,6 @@
 package com.example.kino.features.content.presentation.home
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -20,14 +21,18 @@ import com.example.kino.R
 import com.example.kino.databinding.FragmentHomeBinding
 import com.example.kino.features.content.data.models.Movie
 import com.example.kino.utils.ConnectionLiveData
+import com.example.kino.utils.NotificationHelper
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class HomeFragment : Fragment(), ContentItemAdapter.ContentClickListener {
+class HomeFragment(private val notificationHelper: NotificationHelper) : Fragment(),
+    ContentItemAdapter.ContentClickListener {
     // private val vm by viewModel<MainViewModel>()
     // private val vm: MainViewModel by activityViewModels()
+
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!

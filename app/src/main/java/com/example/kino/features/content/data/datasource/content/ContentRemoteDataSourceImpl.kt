@@ -1,6 +1,7 @@
-package com.example.kino.features.content.data.datasource
+package com.example.kino.features.content.data.datasource.content
 
 import com.example.kino.features.content.data.api.MovieApi
+import com.example.kino.features.content.data.datasource.content.ContentRemoteDataSource
 import com.example.kino.features.content.data.models.Movie
 
 class ContentRemoteDataSourceImpl(private val api: MovieApi) : ContentRemoteDataSource {
