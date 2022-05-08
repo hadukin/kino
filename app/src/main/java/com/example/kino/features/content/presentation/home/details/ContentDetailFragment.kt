@@ -86,7 +86,9 @@ class ContentDetailFragment() : Fragment() {
                                 title = movie.nameRu,
                                 body = movie.nameRu,
                                 time = r.time,
-                                filmId = movie.filmId
+                                filmId = movie.filmId,
+                                minute = r.minute,
+                                hourOfDay = r.hourOfDay,
                             )
                         )
                     }

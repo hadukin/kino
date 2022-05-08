@@ -6,37 +6,51 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.kino.MainActivity
+import com.example.kino.features.content.data.models.Movie
+import com.example.kino.features.content.domain.usecase.DeleteScheduleUseCase
+import com.example.kino.features.content.domain.usecase.ReadAllScheduleUseCase
 import com.example.kino.utils.NotificationHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
+import org.koin.core.component.inject
+import java.util.*
 
-class ScheduleMovieReceiver : BroadcastReceiver() {
+class ScheduleMovieReceiver : BroadcastReceiver(), KoinComponent {
+    private val readAllScheduleUseCase: ReadAllScheduleUseCase by inject()
+    private val deleteScheduleUseCase: DeleteScheduleUseCase by inject()
+    // private val notificationHelper: NotificationHelper by inject()
+    // private val readAllScheduleUseCase: ReadAllScheduleUseCase = get()
+
 
     override fun onReceive(context: Context?, intent: Intent?) {
         val i = Intent(context, MainActivity::class.java)
         i.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val pendingIntent = PendingIntent.getActivity(context, 0, i, 0)
 
-        val bundle = intent?.extras
-        var movieName: String? = null
+        val notificationHelper = context?.let { NotificationHelper(it) }
 
-        if (bundle != null) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val resultDeferred = async { readAllScheduleUseCase.execute() }
+            val result = resultDeferred.await()
 
-            movieName = bundle.getString("movie_name")
+            val c = Calendar.getInstance()
+            val hour = c.get(Calendar.HOUR_OF_DAY)
+            val minute = c.get(Calendar.MINUTE)
 
-            // for (key in bundle.keySet()) {
-            //     Log.e("TAG", "$key : ${bundle[key]}")
-            // }
-        }
-
-        // intent?.extras?.keySet()?.map { it to intent?.extras?.get(it) }
-
-
-        if (context != null) {
-            val notificationHelper = NotificationHelper(context)
-            notificationHelper.notify(
-                "Вы хотели посмотреть фильм",
-                "${movieName ?: ""}",
-                pendingIntent
-            )
+            for (item in result) {
+                if (item.hourOfDay == hour && item.minute == minute) {
+                    notificationHelper?.notify(
+                        title = "Не забудьте посмотреть фильм",
+                        body = item.title,
+                        pendingIntent = pendingIntent,
+                    )
+                    // val resultDeferred = async { deleteScheduleUseCase.execute() }
+                }
+            }
         }
     }
 }

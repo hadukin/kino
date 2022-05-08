@@ -14,4 +14,6 @@ data class Schedule(
     @ColumnInfo(name = "title") @SerializedName("title") val title: String,
     @ColumnInfo(name = "body") @SerializedName("body") val body: String,
     @ColumnInfo(name = "time") @SerializedName("time") val time: String,
+    @ColumnInfo(name = "minute") @SerializedName("minute") val minute: Int,
+    @ColumnInfo(name = "hourOfDay") @SerializedName("hourOfDay") val hourOfDay: Int,
 ) : Parcelable

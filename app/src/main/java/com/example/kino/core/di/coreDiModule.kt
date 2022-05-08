@@ -7,4 +7,5 @@ import org.koin.dsl.module
 val coreDiModule = module {
     single { NotificationHelper(context = get()) }
     single { ScheduleMovieReceiver() }
+    // single { ScheduleReceiverHelper() }
 }
