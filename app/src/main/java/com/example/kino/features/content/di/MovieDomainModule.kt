@@ -8,6 +8,7 @@ val movieDomainModule = module {
     factory { SaveToFavoriteUseCase(contentRepository = get()) }
     factory { DeleteFromFavoriteUseCase(contentRepository = get()) }
     factory { SaveAllMoviesUseCase(contentRepository = get()) }
+    factory { GetMovieByIdUseCase(contentRepository = get()) }
 
     factory { ReadAllScheduleUseCase(repository = get()) }
     factory { CreateScheduleUseCase(repository = get()) }

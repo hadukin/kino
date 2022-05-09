@@ -5,6 +5,7 @@
     android:id="@+id/fragment_home_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:defaultNavHost="true"
     tools:context=".features.content.presentation.home.HomeFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -57,9 +58,9 @@
 
                 <Button
                     android:id="@+id/show_notification"
-                    android:text="show notification"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="show notification" />
             </androidx.appcompat.widget.Toolbar>
 
 

@@ -11,6 +11,9 @@ interface MoviesDao {
     @Query("SELECT * FROM movies")
     fun getAll(): List<Movie>
 
+    @Query("SELECT * FROM movies WHERE filmId = :id")
+    fun getMovieById(id: Int): Movie
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(movie: List<Movie>)
 
@@ -21,7 +24,7 @@ interface MoviesDao {
     fun getAllFavorites(favorite: Boolean): List<Movie>
 
     @Query("UPDATE movies SET isFavorite = :isFavorite WHERE filmId = :id")
-    fun setIsFavorite(id: Int, isFavorite: Boolean);
+    fun setIsFavorite(id: Int, isFavorite: Boolean)
 
     @Delete
     fun delete(movie: Movie)

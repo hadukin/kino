@@ -3,6 +3,7 @@ package com.example.kino.features.content.presentation.home
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -49,6 +50,9 @@ class HomeFragment(private val notificationHelper: NotificationHelper) : Fragmen
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        // val args = arguments?.getParcelable<Movie>("content")
+        Log.d("HomeFragment", "${arguments}")
 
         connectionLiveData = ConnectionLiveData(requireContext())
         connectionLiveData.observe(viewLifecycleOwner) {

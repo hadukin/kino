@@ -9,6 +9,8 @@ class ContentLocalDataSourceImpl(private val dao: MoviesDao) : ContentLocalDataS
 
     override suspend fun getMovies(): List<Movie> = dao.getAll()
 
+    override suspend fun getMovieById(id: Int): Movie = dao.getMovieById(id)
+
     override suspend fun saveAllMovies(items: List<Movie>) = dao.insertAll(items)
 
     override suspend fun saveToFavorite(item: Movie) = dao.insert(item)

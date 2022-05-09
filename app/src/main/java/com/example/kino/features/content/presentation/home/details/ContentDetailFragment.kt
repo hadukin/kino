@@ -155,7 +155,7 @@ class ContentDetailFragment() : Fragment() {
     }
 
     companion object {
-        private const val CONTENT = "content"
+        const val CONTENT = "content"
         const val SCHEDULE_DIALOG_RESULT = "SCHEDULE_DIALOG_RESULT"
         const val SCHEDULE_RESULT = "SCHEDULE_RESULT"
     }

@@ -26,14 +26,13 @@ class ContentRepositoryImpl(
         }
     }
 
+    override suspend fun getMovieById(id: Int): Movie {
+        return local.getMovieById(id)
+    }
+
     override suspend fun getMovies(page: Int): List<Movie> {
         // delay(1500)
-
         val localData = local.getMovies()
-
-        // throw Exception("ERROR")
-
-
         Log.d("isConnected", "${localData.size}")
 
         if (isConnected) {
@@ -53,8 +52,6 @@ class ContentRepositoryImpl(
         } else {
             return localData
         }
-
-
     }
 
     override suspend fun saveAllMovies(items: List<Movie>) {

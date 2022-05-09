@@ -6,6 +6,8 @@ import com.example.kino.features.content.domain.repository.ContentRepository
 interface ContentLocalDataSource {
     suspend fun getMovies(): List<Movie>
 
+    suspend fun getMovieById(id: Int): Movie
+
     suspend fun saveAllMovies(items: List<Movie>)
 
     suspend fun saveToFavorite(item: Movie)
