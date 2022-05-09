@@ -1,11 +1,11 @@
 package com.example.kino.services
 
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-import com.example.kino.MainActivity
+import android.os.Bundle
+import androidx.navigation.NavDeepLinkBuilder
+import com.example.kino.R
 import com.example.kino.features.content.domain.usecase.DeleteScheduleUseCase
 import com.example.kino.features.content.domain.usecase.GetMovieByIdUseCase
 import com.example.kino.features.content.domain.usecase.ReadAllScheduleUseCase
@@ -28,31 +28,27 @@ class ScheduleMovieReceiver : BroadcastReceiver(), KoinComponent {
     override fun onReceive(context: Context?, intent: Intent?) {
         val notificationHelper = context?.let { NotificationHelper(it) }
 
-
         CoroutineScope(Dispatchers.IO).launch {
             val resultDeferred = async { readAllScheduleUseCase.execute() }
             val result = resultDeferred.await()
 
             val c = Calendar.getInstance()
             val hour = c.get(Calendar.HOUR_OF_DAY)
-            val minute = c.get(Calendar.MINUTE )
+            val minute = c.get(Calendar.MINUTE)
 
             for (item in result) {
                 if (item.hourOfDay == hour && item.minute == minute) {
                     val resultMovieDeferred = async { getMovieByIdUseCase.execute(item.filmId) }
                     val resultMovie = resultMovieDeferred.await()
 
-                    val startIntent = Intent(context, MainActivity::class.java)
-                    startIntent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    startIntent.putExtra("content", resultMovie)
+                    val args = Bundle()
+                    args.putParcelable(ContentDetailFragment.CONTENT, resultMovie)
 
-                    val pendingIntent =
-                        PendingIntent.getActivity(
-                            context,
-                            0,
-                            startIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                        )
+                    val pendingIntent = NavDeepLinkBuilder(context!!)
+                        .setGraph(R.navigation.bottom_navigation)
+                        .setDestination(R.id.contentDetailFragment)
+                        .setArguments(args)
+                        .createPendingIntent()
 
                     notificationHelper?.notify(
                         title = "Не забудьте посмотреть фильм",

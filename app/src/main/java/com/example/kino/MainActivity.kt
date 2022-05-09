@@ -46,17 +46,11 @@ class MainActivity : AppCompatActivity() {
         navController.setGraph(navController.graph, bundle)
         findViewById<BottomNavigationView>(R.id.navigate).setupWithNavController(navController)
 
-        val content = bundle?.getParcelable<Movie>("content")
+
+        val content = bundle?.getParcelable<Movie>(ContentDetailFragment.CONTENT)
         if (content != null) {
-
-            val action = HomeFragmentDirections.actionNavigationHomeToContentDetailFragment(content)
+            val action = HomeFragmentDirections.actionHomeToContentDetail(content)
             navController.navigate(action)
-
-            // bundle.putParcelable("content", content)
-            // navController.navigate(
-            //     R.id.action_navigation_home_to_contentDetailFragment,
-            //     bundle,
-            // )
         }
     }
 

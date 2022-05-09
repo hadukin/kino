@@ -55,17 +55,17 @@ class HomeFragment(private val notificationHelper: NotificationHelper) : Fragmen
         // val args = arguments?.getParcelable<Movie>("content")
         Log.d("HomeFragment", "${arguments}")
 
-        connectionLiveData = ConnectionLiveData(requireContext())
-        connectionLiveData.observe(viewLifecycleOwner) {
-            isNetworkAccess = it
-            if (vm.isNetworkAvailable.value != it) {
-                isFirstLoading = false
-                vm.isNetworkAvailable.value = it
-                if (!isFirstLoading) {
-                    onChangeInternetConnectionSnackBar(it)
-                }
-            }
-        }
+        // connectionLiveData = ConnectionLiveData(requireContext())
+        // connectionLiveData.observe(viewLifecycleOwner) {
+        //     isNetworkAccess = it
+        //     if (vm.isNetworkAvailable.value != it) {
+        //         isFirstLoading = false
+        //         vm.isNetworkAvailable.value = it
+        //         if (!isFirstLoading) {
+        //             onChangeInternetConnectionSnackBar(it)
+        //         }
+        //     }
+        // }
 
         recycler = binding.recycler
 
@@ -138,12 +138,12 @@ class HomeFragment(private val notificationHelper: NotificationHelper) : Fragmen
         // val bundle = Bundle()
         // bundle.putParcelable("content", contentItem)
         // findNavController().navigate(
-        //     R.id.action_navigation_home_to_contentDetailFragment,
+        //     R.id.action_home_to_content_detail,
         //     bundle
         // )
 
         // TODO: Navigate example 3
-        val action = HomeFragmentDirections.actionNavigationHomeToContentDetailFragment(contentItem)
+        val action = HomeFragmentDirections.actionHomeToContentDetail(contentItem)
         findNavController().navigate(action)
     }
 
