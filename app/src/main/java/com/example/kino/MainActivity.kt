@@ -9,10 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navArgument
 import androidx.navigation.ui.setupWithNavController
 import com.example.kino.databinding.ActivityMainBinding
 import com.example.kino.features.content.data.models.Movie
+import com.example.kino.features.content.presentation.home.HomeFragment
+import com.example.kino.features.content.presentation.home.HomeFragmentDirections
+import com.example.kino.features.content.presentation.home.details.ContentDetailFragment
+import com.example.kino.features.content.presentation.home.details.ContentDetailFragmentArgs
 import com.example.kino.services.ScheduleMovieReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
@@ -24,14 +29,9 @@ class MainActivity : AppCompatActivity() {
     // val viewModel: MainViewModel by viewModel()
     // private val viewModel by viewModel<MainViewModel>()
 
-    companion object {
-        private const val TAG = "MAIN_ACTIVITY"
-    }
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var alarmManager: AlarmManager
 
-    @SuppressLint("ResourceType", "LongLogTag")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupKoinFragmentFactory()
@@ -46,12 +46,17 @@ class MainActivity : AppCompatActivity() {
         navController.setGraph(navController.graph, bundle)
         findViewById<BottomNavigationView>(R.id.navigate).setupWithNavController(navController)
 
-        val hasContent = bundle?.getParcelable<Movie>("content")
-        Log.d("$TAG/hasContent", "${hasContent}")
+        val content = bundle?.getParcelable<Movie>("content")
+        if (content != null) {
 
-        if (hasContent != null) {
-            // navController.createDeepLink().addDestination(R.layout.fragment_content_detail, bundle)
-            // navController.navigate(R.layout.fragment_content_detail, bundle, null)
+            val action = HomeFragmentDirections.actionNavigationHomeToContentDetailFragment(content)
+            navController.navigate(action)
+
+            // bundle.putParcelable("content", content)
+            // navController.navigate(
+            //     R.id.action_navigation_home_to_contentDetailFragment,
+            //     bundle,
+            // )
         }
     }
 
@@ -65,17 +70,7 @@ class MainActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    @SuppressLint("LongLogTag")
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        val hasContent = intent?.extras?.get("content")
-
-        Log.d("${TAG}/onNewIntentMain", "${hasContent}")
-    }
-
-    @SuppressLint("LongLogTag")
     private fun setNotificationBackgroundAlarmManager() {
-        Log.d("$TAG/BACKGROUND_ALARM", "BACKGROUND_ALARM_MANAGER")
         val myIntent = Intent(applicationContext, ScheduleMovieReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, myIntent, 0)
 

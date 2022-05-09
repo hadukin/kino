@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -125,12 +126,25 @@ class HomeFragment(private val notificationHelper: NotificationHelper) : Fragmen
     }
 
     override fun onClickDetails(contentItem: Movie, position: Int) {
-        childFragmentManager
-            .beginTransaction()
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            .add(R.id.fragment_home_id, ContentDetailFragment(contentItem))
-            .addToBackStack(null)
-            .commit()
+        // TODO: Navigate example 1
+        // childFragmentManager
+        //     .beginTransaction()
+        //     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+        //     .add(R.id.fragment_home_id, ContentDetailFragment(contentItem))
+        //     .addToBackStack(null)
+        //     .commit()
+
+        // TODO: Navigate example 2
+        // val bundle = Bundle()
+        // bundle.putParcelable("content", contentItem)
+        // findNavController().navigate(
+        //     R.id.action_navigation_home_to_contentDetailFragment,
+        //     bundle
+        // )
+
+        // TODO: Navigate example 3
+        val action = HomeFragmentDirections.actionNavigationHomeToContentDetailFragment(contentItem)
+        findNavController().navigate(action)
     }
 
 

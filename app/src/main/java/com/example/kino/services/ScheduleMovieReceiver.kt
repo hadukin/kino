@@ -26,7 +26,6 @@ class ScheduleMovieReceiver : BroadcastReceiver(), KoinComponent {
 
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        Log.d("SCHEDULE_MOVIE_RECEIVER", "SCHEDULE_MOVIE_RECEIVER")
         val notificationHelper = context?.let { NotificationHelper(it) }
 
 
@@ -36,7 +35,7 @@ class ScheduleMovieReceiver : BroadcastReceiver(), KoinComponent {
 
             val c = Calendar.getInstance()
             val hour = c.get(Calendar.HOUR_OF_DAY)
-            val minute = c.get(Calendar.MINUTE)
+            val minute = c.get(Calendar.MINUTE )
 
             for (item in result) {
                 if (item.hourOfDay == hour && item.minute == minute) {
@@ -63,7 +62,6 @@ class ScheduleMovieReceiver : BroadcastReceiver(), KoinComponent {
 
                     val resultDeferred = async { deleteScheduleUseCase.execute(item) }
                     val result = resultDeferred.await()
-
                 }
             }
         }
