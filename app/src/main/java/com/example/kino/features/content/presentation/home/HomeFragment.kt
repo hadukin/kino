@@ -55,17 +55,17 @@ class HomeFragment(private val notificationHelper: NotificationHelper) : Fragmen
         // val args = arguments?.getParcelable<Movie>("content")
         Log.d("HomeFragment", "${arguments}")
 
-        // connectionLiveData = ConnectionLiveData(requireContext())
-        // connectionLiveData.observe(viewLifecycleOwner) {
-        //     isNetworkAccess = it
-        //     if (vm.isNetworkAvailable.value != it) {
-        //         isFirstLoading = false
-        //         vm.isNetworkAvailable.value = it
-        //         if (!isFirstLoading) {
-        //             onChangeInternetConnectionSnackBar(it)
-        //         }
-        //     }
-        // }
+        connectionLiveData = ConnectionLiveData(requireContext())
+        connectionLiveData.observe(viewLifecycleOwner) {
+            isNetworkAccess = it
+            if (vm.isNetworkAvailable.value != it) {
+                isFirstLoading = false
+                vm.isNetworkAvailable.value = it
+                if (!isFirstLoading) {
+                    onChangeInternetConnectionSnackBar(it)
+                }
+            }
+        }
 
         recycler = binding.recycler
 
