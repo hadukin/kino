@@ -23,12 +23,7 @@ class App : Application() {
             modules(
                 listOf(
                     coreDiModule,
-                    movieModule,
-                    movieNetworkModule,
-                    movieDomainModule,
-                    movieDataModule,
-                    movieDatabaseModule,
-                    moviePresentationModule,
+                    movieDiModule,
                 )
             )
         }

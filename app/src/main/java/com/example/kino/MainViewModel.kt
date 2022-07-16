@@ -49,34 +49,37 @@ class MainViewModel(
     private val _isLoading = MutableLiveData<Boolean>().apply { value = false }
     val isLoading: LiveData<Boolean> = _isLoading
 
-    suspend fun loadMore(page: Int, isReload: Boolean = false) =
-        viewModelScope.launch(Dispatchers.IO) {
-            _isLoading.postValue(true)
-            try {
-                if (isReload) {
-                    _content.postValue(arrayListOf())
-                }
-                val resultDeferred = async { getMoviePopularUseCase.execute(page) }
-                val result = resultDeferred.await()
-                val data = arrayListOf<Movie>()
+    suspend fun loadMore(page: Int, isReload: Boolean = false) {
+        _isLoading.postValue(true)
 
-                for (item in result) {
-                    if (content.value?.contains(item) == false) {
-                        data.add(item)
-                    }
-                }
-                val list = _content.value
-                list?.addAll(result)
-                _content.postValue(list)
-
-            } catch (error: HttpException) {
-                Log.e("ERROR_HTTP", "$error")
-            } catch (error: Exception) {
-                Log.e("ERROR_EXCEPTION", "$error")
-            } finally {
-                _isLoading.postValue(false)
+        try {
+            if (isReload) {
+                _content.postValue(arrayListOf())
             }
+
+            val response = getMoviePopularUseCase.execute(page)
+
+            // val resultDeferred = async { getMoviePopularUseCase.execute(page) }
+            // val result = resultDeferred.await()
+
+            val data = arrayListOf<Movie>()
+            for (item in response) {
+                if (content.value?.contains(item) == false) {
+                    data.add(item)
+                }
+            }
+            val list = _content.value
+            list?.addAll(response)
+            _content.postValue(list)
+
+        } catch (error: HttpException) {
+            Log.e("ERROR_HTTP", "$error")
+        } catch (error: Exception) {
+            Log.e("ERROR_EXCEPTION", "$error")
+        } finally {
+            _isLoading.postValue(false)
         }
+    }
 
     fun toggleFavorite(item: Movie): String {
         var current: Movie = item
